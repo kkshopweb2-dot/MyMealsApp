@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* === Full Page Background === */
+.success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url("../assets/images/bg.png"); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  position: relative;
+}
+
+
+
+/* === Card Style (for both screens) === */
+.card,
+.thankyou-card {
+  position: relative;
+  z-index: 1; /* Above overlay */
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  padding: 40px 30px;
+  max-width: 480px;
+  text-align: center;
+  transition: all 0.4s ease;
+  animation: fadeIn 0.8s ease;
+}
+
+/* === Titles === */
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #861f6a;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* === Reminder Text === */
+.reminderTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.paragraph {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.bold {
+  font-weight: 700;
+  color: #861f6a;
+}
+
+/* === Checkbox === */
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 25px 0;
+  gap: 10px;
+}
+
+.checkboxContainer input {
+  width: 18px;
+  height: 18px;
+  accent-color: #861f6a;
+}
+
+.agreeText {
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* === Button === */
+.button {
+  background-color: #861f6a;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button.active:hover {
+  background-color: #6b1754;
+  transform: scale(1.05);
+}
+
+/* === Thank You Screen === */
+.logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.check {
+  font-size: 50px;
+  color: #4caf50;
+  margin: 15px 0;
+  animation: pop 0.6s ease;
+}
+
+.thankyou {
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.note {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* === Responsive === */
+@media (max-width: 480px) {
+  .card, .thankyou-card {
+    padding: 30px 20px;
+  }
+  .title { font-size: 20px; }
+  .thankyou { font-size: 22px; }
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery App Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        code {
+            font-family: "Courier New", Courier, monospace;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .api-table th, .api-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .api-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Food Delivery App Documentation</h1>
+
+    <div class="section" id="user-guide">
+        <h2>User Guide</h2>
+        <p>This guide provides instructions on how to use the Food Delivery application.</p>
+
+        <h3>Getting Started</h3>
+        <p>To start using the application, you first need to register for an account. Once registered, you can log in to access the dashboard and all the features.</p>
+        <ul>
+            <li><strong>Registration:</strong> Navigate to the signup page and fill in your details to create an account.</li>
+            <li><strong>Login:</strong> Once you have an account, you can log in with your email and password.</li>
+        </ul>
+
+        <h3>Features</h3>
+        <ul>
+            <li><strong>Dashboard:</strong> The main hub of the application where you can see an overview of your account and navigate to other features.</li>
+            <li><strong>Order Meals:</strong> Browse through available meal plans and place an order.</li>
+            <li><strong>File Complaints:</strong> If you have any issues with your order, you can raise a complaint.</li>
+            <li><strong>Provide Feedback:</strong> Share your feedback on the food, delivery, and management.</li>
+            <li><strong>Manage Delivery Locations:</strong> Add, update, and remove delivery addresses.</li>
+            <li><strong>Set Meal Preferences:</strong> Specify your meal preferences, such as vegetarian, no nuts, etc.</li>
+            <li><strong>Pause or Resume Meals:</strong> You can pause your meal plan for a certain period and resume it when you are back.</li>
+            <li><strong>Renewal Payments:</strong> View your payment history and manage your subscription renewals.</li>
+            <li><strong>Update Contact Information:</strong> Keep your contact details up to date.</li>
+        </ul>
+    </div>
+
+    <div class="section" id="developer-guide">
+        <h2>Developer Guide</h2>
+        <p>This guide is for developers who want to contribute to the project. It covers the project structure, setup, and API documentation.</p>
+
+        <h3>Project Overview</h3>
+        <p>The project is a monorepo containing three main parts:</p>
+        <ul>
+            <li><strong>Frontend (React):</strong> Located in the <code>/src</code> directory, this is the user-facing application.</li>
+            <li><strong>Backend (Express.js):</strong> Located in the <code>/backend</code> directory, this is the main backend for the React application.</li>
+            <li><strong>Backend (Laravel):</strong> Located in the <code>/laravel</code> directory, this is another backend that is currently used for database migrations and as a reference.</li>
+        </ul>
+
+        <div class="section">
+            <h3>Backend (Express.js)</h3>
+            <h4>Setup</h4>
+            <p>To run the Express.js backend, follow these steps:</p>
+            <pre><code>cd backend
+npm install
+npm start</code></pre>
+            <p>The server will start on <code>http://localhost:5000</code>.</p>
+
+            <h4>Database</h4>
+            <p>The backend uses a MySQL database named <code>mymealsdb</code>. The database schema is managed by the Laravel project's migrations. To set up the database, you need to configure the Laravel environment and run the migrations as described in the Laravel section.</p>
+
+            <h4>API Endpoints</h4>
+            <p>The following table lists the available API endpoints for the Express.js backend.</p>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Endpoint</th>
+                        <th>Description</th>
+                        <th>Authentication</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>POST</td><td>/api/auth/register</td><td>Register a new user</td><td>No</td></tr>
+                    <tr><td>POST</td><td>/api/auth/login</td><td>Login a user</td><td>No</td></tr>
+                    <tr><td>GET</td><td>/api/users</td><td>Get all users</td><td>No</td></tr>
+                    <tr><td>GET</td><td>/api/plans</td><td>Get all meal plans</td><td>No</td></tr>
+                    <tr><td>GET</td><td>/api/meals</td><td>Get all meals</td><td>No</td></tr>
+                    <tr><td>POST</td><td>/api/orders</td><td>Create a new order</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/orders</td><td>Get all orders for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/order-meals</td><td>Get all order-meals</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/complaints</td><td>Get all complaints for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/complaints</td><td>Create a new complaint</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/complaints/:id</td><td>Get a specific complaint</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/complaints/:id</td><td>Update a complaint</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/complaints/:id</td><td>Delete a complaint</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/feedbacks</td><td>Get all feedbacks for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/feedbacks</td><td>Create a new feedback</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/feedbacks/:id</td><td>Get a specific feedback</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/feedbacks/:id</td><td>Update a feedback</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/feedbacks/:id</td><td>Delete a feedback</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/delivery-locations</td><td>Get all delivery locations for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/delivery-locations</td><td>Create a new delivery location</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/delivery-locations/:id</td><td>Get a specific delivery location</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/delivery-locations/:id</td><td>Update a delivery location</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/delivery-locations/:id</td><td>Delete a delivery location</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/meal-preferences</td><td>Get all meal preferences for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/meal-preferences</td><td>Create a new meal preference</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/meal-preferences/:id</td><td>Get a specific meal preference</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/meal-preferences/:id</td><td>Update a meal preference</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/meal-preferences/:id</td><td>Delete a meal preference</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/pause-resume-meals</td><td>Get all pause/resume meal records for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/pause-resume-meals</td><td>Create a new pause/resume meal record</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/pause-resume-meals/:id</td><td>Get a specific pause/resume meal record</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/pause-resume-meals/:id</td><td>Update a pause/resume meal record</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/pause-resume-meals/:id</td><td>Delete a pause/resume meal record</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/payments</td><td>Get all payments for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/payments</td><td>Create a new payment</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/payments/:id</td><td>Get a specific payment</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/payments/:id</td><td>Update a payment</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/payments/:id</td><td>Delete a payment</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/user-contact-updates</td><td>Get all user contact updates for the logged-in user</td><td>Yes</td></tr>
+                    <tr><td>POST</td><td>/api/user-contact-updates</td><td>Create a new user contact update</td><td>Yes</td></tr>
+                    <tr><td>GET</td><td>/api/user-contact-updates/:id</td><td>Get a specific user contact update</td><td>Yes</td></tr>
+                    <tr><td>PUT</td><td>/api/user-contact-updates/:id</td><td>Update a user contact update</td><td>Yes</td></tr>
+                    <tr><td>DELETE</td><td>/api/user-contact-updates/:id</td><td>Delete a user contact update</td><td>Yes</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Backend (Laravel)</h3>
+            <h4>Setup</h4>
+            <p>The Laravel backend is primarily used for database migrations. To set it up, follow these steps:</p>
+            <pre><code>cd laravel
+composer install
+cp .env.example .env
+# Update the .env file with your database credentials for mymealsdb
+php artisan key:generate
+php artisan migrate
+php artisan serve</code></pre>
+            <p>The Laravel server will start on <code>http://localhost:8000</code>.</p>
+        </div>
+
+        <div class="section">
+            <h3>Frontend (React)</h3>
+            <h4>Setup</h4>
+            <p>To run the React frontend, follow these steps:</p>
+            <pre><code>npm install
+npm start</code></pre>
+            <p>The development server will start on <code>http://localhost:3000</code>.</p>
+
+            <h4>Project Structure</h4>
+            <p>The main source code for the React application is in the <code>/src</code> directory.</p>
+            <ul>
+                <li><strong><code>/src/api</code>:</strong> Contains the configured Axios instance for making API calls.</li>
+                <li><strong><code>/src/assets</code>:</strong> Contains static assets like images.</li>
+                <li><strong><code>/src/component</code>:</strong> Contains reusable React components.</li>
+                <li><strong><code>/src/css</code>:</strong> Contains CSS files for styling.</li>
+                <li><strong><code>/src/pages</code>:</strong> Contains the main page components.</li>
+                <li><strong><code>/src/redux</code>:</strong> Contains the Redux store and slices for state management.</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

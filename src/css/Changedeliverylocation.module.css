@@ -1,0 +1,250 @@
+/* Container */
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  min-height: 50vh;
+  max-height: 80vh; /* limit vertical height */
+  background-color: #fff;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  overflow-y: auto; /* scroll only inside form container */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Form Card */
+.formCard:hover {
+  transform: translateY(-3px);
+  transition: transform 0.2s ease;
+}
+
+/* Title */
+.formTitle {
+  text-align: center;
+  color: #2e7d5c;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+}
+
+/* Step Section */
+.step {
+  margin-top: 15px;
+  width: 100%;
+}
+
+/* Step Header */
+.stepHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.3s ease;
+}
+
+.stepHeader:hover {
+  background-color: #e0f0e7;
+}
+
+/* Edit Button */
+.editButton {
+  background-color: #2e7d5c;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.editButton:hover {
+  background-color: #24664b;
+  transform: translateY(-1px);
+}
+
+/* Collapsed Step */
+.collapsed {
+  max-height: 60px; /* show only header */
+  overflow: hidden;
+  opacity: 0.85;
+  margin-bottom: 10px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Step Headings */
+.step h3 {
+  color: #2e7d5c;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+}
+
+/* Inputs and select */
+.inputField {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #c9e0d8;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.inputField:focus {
+  border-color: #2e7d5c;
+  box-shadow: 0 0 5px rgba(46, 125, 92, 0.3);
+  outline: none;
+}
+
+/* Checkbox & Radio Group */
+.checkboxGroup,
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Buttons */
+.btnGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  background-color: #2e7d5c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #24664b;
+  transform: translateY(-2px);
+}
+
+.nextBtn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-top: 15px;
+  border-radius: 10px;
+}
+
+/* Info Text */
+.infoText {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Address section */
+.addressGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.addressGroup input {
+  margin-bottom: 10px;
+}
+
+/* Preview Box */
+.previewBox {
+  background: #f7f9f7;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #c9e0d8;
+  font-size: 0.95rem;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  box-shadow: inset 0 2px 5px rgba(46, 125, 92, 0.05);
+  margin-bottom: 20px;
+}
+
+/* Thank You Message */
+.thankYou {
+  text-align: center;
+  padding: 30px 15px;
+}
+
+.thankYou h2 {
+  font-size: 1.8rem;
+  color: #2e7d5c;
+  margin-bottom: 15px;
+}
+
+.thankYou p {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .formCard {
+    padding: 25px 20px;
+  }
+
+  .btnGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checkboxGroup,
+  .radioGroup {
+    flex-direction: column;
+  }
+
+  .addressGroup {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .formTitle {
+    font-size: 1.5rem;
+  }
+
+  .step h3 {
+    font-size: 1.2rem;
+  }
+
+  .inputField {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  button {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .previewBox {
+    max-height: 250px;
+    padding: 15px;
+  }
+}

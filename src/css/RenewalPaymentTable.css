@@ -1,0 +1,146 @@
+/* === Table Container === */
+.payment-table-container {
+  background: rgba(255, 255, 255, 0.85); 
+  border-radius: 0; 
+  padding: 100px;
+  margin: 20px ;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  max-width: 100%;
+  animation: fadeIn 0.5s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.payment-table-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Table title */
+.payment-table-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+}
+
+/* Scrollable table */
+.table-scroll {
+  overflow-x: auto;
+  max-height: 75vh;
+}
+
+/* Table styles */
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1600px;
+}
+
+.payment-table th,
+.payment-table td {
+  border: 1px solid #e0e0e0;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+
+.payment-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.payment-table tr:hover td {
+  background-color: #f1f7ff;
+}
+
+/* Input fields */
+.payment-table input[type="text"],
+.payment-table input[type="email"],
+.payment-table input[type="number"],
+.payment-table input[type="date"],
+.payment-table input[type="time"] {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 0; /* no rounded corners */
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.payment-table input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
+
+.payment-table input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* === Remove arrows/spinners === */
+
+/* Number input arrows */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Date/Time picker arrows */
+input[type=date]::-webkit-calendar-picker-indicator,
+input[type=time]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .payment-table {
+    min-width: 1400px;
+  }
+}
+
+@media (max-width: 992px) {
+  .payment-table-container {
+    padding: 25px;
+  }
+  .payment-table {
+    min-width: 1200px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-table-container {
+    padding: 20px;
+  }
+  .payment-table {
+    min-width: 900px;
+    font-size: 12px;
+  }
+}

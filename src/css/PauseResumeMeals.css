@@ -1,0 +1,191 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* ===============================
+   CONTAINER
+=============================== */
+.pause-container {
+  background: linear-gradient(135deg, #d5f5e3, #b3e5c8);
+  min-height: 100vh;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   LOGO
+=============================== */
+.pause-logo {
+  width: 100px;
+  display: block;
+  margin: 20px auto 10px;
+}
+
+/* ===============================
+   CARD
+=============================== */
+.pause-card {
+  background: rgba(255, 255, 255, 0.8); 
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  box-sizing: border-box;
+  backdrop-filter: blur(6px); 
+}
+
+
+.pause-card:hover {
+  transform: translateY(-3px);
+}
+
+.pause-card h2,
+.pause-card h3 {
+  color: #104b45;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* ===============================
+   INPUTS & SELECTS
+=============================== */
+.pause-card input,
+.pause-card select {
+  width: 100%;
+  padding: 12px 14px; /* increased padding to avoid placeholder overlap */
+  margin-bottom: 14px;
+  border: 1px solid #bcd5c8;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+  color: #333;
+  box-sizing: border-box;
+  background: #fafafa;
+}
+
+.pause-card input::placeholder {
+  color: #aaa;
+  font-size: 15px;
+  opacity: 1;
+}
+
+/* Fix placeholder for select */
+.pause-card select:invalid {
+  color: #aaa;
+}
+
+.pause-card option[value=""] {
+  color: #aaa;
+}
+
+/* Focus states */
+.pause-card input:focus,
+.pause-card select:focus {
+  border-color: #104b45;
+  background: #fff;
+  outline: none;
+}
+
+/* ===============================
+   BUTTONS
+=============================== */
+button {
+  background: #104b45;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 10px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #0b3b35;
+}
+
+.back-btn {
+  background: #fff;
+  color: #104b45;
+  border: 1px solid #104b45;
+}
+
+.back-btn:hover {
+  background: #104b45;
+  color: #fff;
+}
+
+/* ===============================
+   MEAL SECTION
+=============================== */
+.meal-section {
+  border-top: 1px solid #cbe1d7;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ===============================
+   REVIEW BOX
+=============================== */
+.review-box {
+  background: #f9fff9;
+  border: 1px solid #bcd5c8;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   THANK YOU MESSAGE
+=============================== */
+.thankyou {
+  text-align: center;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+=============================== */
+@media (max-width: 768px) {
+  .pause-card {
+    padding: 20px;
+  }
+
+  .pause-card input,
+  .pause-card select {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  button {
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pause-card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .pause-card input,
+  .pause-card select {
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+
+  button {
+    padding: 8px 14px;
+  }
+}
