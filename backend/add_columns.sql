@@ -1,0 +1,13 @@
+ALTER TABLE orders
+ADD COLUMN name VARCHAR(255),
+ADD COLUMN phone VARCHAR(255),
+ADD COLUMN email VARCHAR(255),
+ADD COLUMN primary_address TEXT,
+ADD COLUMN secondary_address TEXT,
+ADD COLUMN delivery_time TIME,
+ADD COLUMN plan VARCHAR(255),
+ADD COLUMN payment_method VARCHAR(255),
+ADD COLUMN qr_amount DECIMAL(10, 2),
+ADD COLUMN qr_transaction_id VARCHAR(255),
+ADD COLUMN qr_note TEXT,
+ADD COLUMN qr_screenshot VARCHAR(255);

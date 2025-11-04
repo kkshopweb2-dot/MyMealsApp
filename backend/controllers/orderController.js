@@ -1,38 +1,82 @@
 import db from "../db.js";
 
 export const createOrder = (req, res) => {
-  const { plan_id, meals } = req.body;
-  const user_id = req.userId;
-  if (!user_id || !plan_id || !meals || !meals.length)
-    return res.status(400).json({ error: "User, plan, and meals required" });
+  const {
+    name,
+    phone,
+    email,
+    primaryAddress,
+    secondaryAddress,
+    deliveryTime,
+    plan,
+    paymentMethod,
+    qrDetails,
+  } = req.body;
 
-  const mealIds = meals.map((m) => m.meal_id);
-  const placeholders = mealIds.map(() => "?").join(",");
-  const sql = `SELECT id, price FROM meals WHERE id IN (${placeholders})`;
+  // Basic validation
+  if (!name || !phone || !primaryAddress || !plan || !paymentMethod) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
-  db.query(sql, mealIds, (err, mealResults) => {
-    if (err) return res.status(500).json({ error: err.message });
+  const orderSql = `
+    INSERT INTO orders (name, phone, email, primary_address, secondary_address, delivery_time, plan, payment_method, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+  `;
 
-    let totalAmount = 0;
-    mealResults.forEach((meal) => {
-      const quantity = meals.find((m) => m.meal_id === meal.id)?.quantity || 1;
-      totalAmount += meal.price * quantity;
-    });
+  const orderValues = [
+    name,
+    phone,
+    email,
+    primaryAddress,
+    secondaryAddress,
+    deliveryTime,
+    plan,
+    paymentMethod,
+  ];
 
-    const orderSql =
-      "INSERT INTO orders (user_id, plan_id, status, total_amount) VALUES (?, ?, 'pending', ?)";
-    db.query(orderSql, [user_id, plan_id, totalAmount], (err2, results) => {
-      if (err2) return res.status(500).json({ error: err2.message });
+  db.query(orderSql, orderValues, (err, results) => {
+    if (err) {
+      console.error("Error inserting order:", err);
+      return res.status(500).json({ error: "Failed to create order", db_error: err });
+    }
 
-      const orderId = results.insertId;
-      const mealSql = "INSERT INTO order_meals (order_id, meal_id, quantity) VALUES ?";
-      const mealValues = meals.map((m) => [orderId, m.meal_id, m.quantity || 1]);
+    const orderId = results.insertId;
 
-      db.query(mealSql, [mealValues], (err3) => {
-        if (err3) return res.status(500).json({ error: err3.message });
-        res.json({ message: "Order placed successfully!", orderId, totalAmount });
+    if (paymentMethod === 'QR') {
+      const qrSql = `
+        INSERT INTO qr_payments (order_id, amount, transaction_id, note, screenshot)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+      const qrValues = [
+        orderId,
+        qrDetails.amount,
+        qrDetails.transactionId,
+        qrDetails.note,
+        qrDetails.screenshot === '' ? null : qrDetails.screenshot,
+      ];
+
+      db.query(qrSql, qrValues, (err2) => {
+        if (err2) {
+          console.error("Error inserting QR payment:", err2);
+          return res.status(500).json({ error: "Failed to create QR payment", db_error: err2 });
+        }
+        res.json({ message: "Order placed successfully!", orderId });
       });
-    });
+    } else if (paymentMethod === 'Cash') {
+      const cashSql = `
+        INSERT INTO cash_payments (order_id)
+        VALUES (?)
+      `;
+      db.query(cashSql, [orderId], (err3) => {
+        if (err3) {
+          console.error("Error inserting cash payment:", err3);
+          return res.status(500).json({ error: "Failed to create cash payment", db_error: err3 });
+        }
+        res.json({ message: "Order placed successfully!", orderId });
+      });
+    } else {
+      res.json({ message: "Order placed successfully!", orderId });
+    }
   });
 };
 
