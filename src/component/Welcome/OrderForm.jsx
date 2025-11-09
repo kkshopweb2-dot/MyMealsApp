@@ -96,6 +96,7 @@ export default function OrderForm({ bg, plan, setPlan, onSuccess }) {
       plan,
       payByCash,
       payByQR); // Logs to console
+      const paymentMethod = (payByCash)?'Cash':'QR';
     try {
       // Build plain object from FormData
       const payload = {
@@ -103,8 +104,7 @@ export default function OrderForm({ bg, plan, setPlan, onSuccess }) {
         primaryAddress,
         secondaryAddress,
         plan,
-        payByCash,
-        payByQR,
+        paymentMethod,
       };
 
       // Append any file fields if they exist
