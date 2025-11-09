@@ -142,7 +142,6 @@ export default function OrderForm({ bg, plan, setPlan, onSuccess }) {
     <div className="mymeals-page-bg" style={{ backgroundImage: `url(${bg})` }}>
       <div className="mymeals-form-card">
         <h1 className="mymeals-form-title">MyMeals Order Form</h1>
-
         <InputGroup label="Name *" name="name" onChange={handleChange} />
         <InputGroup label="Phone *" name="phone" onChange={handleChange} />
         <InputGroup label="Email" name="email" onChange={handleChange} />

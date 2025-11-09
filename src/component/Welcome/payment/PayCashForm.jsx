@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import "../../../css/Paycash.css";
 
-export default function PayCashForm({ onSubmit }) {
-  const [amountPaid, setAmountPaid] = useState("");
+export default function PayCashForm({ formDataRef, handleChange, onSubmit, }) {
+  
   const [cashPaidOption, setCashPaidOption] = useState("");
-  const [deliveryBoyName, setDeliveryBoyName] = useState("");
-  const [deliveryBoyMobile, setDeliveryBoyMobile] = useState("");
-  const [cashDate, setCashDate] = useState("");
-  const [cashTime, setCashTime] = useState("");
-  const [cashNote, setCashNote] = useState("");
 
   const handleSubmit = () => {
-    if (!amountPaid || !cashPaidOption) {
+    formDataRef.current.set("cashPaidOption",cashPaidOption);
+    if ( !cashPaidOption) {
       alert("Please fill all required fields.");
       return;
     }
@@ -24,7 +20,7 @@ export default function PayCashForm({ onSubmit }) {
 
       <div className="form-group">
         <label>Amount Paid *</label>
-        <input type="number" value={amountPaid} onChange={(e) => setAmountPaid(e.target.value)} />
+        <input type="number" value={formDataRef.current.get("amount")} readOnly />
       </div>
 
       <div className="form-group">
@@ -57,28 +53,28 @@ export default function PayCashForm({ onSubmit }) {
         <>
           <div className="form-group">
             <label>Delivery Boy Name *</label>
-            <input value={deliveryBoyName} onChange={(e) => setDeliveryBoyName(e.target.value)} />
+            <input name="deliveryBoyName" onChange={handleChange} />
           </div>
           <div className="form-group">
             <label>Delivery Boy Mobile *</label>
-            <input value={deliveryBoyMobile} onChange={(e) => setDeliveryBoyMobile(e.target.value)} />
+            <input typr="number" name="deliveryBoyMobile" onChange={handleChange} />
           </div>
         </>
       )}
 
       <div className="form-group">
         <label>Select Date</label>
-        <input type="date" value={cashDate} onChange={(e) => setCashDate(e.target.value)} />
+        <input type="date" name="cashDate" onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Select Time</label>
-        <input type="time" value={cashTime} onChange={(e) => setCashTime(e.target.value)} />
+        <input type="time" name="cashTime" onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Note</label>
-        <textarea value={cashNote} onChange={(e) => setCashNote(e.target.value)} />
+        <textarea name="cashNote" onChange={handleChange} />
       </div>
 
       <button className="mymeals-btn" onClick={handleSubmit}>
