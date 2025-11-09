@@ -7,34 +7,35 @@ export default function PaymentOptions({ payByQR, setPayByQR, payByCash, setPayB
       <h2 className="mymeals-payment-title">Choose Payment Method</h2>
 
       <div className="mymeals-option-row">
-        <input
-          type="checkbox"
+        <input id="payByQR"
+          type="checkbox" onClick={onNext}
           checked={payByQR}
           onChange={(e) => {
             setPayByQR(e.target.checked);
             if (e.target.checked) setPayByCash(false);
           }}
         />
-        <span className="mymeals-option-text">Pay through QR Code</span>
+        <label htmlFor="payByQR" className="mymeals-option-text">Pay through QR Code</label>
       </div>
 
       <div className="mymeals-option-row">
-        <input
+        <input  id="payByCash"
           type="checkbox"
-          checked={payByCash}
+          checked={payByCash} 
+          onClick={onNext}
           onChange={(e) => {
             setPayByCash(e.target.checked);
             if (e.target.checked) setPayByQR(false);
           }}
         />
-        <span className="mymeals-option-text">Pay Cash</span>
+        <label htmlFor="payByCash" className="mymeals-option-text">Pay Cash</label>
       </div>
 
-      {(payByQR || payByCash) && (
+       {(payByQR || payByCash) && (
         <button className="mymeals-btn" onClick={onNext}>
           Next
         </button>
-      )}
+      )} 
     </div>
   );
 }

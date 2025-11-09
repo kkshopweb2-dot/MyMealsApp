@@ -80,7 +80,7 @@ export default function WelcomePage() {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
   // === Handlers ===
@@ -121,6 +121,7 @@ export default function WelcomePage() {
           acknowledged={acknowledged}
           setAcknowledged={setAcknowledged}
           onFillForm={() => setShowOrderForm(true)}
+
         />
       )}
 

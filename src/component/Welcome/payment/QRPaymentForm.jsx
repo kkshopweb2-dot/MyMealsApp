@@ -2,25 +2,20 @@ import React from "react";
 import "../../../css/Paycash.css";
 
 export default function QRPaymentForm({
-  amount,
-  setAmount,
-  planName,
-  setPlanName,
-  transactionId,
-  setTransactionId,
-  note,
-  setNote,
-  screenshot,
-  setScreenshot,
+  formDataRef,
+  handleChange,
   onSubmit,
 }) {
   const handlePick = (e) => {
     const file = e.target.files[0];
-    if (file) setScreenshot(file);
+    if (file) formDataRef.current.set("screenshot", file);
+    console.log(formDataRef.current.get("screenshot").name);
   };
 
   const handleSubmit = () => {
-    if (!screenshot || !transactionId || !planName) {
+    if (!formDataRef.current.get("screenshot") || !formDataRef.current.get("transactionId") ) {
+      console.log(formDataRef.current.get("screenshot"));
+      console.log(formDataRef.current.get("transactionId"));
       alert("Please fill all required fields and upload a screenshot.");
       return;
     }
@@ -39,29 +34,31 @@ export default function QRPaymentForm({
       />
 
       <div className="mymeals-input-group">
-        <label>Amount Paid</label>
-        <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
-      </div>
-
-      <div className="mymeals-input-group">
-        <label>Plan Name</label>
-        <input value={planName} onChange={(e) => setPlanName(e.target.value)} />
+        <label>Amount To Pay</label>
+        <input type="number" value={formDataRef.current.get("amount")}  readOnly />
       </div>
 
       <div>
         <label>Share Screenshot *</label>
-        <input type="file" className="uploadBox" onChange={handlePick} />
-        {screenshot && <p>{screenshot.name}</p>}
+        <input type="file" className="uploadBox" onChange={handlePick} accept="image/*" />
+        {formDataRef.current.get("screenshot") && (
+          <img
+            src={URL.createObjectURL(formDataRef.current.get("screenshot"))}
+            alt="Uploaded"
+            className="uploadedPreview"
+            style={{ maxWidth: "100%", marginTop: "8px" }}
+          />
+        )}
       </div>
 
       <div className="mymeals-input-group">
         <label>Transaction ID *</label>
-        <input value={transactionId} onChange={(e) => setTransactionId(e.target.value)} />
+        <input name="transactionId" onChange={handleChange} />
       </div>
 
       <div className="mymeals-input-group">
         <label>Note</label>
-        <input value={note} onChange={(e) => setNote(e.target.value)} />
+        <input name="note" onChange={handleChange} />
       </div>
 
       <button className="submitBtn" onClick={handleSubmit}>Submit</button>
