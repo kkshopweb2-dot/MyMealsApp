@@ -3,9 +3,10 @@
   border-radius: 15px;
   padding: 25px;
   margin: 30px auto;
-  max-width: 95%;
+  max-width: 100%; /* was 95% */
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
+
 
 .complaint-title {
   font-size: 22px;

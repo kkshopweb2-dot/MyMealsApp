@@ -1,50 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "../css/MealPreferenceTable.module.css";
 
-const MealPreferenceTable = () => {
-  const [rows, setRows] = useState([
-    {
-      orderNo: "",
-      name: "",
-      email: "",
-      phone: "",
-      plan: "",
-      effectiveFrom: "",
-      mealType: "",
-      avoidNonVeg: "",
-      avoidVeg: "",
-      dishChoice: "",
-    },
-  ]);
-
-  const handleChange = (index, field, value) => {
-    const updatedRows = [...rows];
-    updatedRows[index][field] = value;
-    setRows(updatedRows);
-  };
-
-  const addRow = () => {
-    setRows([
-      ...rows,
-      {
-        orderNo: "",
-        name: "",
-        email: "",
-        phone: "",
-        plan: "",
-        effectiveFrom: "",
-        mealType: "",
-        avoidNonVeg: "",
-        avoidVeg: "",
-        dishChoice: "",
-      },
-    ]);
-  };
-
+const MealPreferenceTable = ({ rows }) => {
   return (
     <div className={styles.tableContainer}>
-      <h2 className={styles.tableTitle}>Meal Preference Data</h2>
-
+      <h3 className={styles.tableTitle}>Submitted Meal Preferences</h3>
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -52,39 +12,33 @@ const MealPreferenceTable = () => {
               <th>Order No</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Phone</th>
               <th>Plan</th>
               <th>Effective From</th>
               <th>Meal Type</th>
-              <th>Avoid Non-Veg</th>
-              <th>Avoid Veg</th>
-              <th>Dish Choice</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {Object.keys(row).map((key) => (
-                  <td key={key}>
-                    <input
-                      type="text"
-                      value={row[key]}
-                      onChange={(e) =>
-                        handleChange(rowIndex, key, e.target.value)
-                      }
-                      className={styles.inputCell}
-                    />
-                  </td>
-                ))}
+            {rows && rows.length > 0 ? (
+              rows.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.orderNo}</td>
+                  <td>{row.name}</td>
+                  <td>{row.email}</td>
+                  <td>{row.plan}</td>
+                  <td>{row.effectiveFrom}</td>
+                  <td>{row.mealType}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className={styles.noData}>
+                 
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
-
-      <button onClick={addRow} className={styles.addButton}>
-        + Add Row
-      </button>
     </div>
   );
 };

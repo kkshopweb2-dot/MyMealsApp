@@ -2,11 +2,13 @@
   width: 100%;
   overflow-x: auto;
   margin: 30px auto;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85); /* semi-transparent white */
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  backdrop-filter: blur(8px); /* optional: soft blur for glass effect */
 }
+
 
 /* Header section with title + add button */
 .headerRow {

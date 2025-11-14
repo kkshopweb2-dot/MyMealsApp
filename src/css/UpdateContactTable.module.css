@@ -1,6 +1,7 @@
 /* === Table Container === */
 .tableContainer {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.75); /* semi-transparent white */
+  backdrop-filter: blur(10px); /* adds frosted glass effect */
   border-radius: 15px;
   padding: 25px;
   margin: 30px auto;
@@ -11,6 +12,7 @@
   font-family: "Poppins", sans-serif;
 }
 
+
 /* === Title === */
 .tableTitle {
   text-align: center;
@@ -18,12 +20,6 @@
   font-weight: 600;
   color: #333;
   margin-bottom: 20px;
-}
-
-/* === Table Wrapper === */
-.tableWrapper {
-  width: 100%;
-  overflow-x: auto;
 }
 
 /* === Table === */
@@ -34,7 +30,7 @@
 }
 
 .table thead {
-  background: #007bff;
+  background: #eef3f9;
   color: white;
 }
 

@@ -11,6 +11,8 @@ import FeedbackSection from "./FeedbackSection";
 import OverallFeedback from "./OverallFeedback";
 import ThankYou from "./ThankYou";
 
+import FeedbackTable from "../FeedbackTable";
+
 const FeedbackForm = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ✅ Added
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -104,40 +106,41 @@ const FeedbackForm = () => {
           }}
         >
           <div className="empty-dashboard">
-
-
-            <div className="feedback-wrapper">
-              <div className="feedback-card">
-                <h2 className="title">Customer Feedback Form</h2>
-                <form onSubmit={handleSubmit}>
-                  <FeedbackInputs
-                    formData={formData}
-                    handleChange={handleChange}
-                    errors={errors}
-                    plans={plans}
-                  />
-
-                  {["Food", "Delivery", "Management"].map((section) => (
-                    <FeedbackSection
-                      key={section}
-                      section={section}
-                      ratings={ratings}
-                      setRatings={setRatings}
-                      ratingOptions={ratingOptions}
+            <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
+              <div className="feedback-wrapper">
+                <div className="feedback-card">
+                  <h2 className="title">Customer Feedback Form</h2>
+                  <form onSubmit={handleSubmit}>
+                    <FeedbackInputs
+                      formData={formData}
+                      handleChange={handleChange}
+                      errors={errors}
+                      plans={plans}
                     />
-                  ))}
 
-                  <OverallFeedback
-                    formData={formData}
-                    handleChange={handleChange}
-                    errors={errors}
-                  />
+                    {["Food", "Delivery", "Management"].map((section) => (
+                      <FeedbackSection
+                        key={section}
+                        section={section}
+                        ratings={ratings}
+                        setRatings={setRatings}
+                        ratingOptions={ratingOptions}
+                      />
+                    ))}
 
-                  <button type="submit" className="submitButton">
-                    Submit Feedback
-                  </button>
-                </form>
+                    <OverallFeedback
+                      formData={formData}
+                      handleChange={handleChange}
+                      errors={errors}
+                    />
+
+                    <button type="submit" className="submitButton">
+                      Submit Feedback
+                    </button>
+                  </form>
+                </div>
               </div>
+              <FeedbackTable />
             </div>
           </div>
         </main>

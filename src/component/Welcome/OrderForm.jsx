@@ -4,7 +4,7 @@ import "../../css/MyMealsOrderForm.css";
 import PaymentOptions from "./payment/PaymentOptions";
 import QRPaymentForm from "./payment/QRPaymentForm";
 import PayCashForm from "./payment/PayCashForm";
-import { data } from "react-router-dom";
+
 
 // --- Reusable Input ---
 function InputGroup({ label, type = "text", value, name, onChange, placeholder, isTextarea }) {
@@ -133,9 +133,7 @@ export default function OrderForm({ bg, plan, setPlan, onSuccess }) {
       setPlans(response.data);
       console.log("real plan", response.data);
     };
-    if (plans.length === 0) {
-      fetchPlans();
-    }
+    fetchPlans();
   }, []);
 
   return (

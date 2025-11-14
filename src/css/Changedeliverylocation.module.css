@@ -1,26 +1,113 @@
-/* Container */
+/* === Form & Table Wrapper === */
+.formTableWrapper {
+  display: flex;
+  gap: 20px;
+  align-items: stretch; /* ensures equal height */
+  flex-wrap: wrap; /* stack on smaller screens */
+  justify-content: space-between;
+  padding: 20px;
+}
+
 .formContainer {
+  flex: 1 1 350px;
+  max-width: 600px;
+  min-width: 300px;
+  min-height: 50vh;
+  max-height: 80vh;
+  background-color: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 600px;
-  min-height: 50vh;
-  max-height: 80vh; /* limit vertical height */
-  background-color: #fff;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  backdrop-filter: blur(10px); /* optional: adds soft blur for glass effect */
+}
+
+.formContainer:hover {
+  transform: translateY(-3px);
+}
+
+
+.tableContainer {
+  flex: 2 1 400px;
+  max-width: 800px;
+  min-width: 300px;
+  min-height: 80vh;
+  max-height: 90vh;
+  background-color: rgba(255, 255, 255, 0.85); /* semi-transparent white */
   padding: 20px;
-  font-family: 'Poppins', sans-serif;
-  overflow-y: auto; /* scroll only inside form container */
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  backdrop-filter: blur(10px); /* optional: glass-like blur */
 }
 
-/* Form Card */
-.formCard:hover {
+.tableContainer:hover {
   transform: translateY(-3px);
-  transition: transform 0.2s ease;
 }
 
-/* Title */
+
+/* === Table Styling === */
+.tableWrapper {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: #333;
+  text-align: left;
+}
+
+/* === Table Header === */
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(90deg, #e0f0e7, #c9e0d8);
+  color: #2e7d5c;
+  font-weight: 600;
+  padding: 12px 10px;
+  border-bottom: 2px solid #b6d4c9;
+  z-index: 1;
+}
+
+/* === Table Rows === */
+.table tbody tr:nth-child(even) {
+  background-color: #f9fdfb;
+}
+
+.table tbody tr:hover {
+  background-color: #eaf7f0;
+  transition: background 0.3s ease;
+}
+
+/* === Table Cells === */
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e0f0e7;
+  word-wrap: break-word;
+}
+
+/* === Empty Table Message === */
+.table td[colspan] {
+  text-align: center;
+  padding: 15px;
+  color: #555;
+  font-style: italic;
+}
+
+/* === Form Title === */
 .formTitle {
   text-align: center;
   color: #2e7d5c;
@@ -28,13 +115,12 @@
   margin-bottom: 25px;
 }
 
-/* Step Section */
+/* === Step Section === */
 .step {
   margin-top: 15px;
   width: 100%;
 }
 
-/* Step Header */
 .stepHeader {
   display: flex;
   justify-content: space-between;
@@ -51,7 +137,7 @@
   background-color: #e0f0e7;
 }
 
-/* Edit Button */
+/* === Edit Button === */
 .editButton {
   background-color: #2e7d5c;
   color: white;
@@ -68,23 +154,23 @@
   transform: translateY(-1px);
 }
 
-/* Collapsed Step */
+/* === Collapsed Step === */
 .collapsed {
-  max-height: 60px; /* show only header */
+  max-height: 60px;
   overflow: hidden;
   opacity: 0.85;
   margin-bottom: 10px;
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
-/* Step Headings */
+/* === Step Headings === */
 .step h3 {
   color: #2e7d5c;
   margin-bottom: 20px;
   font-size: 1.4rem;
 }
 
-/* Inputs and select */
+/* === Inputs & Select === */
 .inputField {
   display: block;
   width: 100%;
@@ -103,7 +189,7 @@
   outline: none;
 }
 
-/* Checkbox & Radio Group */
+/* === Checkbox & Radio === */
 .checkboxGroup,
 .radioGroup {
   display: flex;
@@ -121,7 +207,7 @@
   color: #333;
 }
 
-/* Buttons */
+/* === Buttons === */
 .btnGroup {
   display: flex;
   justify-content: space-between;
@@ -154,14 +240,14 @@ button:hover {
   border-radius: 10px;
 }
 
-/* Info Text */
+/* === Info Text === */
 .infoText {
   font-size: 0.9rem;
   color: #555;
   margin-bottom: 10px;
 }
 
-/* Address section */
+/* === Address Section === */
 .addressGroup {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -172,7 +258,7 @@ button:hover {
   margin-bottom: 10px;
 }
 
-/* Preview Box */
+/* === Preview Box === */
 .previewBox {
   background: #f7f9f7;
   padding: 20px;
@@ -186,7 +272,7 @@ button:hover {
   margin-bottom: 20px;
 }
 
-/* Thank You Message */
+/* === Thank You Message === */
 .thankYou {
   text-align: center;
   padding: 30px 15px;
@@ -203,7 +289,20 @@ button:hover {
   color: #333;
 }
 
-/* Responsive Design */
+/* === Responsive Design === */
+@media (max-width: 1024px) {
+  .formTableWrapper {
+    flex-direction: column;
+  }
+
+  .formContainer,
+  .tableContainer {
+    max-width: 100%;
+    min-height: auto;
+    max-height: none;
+  }
+}
+
 @media (max-width: 768px) {
   .formCard {
     padding: 25px 20px;

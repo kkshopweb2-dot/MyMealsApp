@@ -1,22 +1,12 @@
 /* === Table Container === */
-.tableContainer {
-  background: #ffffff;
-  border-radius: 15px;
-  padding: 25px;
-  margin: 30px auto;
-  max-width: 95%;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  overflow-x: auto;
-  animation: fadeIn 0.5s ease;
-  font-family: "Poppins", sans-serif;
-}
 
-/* === Title === */
+
+/* === Table Title === */
 .tableTitle {
   text-align: center;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 600;
-  color: #333;
+  color: #171414;
   margin-bottom: 20px;
 }
 
@@ -26,16 +16,11 @@
   overflow-x: auto;
 }
 
-/* === Table === */
+/* === Table Styling === */
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px;
-}
-
-.table thead {
-  background: #007bff;
-  color: white;
+  min-width: 900px;
 }
 
 .table th,
@@ -45,50 +30,36 @@
   border: 1px solid #ddd;
 }
 
-.table th {
-  font-size: 15px;
+.table thead {
+  background-color: #e3e6e8e3;
+  color: white;
   font-weight: 600;
 }
 
-.table td {
-  background-color: #fafafa;
-  font-size: 14px;
+.table tbody tr:nth-child(even) td {
+  background-color: #f7f7f7;
 }
 
-/* === Input Cells === */
-.inputCell {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  text-align: center;
-  font-size: 14px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.table tbody tr:hover td {
+  background-color: #e6f0ff;
+  transition: 0.3s;
 }
 
-.inputCell:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-}
-
-/* === Add Button === */
-.addButton {
-  display: block;
-  margin: 20px auto 0;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
+.table th {
   font-size: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.addButton:hover {
-  background-color: #0056b3;
-  transform: scale(1.03);
+.table td {
+  font-size: 14px;
+  color: #f3efef;
+}
+
+/* === No Data Row === */
+.noData {
+  text-align: center;
+  font-style: italic;
+  color: #1b1a1a;
+  padding: 20px 0;
 }
 
 /* === Responsive === */
@@ -100,13 +71,9 @@
   .table {
     font-size: 13px;
   }
-
-  .addButton {
-    width: 100%;
-  }
 }
 
-/* === Animation === */
+/* === Fade-in Animation === */
 @keyframes fadeIn {
   from {
     opacity: 0;

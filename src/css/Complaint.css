@@ -1,14 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
-
-
 /* Centering form properly */
-
 
 /* Elegant glass card */
 .card {
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.8); /* more transparent */
+  backdrop-filter: blur(12px); /* maintains glass effect */
   border-radius: 22px;
   padding: 35px 30px;
   max-width: 480px;
@@ -195,4 +192,18 @@ textarea {
   .checkbox {
     flex: 1 1 100%;
   }
+}
+
+.form-and-table-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.form-wrapper {
+  flex: 1;
+}
+
+.table-container {
+  flex: 1;
 }

@@ -169,7 +169,7 @@ export default function PauseResumeMeals() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="10">No meal data found.</td>
+                        <td colSpan="10"></td>
                       </tr>
                     )}
                   </tbody>

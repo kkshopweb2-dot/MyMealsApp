@@ -1,6 +1,6 @@
 /* === Container === */
 .tableContainer {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.85); /* semi-transparent */
   border-radius: 15px;
   padding: 25px;
   margin: 30px auto;
@@ -8,7 +8,9 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   overflow-x: auto;
   animation: fadeIn 0.5s ease;
+  backdrop-filter: blur(8px); /* optional glass effect */
 }
+
 
 /* === Title === */
 .tableTitle {
