@@ -1,0 +1,209 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/* Centering form properly */
+
+/* Elegant glass card */
+.card {
+  background: rgba(255, 255, 255, 0.8); /* more transparent */
+  backdrop-filter: blur(12px); /* maintains glass effect */
+  border-radius: 22px;
+  padding: 35px 30px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+/* Logo styling */
+.logo-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logo-img {
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+/* Heading styling */
+.heading {
+  font-size: 22px;
+  font-weight: 600;
+  color: #295b52;
+  text-align: center;
+  margin-bottom: 22px;
+  margin-top: 10px; /* keeps space between logo and title */
+}
+
+label {
+  display: block;
+  color: #444;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+  margin-top: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #3aa27b;
+  outline: none;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* Complaint type buttons */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.checkbox {
+  flex: 1 1 calc(50% - 10px);
+  text-align: center;
+  border: 1px solid #888;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.checkbox.selected {
+  background-color: #3aa27b;
+  color: white;
+  border-color: #2d8c68;
+}
+
+/* Buttons */
+.btn {
+  background-color: #295b52;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #3aa27b;
+}
+
+.preview-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+}
+
+/* ✅ Thank You Screen */
+.thankyou-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e1f7ec, #f2fcf8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.thank-icon {
+  color: #3aa27b;
+  font-size: 90px;
+}
+
+.thank-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #295b52;
+  margin-top: 20px;
+}
+
+.thank-text {
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+/* 🌐 Responsive Design */
+@media (max-width: 600px) {
+  .card {
+    padding: 25px 20px;
+    border-radius: 18px;
+    max-width: 90%;
+  }
+
+  .logo-img {
+    width: 110px;
+  }
+
+  .heading {
+    font-size: 20px;
+    margin-top: 8px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 13px;
+  }
+
+  .btn {
+    font-size: 15px;
+  }
+
+  .checkbox {
+    flex: 1 1 100%;
+  }
+}
+
+.form-and-table-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.form-wrapper {
+  flex: 1;
+}
+
+.table-container {
+  flex: 1;
+}

@@ -1,0 +1,261 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🌄 Full Page Background */
+.customerform-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1rem;
+  backdrop-filter: blur(3px);
+  overflow-y: auto;
+}
+
+/* 🪄 Form Card */
+.customerform-card {
+  width: 100%;
+  max-width: 650px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  padding: 40px 30px;
+  animation: fadeInUp 0.6s ease;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+/* ✨ Title */
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  color: #861f6a;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.4;
+}
+
+/* 💳 Payment Option */
+.option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  background-color: rgba(255, 255, 255, 0.95);
+  transition: all 0.3s ease;
+}
+
+.option:hover {
+  background-color: #f5f5f5;
+  transform: translateY(-2px);
+}
+
+.selectedOption {
+  border-color: #861f6a;
+  background: linear-gradient(135deg, #f6ecf3, #ffffff);
+  box-shadow: 0 4px 10px rgba(134, 31, 106, 0.15);
+}
+
+.optionText {
+  margin-left: 10px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.icon {
+  font-size: 22px;
+  color: #861f6a;
+}
+
+/* 🧾 QR Form Section */
+.formContainer {
+  margin-top: 25px;
+  padding: 20px;
+  background: rgba(245, 245, 250, 0.95);
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 🏡 Address Group */
+.addressGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.subTitle {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #2e7d5c;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* 🧾 QR Image */
+.qr {
+  display: block;
+  margin: 0 auto 20px auto;
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  border: 2px solid #861f6a;
+  box-shadow: 0 4px 12px rgba(134, 31, 106, 0.2);
+}
+
+/* ✍️ Labels & Inputs */
+.label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #2e7d5c;
+  font-size: 15px;
+}
+
+/* 🧠 Placeholder fix */
+.input {
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  line-height: 1.6;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  background-color: #fff;
+}
+
+.input::placeholder {
+  color: #aaa;
+  opacity: 1;
+  transition: color 0.3s ease;
+}
+
+.input:focus::placeholder {
+  color: #bbb;
+}
+
+.input:focus {
+  border-color: #861f6a;
+  box-shadow: 0 0 8px rgba(134, 31, 106, 0.3);
+  outline: none;
+}
+
+/* 🗺️ Map Preview */
+.mapPreview {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  overflow: hidden;
+  background-color: #f9f9f9;
+}
+
+.mapPreview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+/* 📸 Upload Box */
+.uploadBox {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #bbb;
+  margin-bottom: 15px;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.uploadBox:hover {
+  border-color: #861f6a;
+  background: #faf5fa;
+  box-shadow: 0 0 8px rgba(134, 31, 106, 0.2);
+}
+
+/* ✅ Submit Button */
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #861f6a, #a1326a);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.submitBtn:hover {
+  background: linear-gradient(135deg, #a1326a, #861f6a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* 🌈 Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 700px) {
+  .customerform-card {
+    padding: 25px 20px;
+    margin: 20px 0;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .optionText {
+    font-size: 15px;
+  }
+
+  .mapPreview {
+    height: 200px;
+  }
+
+  .formContainer {
+    padding: 15px;
+  }
+
+  .input {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+}

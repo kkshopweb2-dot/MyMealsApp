@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🌄 Full Page Background */
+.paycash-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1rem;
+  backdrop-filter: blur(2px);
+  overflow-y: auto;
+}
+
+/* 🪄 Form Card */
+.paycash-card {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 30px 25px;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease;
+}
+
+/* ✨ Title */
+.paycash-title {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #0cae4a;
+  font-size: 26px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  line-height: 1.3;
+}
+
+/* 🧾 Form Group */
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #2e7d5c;
+  font-size: 15px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #0cae4a;
+  box-shadow: 0 0 8px rgba(12, 174, 74, 0.3);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* 🔘 Radio Group */
+.radio-group {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+}
+
+/* ✅ Submit Button */
+.paycash-btn {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #0cae4a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.paycash-btn:hover {
+  background-color: #089a3b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 🌈 Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 700px) {
+  .paycash-card {
+    padding: 25px 20px;
+    margin: 20px 0;
+  }
+
+  .paycash-title {
+    font-size: 22px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+
+  .paycash-btn {
+    font-size: 16px;
+    padding: 10px 0;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

@@ -1,0 +1,330 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* ====== CONTAINER ====== */
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+/* ====== FORM BOX ====== */
+.formBox {
+  background-color: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+  padding: 30px 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+  backdrop-filter: blur(6px); /* optional: adds subtle blur behind the box */
+}
+
+
+/* ====== LOGO ====== */
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+}
+
+/* ====== HEADINGS ====== */
+.heading {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #333333;
+}
+
+/* ====== LABELS & SUBTEXT ====== */
+.label {
+  display: block;
+  font-weight: 500;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.subtext {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.brand {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+/* ====== INPUTS & SELECTS ====== */
+.input,
+.select,
+.inputFile,
+textarea {
+  width: 100%;
+  padding: 12px 14px; /* increased padding to prevent placeholder overlap */
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  background: #fafafa;
+  color: #333;
+}
+
+.input::placeholder,
+.select::placeholder,
+textarea::placeholder {
+  color: #aaa;
+  opacity: 1;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* ====== RADIO & CHECKBOX GROUPS ====== */
+.radioGroup,
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.radioOption,
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.radioOption input,
+.checkboxLabel input {
+  margin-right: 8px;
+  accent-color: #4caf50;
+}
+
+/* ====== BUTTONS ====== */
+.nextBtn,
+.backBtn,
+.submitBtn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-size: 0.95rem;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+
+.nextBtn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.nextBtn:hover {
+  background-color: #43a047;
+}
+
+.backBtn {
+  background-color: #cccccc;
+  color: #333;
+}
+
+.backBtn:hover {
+  background-color: #b3b3b3;
+}
+
+.submitBtn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.submitBtn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: #43a047;
+}
+
+/* ====== STEP BUTTONS ====== */
+.stepBtns {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+/* ====== PAYMENT CONTAINER ====== */
+.paymentContainer {
+  margin-top: 20px;
+  background-color: #fafafa;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+.paymentHeader {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.merchantCard {
+  background-color: #fff3e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 500;
+  color: #333;
+  border: 1px solid #ffd180;
+}
+
+.account {
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+.qrCode {
+  width: 120px;
+  height: auto;
+  margin: 10px 0;
+}
+
+/* ====== THANK YOU PAGE ====== */
+.thankYouContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f7f9;
+  padding: 20px;
+}
+
+.thankYouBox {
+  background-color: #ffffff;
+  padding: 30px 25px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  max-width: 450px;
+  width: 100%;
+}
+
+.thankYouTitle {
+  font-size: 1.8rem;
+  margin-top: 10px;
+  color: #4caf50;
+}
+
+.thankYouText {
+  font-size: 1rem;
+  color: #555;
+  margin: 10px 0 15px;
+}
+
+.reminder {
+  background-color: #fff3e0;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.reminder strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* =============================== RESPONSIVE =============================== */
+@media (max-width: 768px) {
+  .formBox {
+    padding: 25px 20px;
+  }
+
+  .heading {
+    font-size: 1.6rem;
+  }
+
+  .input,
+  .select,
+  textarea {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  .nextBtn,
+  .backBtn,
+  .submitBtn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .stepBtns {
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .merchantCard {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  .qrCode {
+    width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .formBox {
+    padding: 20px 15px;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+  }
+
+  .input,
+  .select,
+  textarea {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  .nextBtn,
+  .backBtn,
+  .submitBtn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .merchantCard {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .qrCode {
+    width: 80px;
+  }
+}

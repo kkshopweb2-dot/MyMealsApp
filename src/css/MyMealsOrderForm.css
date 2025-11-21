@@ -1,0 +1,233 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* 🌄 Full Page Background */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+  background-color: #f9fafb;
+}
+
+.mymeals-page-bg {
+  background-image: url("../assets/images/bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1rem;
+  backdrop-filter: blur(2px);
+}
+
+/* 🌿 Glass Form Card */
+.mymeals-form-card {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+  color: #1f1d1d;
+  animation: fadeInUp 0.6s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ✨ Title */
+.mymeals-form-title {
+  text-align: center;
+  margin-bottom: 28px;
+  color: #2e7d5c;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* 🧾 Input Groups */
+.mymeals-input-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mymeals-input-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #2e7d5c;
+}
+
+.mymeals-input-group input,
+.mymeals-input-group textarea,
+.mymeals-input-group select {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #cfd8dc;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.mymeals-input-group input:focus,
+.mymeals-input-group textarea:focus,
+.mymeals-input-group select:focus {
+  border-color: #861f6a;
+  box-shadow: 0 0 8px rgba(134, 31, 106, 0.4);
+}
+
+.mymeals-input-group textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* 💳 Button */
+.mymeals-btn {
+  background: linear-gradient(135deg, #861f6a, #a1326a);
+  color: #fff;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
+
+.mymeals-btn:hover {
+  background: linear-gradient(135deg, #a1326a, #861f6a);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 💰 Payment Section */
+.mymeals-payment-container {
+  margin-top: 25px;
+  padding: 20px;
+  background-color: rgba(247, 242, 247, 0.9);
+  border-radius: 15px;
+  border: 2px solid #861f6a;
+  box-shadow: 0 5px 15px rgba(134, 31, 106, 0.15);
+}
+
+.mymeals-payment-title {
+  color: #861f6a;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.mymeals-option-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mymeals-option-row input {
+  margin-right: 10px;
+}
+
+.mymeals-option-text {
+  font-size: 15px;
+  color: #2e7d5c;
+}
+
+/* 🗺️ Map Styling */
+.mymeals-map-container {
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s ease;
+  animation: mymeals-fadeIn 0.5s ease;
+}
+
+.mymeals-map-container iframe {
+  border: none;
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+}
+
+/* Glowing border when active */
+.mymeals-map-container.active {
+  box-shadow: 0 0 10px #861f6a, 0 0 20px rgba(134, 31, 106, 0.4);
+}
+
+/* Placeholder Map */
+.mymeals-map-placeholder {
+  color: #fff;
+  text-align: center;
+  padding: 30px 10px;
+  background: linear-gradient(135deg, #2e7d5c, #861f6a);
+  border-radius: 12px;
+  font-style: italic;
+  font-size: 17px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: mymeals-pulseGlow 2s infinite;
+}
+
+/* 🌈 Animations */
+@keyframes mymeals-pulseGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes mymeals-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive */
+@media screen and (max-width: 700px) {
+  .mymeals-form-card {
+    padding: 25px 18px;
+    margin: 10px;
+  }
+
+  .mymeals-form-title {
+    font-size: 24px;
+  }
+
+  .mymeals-btn {
+    font-size: 15px;
+  }
+
+  .mymeals-map-container iframe {
+    height: 220px;
+  }
+}

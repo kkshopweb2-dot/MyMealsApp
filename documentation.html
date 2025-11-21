@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyMealsApp Documentation</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #333; }
+        .file-section { border-left: 3px solid #eee; padding-left: 20px; margin-bottom: 40px; }
+        .function-section { margin-bottom: 20px; }
+        code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>MyMealsApp Documentation</h1>
+
+    <h2>Table of Contents</h2>
+    <ul>
+        <li><a href="#frontend">Frontend (src)</a></li>
+        <li><a href="#backend">Backend (backend)</a></li>
+    </ul>
+
+    <h2 id="frontend">Frontend (src)</h2>
+
+    <div class="file-section">
+        <h3>src/api/axios.js</h3>
+        <div class="function-section">
+            <h4>instance</h4>
+            <p>Think of this as a pre-configured messenger. It knows the address of our backend server, so when other parts of the app want to send a message (like asking for data), they can use this instance without having to type the address every time. It also cleverly attaches a secret token to each message to prove that the request is coming from a logged-in user.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/App.js</h3>
+        <div class="function-section">
+            <h4>App</h4>
+            <p>This is the main brain of our application's user interface. It acts like a traffic cop, directing users to the right pages based on the URL they visit. For example, if you go to <code>/login</code>, it shows you the login page. It also has a special power called "lazy loading," which means it only loads the code for a page when you actually need it, making the app start up faster.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Changedeliverylocation.jsx</h3>
+        <div class="function-section">
+            <h4>Changedeliverylocation</h4>
+            <p>This is a multi-part form that guides a user through the process of changing their delivery address. It's like a wizard that asks for information one step at a time, making a potentially complicated task feel simple.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step1BasicInfo.jsx</h3>
+        <div class="function-section">
+            <h4>Step1BasicInfo</h4>
+            <p>The very first screen the user sees when they want to change their delivery location. It asks for fundamental details like their name and order number.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step2EffectiveDate.jsx</h3>
+        <div class="function-section">
+            <h4>Step2EffectiveDate</h4>
+            <p>This is the part of the form where the user picks the date when their new address should become active.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step3Meals.jsx</h3>
+        <div class="function-section">
+            <h4>Step3Meals</h4>
+            <p>Here, the user can choose which of their meals (like lunch or dinner) should be sent to the new address.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step4ChangeFor.jsx</h3>
+        <div class="function-section">
+            <h4>Step4ChangeFor</h4>
+            <p>This step asks the user if they want to change the address for just one meal or for all their future meals.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step5Address.jsx</h3>
+        <div class="function-section">
+            <h4>Step5Address</h4>
+            <p>This is where the user actually types in their new street address, city, and other location details.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step6Preview.jsx</h3>
+        <div class="function-section">
+            <h4>Step6Preview</h4>
+            <p>A confirmation screen that shows the user all the information they've entered so they can double-check it for accuracy before submitting.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/ChangeDeliveryLocation/Step7ThankYou.jsx</h3>
+        <div class="function-section">
+            <h4>Step7ThankYou</h4>
+            <p>The final, friendly screen that tells the user their request has been received successfully.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Complaint/Complaint.jsx</h3>
+        <div class="function-section">
+            <h4>Complaint</h4>
+            <p>This component orchestrates the process of filing a complaint, showing the different form sections in the correct order.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Complaint/ComplaintForm.jsx</h3>
+        <div class="function-section">
+            <h4>ComplaintForm</h4>
+            <p>The main part of the complaint process, where the user describes their issue, uploads a photo if needed, and provides other details.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Complaint/OrderDetailsForm.jsx</h3>
+        <div class="function-section">
+            <h4>OrderDetailsForm</h4>
+            <p>Before filing a complaint, this form collects the user's order information to help customer service understand which order the complaint is about.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Complaint/ThankYou.jsx</h3>
+        <div class="function-section">
+            <h4>ThankYou</h4>
+            <p>A polite message that appears after a user has submitted their complaint, letting them know it's been received.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Dashboard.jsx</h3>
+        <div class="function-section">
+            <h4>Dashboard</h4>
+            <p>The main hub for a logged-in user. It's the first thing they see after logging in and contains the main navigation elements like the header and sidebar.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackForm/FeedbackForm.jsx</h3>
+        <div class="function-section">
+            <h4>FeedbackForm</h4>
+            <p>A dedicated form for customers to share their thoughts and opinions about the service.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackForm/FeedbackHeader.jsx</h3>
+        <div class="function-section">
+            <h4>FeedbackHeader</h4>
+            <p>The title section at the top of the feedback form.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackForm/FeedbackInputs.jsx</h3>
+        <div class="function-section">
+            <h4>FeedbackInputs</h4>
+            <p>The set of boxes where users can type in their name, order number, and other basic details for the feedback form.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackForm/FeedbackSection.jsx</h3>
+        <div class="function-section">
+            <h4>FeedbackSection</h4>
+            <p>A reusable part of the feedback form that lets users rate and comment on specific areas, like "Food" or "Delivery".</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackForm/OverallFeedback.jsx</h3>
+        <div class="function-section">
+            <h4>OverallFeedback</h4>
+            <p>A large text box at the end of the feedback form for any final, general comments.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackForm/ThankYou.jsx</h3>
+        <div class="function-section">
+            <h4>ThankYou</h4>
+            <p>A message that thanks the user for taking the time to provide their valuable feedback.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/FeedbackTable.jsx</h3>
+        <div class="function-section">
+            <h4>FeedbackTable</h4>
+            <p>An admin-facing table that neatly organizes and displays all the feedback received from customers.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Header.jsx</h3>
+        <div class="function-section">
+            <h4>Header</h4>
+            <p>The bar at the top of the screen that usually contains the app logo, navigation buttons, and user profile information.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/login.jsx</h3>
+        <div class="function-section">
+            <h4>Login</h4>
+            <p>The screen where users can enter their email and password to access their account.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MealPreferenceForm/MealPreferenceForm.jsx</h3>
+        <div class="function-section">
+            <h4>MealPreferenceForm</h4>
+            <p>A step-by-step form that allows users to customize their meals, for example, by choosing between veg and non-veg.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MealPreferenceForm/Step1UserInfo.jsx</h3>
+        <div class="function-section">
+            <h4>Step1UserInfo</h4>
+            <p>The first part of the meal preference form, where the user provides their basic account information.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MealPreferenceForm/Step2MealDetails.jsx</h3>
+        <div class="function-section">
+            <h4>Step2MealDetails</h4>
+            <p>The core of the preference form, where users can make specific choices about their food, like avoiding certain ingredients.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MealPreferenceForm/Step3Preview.jsx</h3>
+        <div class="function-section">
+            <h4>Step3Preview</h4>
+            <p>A summary screen that lets the user review all their meal preference changes before confirming them.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MealPreferenceForm/ThankYou.jsx</h3>
+        <div class="function-section">
+            <h4>ThankYou</h4>
+            <p>A confirmation message shown after the user has successfully updated their meal preferences.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MealPreferenceTable.jsx</h3>
+        <div class="function-section">
+            <h4>MealPreferenceTable</h4>
+            <p>A table for administrators to view and manage the meal preferences of all users.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/MenuModal.jsx</h3>
+        <div class="function-section">
+            <h4>MenuModal</h4>
+            <p>A pop-up menu that gives the user quick access to various actions, like changing their delivery location or pausing their meals.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/NewAccountsTable.jsx</h3>
+        <div class="function-section">
+            <h4>NewAccountsTable</h4>
+            <p>A table for admins that lists all the newly registered user accounts.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PauseResumeMeals/PauseResumeMeals.jsx</h3>
+        <div class="function-section">
+            <h4>PauseResumeMeals</h4>
+            <p>A form that lets users temporarily stop (pause) or restart (resume) their meal deliveries.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PauseResumeMeals/Step1Info.jsx</h3>
+        <div class="function-section">
+            <h4>Step1Info</h4>
+            <p>The first screen in the pause/resume process, asking for the user's order and contact details.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PauseResumeMeals/Step2Meals.jsx</h3>
+        <div class="function-section">
+            <h4>Step2Meals</h4>
+            <p>This is where the user can select which meals (e.g., Lunch, Dinner) they want to pause or resume and for which dates.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PauseResumeMeals/Step3Review.jsx</h3>
+        <div class="function-section">
+            <h4>Step3Review</h4>
+            <p>A final review screen showing a summary of the pause/resume request before the user confirms it.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PauseResumeMeals/Step4ThankYou.jsx</h3>
+        <div class="function-section">
+            <h4>Step4ThankYou</h4>
+            <p>A simple message to confirm that the user's request to pause or resume meals has been received.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PauseResumeTable.jsx</h3>
+        <div class="function-section">
+            <h4>PauseResumeTable</h4>
+            <p>A table for administrators to see all the pause and resume requests made by users.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/PrivateRoute.jsx</h3>
+        <div class="function-section">
+            <h4>PrivateRoute</h4>
+            <p>A special guard for certain pages. It checks if a user is logged in. If they are, it lets them see the page. If not, it sends them to the login screen.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPayment/RenewalPayment.jsx</h3>
+        <div class="function-section">
+            <h4>RenewalPayment</h4>
+            <p>A multi-step form that guides users through the process of renewing their meal subscription.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPayment/StepOne.jsx</h3>
+        <div class="function-section">
+            <h4>StepOne</h4>
+            <p>The first step of the renewal process, where the user confirms their order number and delivery location.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPayment/StepTwo.jsx</h3>
+        <div class="function-section">
+            <h4>StepTwo</h4>
+            <p>This step collects the user's personal details like name, email, and address for the renewal.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPayment/StepThree.jsx</h3>
+        <div class="function-section">
+            <h4>StepThree</h4>
+            <p>Here, the user selects their meal plan for the renewal period.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPayment/StepFour.jsx</h3>
+        <div class="function-section">
+            <h4>StepFour</h4>
+            <p>The final step in the renewal process, where the user makes the payment, either by QR code or cash.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPayment/ThankYou.jsx</h3>
+        <div class="function-section">
+            <h4>ThankYou</h4>
+            <p>A confirmation screen that appears after a successful renewal payment, with an important reminder about payment policies.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RenewalPaymentTable.jsx</h3>
+        <div class="function-section">
+            <h4>RenewalPaymentTable</h4>
+            <p>A summary table for admins to track all renewal payments made by users.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/RevenueChart.jsx</h3>
+        <div class="function-section">
+            <h4>RevenueChart</h4>
+            <p>A visual graph that shows the company's income over time.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/SalesByCategory.jsx</h3>
+        <div class="function-section">
+            <h4>SalesByCategory</h4>
+            <p>A pie chart that breaks down sales into different categories, like "Grocery" or "Electronics".</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/SessionsMap.jsx</h3>
+        <div class="function-section">
+            <h4>SessionsMap</h4>
+            <p>A placeholder for a world map that would show where the app's users are located.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Sidebar.jsx</h3>
+        <div class="function-section">
+            <h4>Sidebar</h4>
+            <p>The navigation menu on the side of the screen that provides links to different pages within the user's dashboard.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Signup.jsx</h3>
+        <div class="function-section">
+            <h4>Signup</h4>
+            <p>The page where new users can create an account.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/StatsCards.jsx</h3>
+        <div class="function-section">
+            <h4>StatsCards</h4>
+            <p>A set of small cards that display key statistics at a glance, such as total income or new users.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/TransactionsTable.jsx</h3>
+        <div class="function-section">
+            <h4>TransactionsTable</h4>
+            <p>A table that lists recent financial transactions, like payments and refunds.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/UpdateContactForm/UpdateContactForm.jsx</h3>
+        <div class="function-section">
+            <h4>UpdateContactForm</h4>
+            <p>A form that allows users to change their registered phone number or other contact details.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/UpdateContactForm/UpdateForm.jsx</h3>
+        <div class="function-section">
+            <h4>UpdateForm</h4>
+            <p>The specific input fields within the <code>UpdateContactForm</code> where the user types their new information.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/UpdateContactForm/ThankYouMessage.jsx</h3>
+        <div class="function-section">
+            <h4>ThankYouMessage</h4>
+            <p>A confirmation message shown to the user after they've submitted a request to update their contact information.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/UpdateContactTable.jsx</h3>
+        <div class="function-section">
+            <h4>UpdateContactTable</h4>
+            <p>A table for administrators to view and manage user requests to update their contact information.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/InputGroup.jsx</h3>
+        <div class="function-section">
+            <h4>InputGroup</h4>
+            <p>A reusable building block for forms. It's a simple combination of a label and an input box, designed to be used anywhere a form needs to ask for information.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/MapPreview.jsx</h3>
+        <div class="function-section">
+            <h4>MapPreview</h4>
+            <p>A cool feature that shows a live map preview of an address as the user types it in.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/OrderForm.jsx</h3>
+        <div class="function-section">
+            <h4>OrderForm</h4>
+            <p>The main form new customers use to sign up for the meal service. It collects all necessary information, from personal details to payment.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/payment/PayCashForm.jsx</h3>
+        <div class="function-section">
+            <h4>PayCashForm</h4>
+            <p>A section of the order form that appears if the user chooses to pay with cash. It includes options for paying a delivery person or at the office.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/payment/PaymentOptions.jsx</h3>
+        <div class="function-section">
+            <h4>PaymentOptions</h4>
+            <p>This component presents the user with the choice of how they want to pay, for example, by QR code or by cash.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/payment/QRPaymentForm.jsx</h3>
+        <div class="function-section">
+            <h4>QRPaymentForm</h4>
+            <p>If the user decides to pay via QR code, this form appears. It shows the QR code to scan and has fields for the transaction ID and a screenshot of the payment confirmation.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/PlanSelector.jsx</h3>
+        <div class="function-section">
+            <h4>PlanSelector</h4>
+            <p>A simple dropdown menu that lets the user choose which meal plan they want to subscribe to.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/ServicesCarousel.jsx</h3>
+        <div class="function-section">
+            <h4>ServicesCarousel</h4>
+            <p>An animated slideshow that showcases the different services and features the company offers. It also includes an important warning that users must acknowledge before proceeding.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/SuccessSection.jsx</h3>
+        <div class="function-section">
+            <h4>SuccessSection</h4>
+            <p>A final confirmation screen that appears after a new user has successfully placed their first order and made a payment.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/WelcomePage.jsx</h3>
+        <div class="function-section">
+            <h4>WelcomePage</h4>
+            <p>The main landing page for new visitors. It's the first thing they see and guides them to either sign up or log in.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/component/Welcome/WelcomeScreen.jsx</h3>
+        <div class="function-section">
+            <h4>WelcomeScreen</h4>
+            <p>The very first screen a new user sees, featuring the company logo and buttons to "Sign Up" or "Login".</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/index.js</h3>
+        <div class="function-section">
+            <p>This is the starting block of the entire React application. Its main job is to take the main <code>App</code> component and place it onto the webpage so the user can see and interact with it.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/pages/*.jsx</h3>
+        <div class="function-section">
+            <p>These files act as simple containers for the main components. Think of them as the "pages" of the website. For example, <code>ComplaintPage.jsx</code> is the page that holds and displays the <code>Complaint</code> form component. This separation helps keep the project organized.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/redux/authSlice.js</h3>
+        <div class="function-section">
+            <p>This file manages the user's login status. It keeps track of whether a user is logged in or out and holds their information. It defines the logic for what should happen when a user registers, logs in, or logs out.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/redux/store.js</h3>
+        <div class="function-section">
+            <p>This is the central "memory" of the application. It holds all the important application-wide data, like the user's login status, so that any component can access it without having to pass it down through many layers.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>src/reportWebVitals.js</h3>
+        <div class="function-section">
+            <p>A utility that helps developers measure the performance of the app. It can track how fast pages load and how quickly the app responds to user input, which is useful for making the app feel fast and smooth.</p>
+        </div>
+    </div>
+    <h2 id="backend">Backend (backend)</h2>
+
+    <div class="file-section">
+        <h3>backend/add_columns.sql</h3>
+        <div class="function-section">
+            <p>This is a script for the database, which is like a giant, organized spreadsheet. This particular script adds new columns to the "orders" sheet to store more information about each order, such as the customer's name, phone number, and payment details.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/authController.js</h3>
+        <div class="function-section">
+            <h4>register</h4>
+            <p>This function handles new user sign-ups. When a user creates an account, this code takes their password, scrambles it for security (a process called "hashing"), and then saves the new user's information to the database.</p>
+        </div>
+        <div class="function-section">
+            <h4>login</h4>
+            <p>This function manages user logins. It checks if the email and password a user enters match what's stored in the database. If they match, it gives the user a special, temporary key (a "JWT token") that proves they are logged in.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/complaintController.js</h3>
+        <div class="function-section">
+            <p>These functions are the backend's tools for managing customer complaints. They allow the system to get a list of complaints, create a new one, view a specific one, update it, or delete it. They are the bridge between the user's complaint form and the database where complaints are stored.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/deliveryLocationController.js</h3>
+        <div class="function-section">
+            <p>This set of functions manages the delivery addresses for users. They handle tasks like saving a new address, fetching the list of saved addresses, and updating or deleting an existing one.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/feedbackController.js</h3>
+        <div class="function-section">
+            <p>These functions are responsible for handling customer feedback. They allow the system to save new feedback from a user, retrieve all feedback, or update and delete existing feedback entries in the database.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/mealController.js</h3>
+        <div class="function-section">
+            <h4>getMeals</h4>
+            <p>A simple function that fetches the list of all available meals from the database.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/mealPreferenceController.js</h3>
+        <div class="function-section">
+            <p>This group of functions manages a user's meal preferences. They handle saving a user's choices (like "vegetarian" or "no seafood"), retrieving their current preferences, and updating or deleting them.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/orderController.js</h3>
+        <div class="function-section">
+            <h4>createOrder</h4>
+            <p>This function is triggered when a user places a new order. It takes all the order details (like the plan, address, and payment info) and saves them to the database.</p>
+        </div>
+        <div class="function-section">
+            <h4>getOrders</h4>
+            <p>This function retrieves a history of all orders for a specific user.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/orderMealController.js</h3>
+        <div class="function-section">
+            <h4>getOrderMeals</h4>
+            <p>This function is used to get information about which specific meals are included in which orders.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/pauseResumeMealController.js</h3>
+        <div class="function-section">
+            <p>These functions handle user requests to pause or resume their meal deliveries. They allow the system to record when a user wants to stop and restart their service, and for what reason.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/paymentController.js</h3>
+        <div class="function-section">
+            <p>This set of functions manages payment information. They are responsible for creating new payment records, retrieving payment history, and updating or deleting payment details.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/planController.js</h3>
+        <div class="function-section">
+            <h4>getPlans</h4>
+            <p>A straightforward function that fetches the list of all available subscription plans from the database.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/renewalPaymentController.js</h3>
+        <div class="function-section">
+            <p>These functions are specifically for handling subscription renewals. They manage the process of creating a new renewal payment, retrieving a history of renewals, and updating or deleting renewal records.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/userContactUpdateController.js</h3>
+        <div class="function-section">
+            <p>This group of functions manages requests from users to update their contact information. They handle creating a new update request, retrieving existing requests, and processing them.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/controllers/userController.js</h3>
+        <div class="function-section">
+            <h4>getUsers</h4>
+            <p>A function that retrieves a list of all registered users from the database. This is typically for administrative purposes.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/db.js</h3>
+        <div class="function-section">
+            <p>This file is the key that unlocks the database. It creates the connection between the backend code and the MySQL database, allowing the application to read and write data.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/middleware/verifyToken.js</h3>
+        <div class="function-section">
+            <h4>verifyToken</h4>
+            <p>This is a security guard for the backend. Before allowing access to certain private information, this middleware checks for the special key (the "JWT token") that was given to the user when they logged in. If the key is valid, the user can proceed. If not, they are denied access.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/routes/*.js</h3>
+        <div class="function-section">
+            <p>These files are like the road map for the backend. They define all the different URLs (or "routes") that the application understands. For example, they might define that a request to <code>/api/users</code> should be handled by the <code>getUsers</code> function.</p>
+        </div>
+    </div>
+
+    <div class="file-section">
+        <h3>backend/server.js</h3>
+        <div class="function-section">
+            <p>This is the main engine of the backend. It starts up the server, sets up all the necessary configurations (like allowing the frontend to communicate with it), and tells the server to use the road map defined in the <code>routes</code> files.</p>
+        </div>
+    </div>
+</body>
+</html>

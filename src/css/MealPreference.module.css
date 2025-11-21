@@ -1,0 +1,231 @@
+.formCard {
+  background: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+  width: 100%;
+  max-width: 520px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 30px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  backdrop-filter: blur(8px); /* optional: soft blur behind */
+}
+
+
+.logoContainer {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.inputGroup {
+  width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.inputGroup input,
+.inputGroup select {
+  width: 100%;
+  padding: 12px 14px; /* increased padding for placeholders */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.inputGroup input::placeholder,
+.inputGroup select::placeholder {
+  color: #aaa;
+  opacity: 1;
+}
+
+/* ICON INPUT */
+.iconInput {
+  position: relative;
+  width: 100%;
+}
+
+.iconInput input {
+  padding-left: 40px; /* space for icon */
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+/* HELPER TEXT */
+.helperText {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 3px;
+}
+
+/* BUTTONS */
+.primaryBtn {
+  width: 100%;
+  padding: 12px;
+  background: #056031;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.primaryBtn:hover {
+  background: #056031;
+}
+
+.secondaryBtn {
+  padding: 10px 20px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-right: 10px;
+}
+
+/* BUTTON ROW */
+.buttonRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* TOGGLE SWITCH */
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px; width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #056031;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* ANIMATION */
+.fadeIn {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SUMMARY BOX */
+.summaryBox {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.summaryLabel {
+  font-weight: 500;
+}
+
+.summaryValue {
+  font-weight: 600;
+  color: #111827;
+}
+
+.thankyouBox {
+  text-align: center;
+  padding: 30px 10px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 600px) {
+  .formCard {
+    padding: 20px 15px;
+  }
+
+  .buttonRow {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .inputGroup input,
+  .inputGroup select {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .iconInput input {
+    padding-left: 38px;
+  }
+}

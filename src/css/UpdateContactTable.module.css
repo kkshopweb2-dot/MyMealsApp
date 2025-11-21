@@ -1,0 +1,132 @@
+/* === Table Container === */
+.tableContainer {
+  background: rgba(255, 255, 255, 0.75); /* semi-transparent white */
+  backdrop-filter: blur(10px); /* adds frosted glass effect */
+  border-radius: 15px;
+  padding: 25px;
+  margin: 30px auto;
+  max-width: 95%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  animation: fadeIn 0.5s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* === Title === */
+.tableTitle {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* === Table === */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.table thead {
+  background: #eef3f9;
+  color: white;
+}
+
+.table th,
+.table td {
+  text-align: center;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.table td {
+  background-color: #fafafa;
+  font-size: 14px;
+}
+
+/* === Input Cells === */
+.inputCell {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  text-align: center;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inputCell:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* === Add Row Button === */
+.addButton {
+  display: block;
+  margin: 20px auto 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.addButton:hover {
+  background-color: #0056b3;
+  transform: scale(1.03);
+}
+
+/* === Delete Button === */
+.deleteButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #e63946;
+  transform: scale(1.05);
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .tableContainer {
+    padding: 15px;
+  }
+
+  .table {
+    font-size: 13px;
+  }
+
+  .addButton {
+    width: 100%;
+  }
+}
+
+/* === Animation === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,45 @@
+/* src/components/Card.css */
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card h4 {
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead tr {
+  background-color: #f0f0f0;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: white;
+}
+
+.status.verified { background: #28a745; }
+.status.pending { background: #ffc107; }
+.status.blocked { background: #dc3545; }
+.status.success { background: #28a745; }
+.status.declined { background: #dc3545; }

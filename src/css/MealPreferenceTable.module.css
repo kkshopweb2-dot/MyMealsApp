@@ -1,0 +1,86 @@
+/* === Table Container === */
+
+
+/* === Table Title === */
+.tableTitle {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #171414;
+  margin-bottom: 20px;
+}
+
+/* === Table Wrapper === */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* === Table Styling === */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.table th,
+.table td {
+  text-align: center;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.table thead {
+  background-color: #e3e6e8e3;
+  color: white;
+  font-weight: 600;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: #f7f7f7;
+}
+
+.table tbody tr:hover td {
+  background-color: #e6f0ff;
+  transition: 0.3s;
+}
+
+.table th {
+  font-size: 15px;
+}
+
+.table td {
+  font-size: 14px;
+  color: #f3efef;
+}
+
+/* === No Data Row === */
+.noData {
+  text-align: center;
+  font-style: italic;
+  color: #1b1a1a;
+  padding: 20px 0;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .tableContainer {
+    padding: 15px;
+  }
+
+  .table {
+    font-size: 13px;
+  }
+}
+
+/* === Fade-in Animation === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

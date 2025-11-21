@@ -1,0 +1,258 @@
+/* === FORM & TABLE WRAPPER === */
+.formTableWrapper {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+/* === FORM CONTAINER === */
+.formContainer {
+  flex: 1 1 350px;
+  max-width: 600px;
+  min-width: 300px;
+  min-height: 50vh;
+  max-height: 80vh;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease;
+}
+
+.formContainer:hover {
+  transform: translateY(-3px);
+}
+
+/* ===============================
+   TABLE CARD (DeliveryLocationTable)
+================================ */
+.tableCard {
+  flex: 2 1 400px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* ===============================
+   SEARCH BAR
+================================ */
+.tableSearch {
+  display: flex;
+  align-items: center;
+  background: #f4fbf7;
+  border: 1px solid #bcd5c8;
+  border-radius: 30px;
+  padding: 6px 14px;
+  margin-bottom: 15px;
+}
+
+.tableSearch input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #104b45;
+}
+
+.tableSearch svg {
+  color: #104b45;
+  font-size: 14px;
+}
+
+/* ===============================
+   TABLE RESPONSIVE WRAPPER
+================================ */
+.tableResponsive {
+  overflow-x: auto;
+  flex: 1;
+}
+
+/* ===============================
+   TABLE STYLING
+================================ */
+.tableWrapper {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tableWrapper thead {
+  background: linear-gradient(90deg, #e0f0e7, #c9e0d8);
+  color: #2e7d5c;
+}
+
+.tableWrapper th,
+.tableWrapper td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #d6e9df;
+}
+
+.tableWrapper tbody tr:nth-child(even) {
+  background: #f6fbf8;
+}
+
+.tableWrapper tbody tr:hover {
+  background: #e8f5ef;
+}
+
+/* No data row */
+.noData {
+  text-align: center;
+  padding: 15px;
+  color: #888;
+  font-style: italic;
+}
+
+/* ===============================
+   PAGINATION
+================================ */
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: #fff;
+  border: 1px solid #104b45;
+  color: #104b45;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background: #104b45;
+  color: #fff;
+}
+
+.pagination button.active {
+  background: #104b45;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   ENTRIES INFO
+================================ */
+.entriesInfo {
+  margin-top: 10px;
+  text-align: right;
+  font-size: 13px;
+  color: #555;
+}
+
+/* ===============================
+   FORM INPUTS
+================================ */
+.inputField {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #c9e0d8;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.inputField:focus {
+  border-color: #2e7d5c;
+  box-shadow: 0 0 5px rgba(46, 125, 92, 0.3);
+  outline: none;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.btnGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  background-color: #2e7d5c;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #24664b;
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   ADDRESS GRID
+================================ */
+.addressGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 1024px) {
+  .formTableWrapper {
+    flex-direction: column;
+  }
+
+  .formContainer,
+  .tableCard {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .addressGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    gap: 4px;
+  }
+
+  .tableWrapper th,
+  .tableWrapper td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .entriesInfo {
+    text-align: center;
+  }
+}

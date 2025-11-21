@@ -1,0 +1,154 @@
+/* ===============================
+   DATA TABLE CARD
+================================ */
+.tableCard {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  margin-top: 10px;
+}
+
+/* ===============================
+   SEARCH BAR
+================================ */
+.tableSearch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f4fbf7;
+  border: 1px solid #bcd5c8;
+  border-radius: 30px;
+  padding: 6px 14px;
+  margin-bottom: 15px;
+}
+
+.tableSearch input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #104b45;
+}
+
+.tableSearch svg {
+  color: #104b45;
+  font-size: 14px;
+}
+
+/* ===============================
+   TABLE STYLING
+================================ */
+.tableWrapper {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tableWrapper thead {
+  background: #104b45;
+  color: #fff;
+}
+
+.tableWrapper th,
+.tableWrapper td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #d6e9df;
+}
+
+.tableWrapper tbody tr:nth-child(even) {
+  background: #f6fbf8;
+}
+
+.tableWrapper tbody tr:hover {
+  background: #e8f5ef;
+}
+
+/* No data row */
+.noData {
+  text-align: center;
+  padding: 15px;
+  color: #888;
+  font-style: italic;
+}
+
+/* ===============================
+   PAGINATION
+================================ */
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: #fff;
+  border: 1px solid #104b45;
+  color: #104b45;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background: #104b45;
+  color: #fff;
+}
+
+.pagination button.active {
+  background: #104b45;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   ENTRIES INFO
+================================ */
+.entriesInfo {
+  margin-top: 10px;
+  text-align: right;
+  font-size: 13px;
+  color: #555;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .tableWrapper th,
+  .tableWrapper td {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+
+  .tableSearch input {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tableCard {
+    padding: 12px;
+  }
+
+  .pagination button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .entriesInfo {
+    text-align: center;
+  }
+}
