@@ -15,7 +15,7 @@
   min-width: 300px;
   min-height: 50vh;
   max-height: 80vh;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 20px;
   font-family: "Poppins", sans-serif;
   overflow-y: auto;
@@ -37,7 +37,7 @@
 ================================ */
 .tableCard {
   flex: 2 1 400px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
@@ -255,4 +255,19 @@ button:hover {
   .entriesInfo {
     text-align: center;
   }
+}
+
+.deliveryFormCard {
+  background: rgba(255, 255, 255, 0.5); /* Slightly more transparent */
+  border-radius: 12px; /* Slightly less rounded */
+  padding: 20px; /* Reduced padding */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Softer shadow */
+  transition: transform 0.2s ease;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px); /* Slightly more blur */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Slightly softer border */
+  font-family: 'Poppins', sans-serif;
+  display: flex; /* Added for layout */
+  flex-direction: column; /* Added for layout */
+  align-items: center; /* Added for layout */
 }

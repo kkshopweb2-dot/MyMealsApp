@@ -4,7 +4,7 @@
 
 /* Elegant glass card */
 .card {
-  background: rgba(255, 255, 255, 0.8); /* more transparent */
+  background: rgba(255, 255, 255, 0.5); /* more transparent */
   backdrop-filter: blur(12px); /* maintains glass effect */
   border-radius: 22px;
   padding: 35px 30px;

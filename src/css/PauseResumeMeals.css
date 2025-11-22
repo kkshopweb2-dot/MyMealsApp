@@ -28,7 +28,7 @@
    CARD
 =============================== */
 .pause-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 16px;
   padding: 25px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);

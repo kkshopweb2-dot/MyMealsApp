@@ -1,5 +1,5 @@
 .formCard {
-  background: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+  background: rgba(255, 255, 255, 0.5); /* semi-transparent white */
   width: 100%;
   max-width: 520px;
   border-radius: 15px;
@@ -11,7 +11,6 @@
   box-sizing: border-box;
   backdrop-filter: blur(8px); /* optional: soft blur behind */
 }
-
 
 .logoContainer {
   margin-bottom: 20px;

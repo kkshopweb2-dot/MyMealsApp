@@ -27,7 +27,7 @@ body, html {
 .mymeals-form-card {
   width: 100%;
   max-width: 720px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 40px 30px;
