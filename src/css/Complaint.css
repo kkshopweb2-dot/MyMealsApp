@@ -3,7 +3,7 @@
 /* Centering form properly */
 
 /* Elegant glass card */
-.card {
+.form-wrapper {
   background: rgba(255, 255, 255, 0.5); /* more transparent */
   backdrop-filter: blur(12px); /* maintains glass effect */
   border-radius: 22px;
@@ -17,7 +17,7 @@
   align-items: center;
 }
 
-.card:hover {
+.form-wrapper:hover {
   transform: translateY(-3px);
 }
 
