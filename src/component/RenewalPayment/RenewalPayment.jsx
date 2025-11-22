@@ -6,7 +6,7 @@ import Sidebar from "../Sidebar";
 import RenewalPaymentTable from "../RenewalPaymentTable"; 
 
 import "../../css/dashboard.css";
-import "../../css/RenewalPaymentTable.css";
+import "../../css/PauseResumeMeals.css";
 import bgImage from "../../assets/images/bg.png"; 
 
 import StepOne from "./StepOne";
@@ -19,6 +19,7 @@ const RenewalPayment = () => {
   const [step, setStep] = useState(1);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [submittedData, setSubmittedData] = useState([]); // State for table data
 
   const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: {
@@ -52,27 +53,15 @@ const RenewalPayment = () => {
 
   const onSubmitPayment = (data) => {
     console.log("Payment Data:", data);
+    setSubmittedData(prevData => [...prevData, data]); // Add new data to the table state
     setPaymentConfirmed(true);
-    reset();
-    setStep(1);
   };
 
-  if (paymentConfirmed) {
-    return (
-      <div className="dashboard-layout">
-        <Sidebar
-          isOpen={isSidebarOpen}
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        />
-        <div className={`dashboard-main ${isSidebarOpen ? "sidebar-open" : ""}`}>
-          <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-          <main className="dashboard-content">
-            <ThankYou setPaymentConfirmed={setPaymentConfirmed} />
-          </main>
-        </div>
-      </div>
-    );
-  }
+  const handleThankYouBack = () => {
+    setPaymentConfirmed(false);
+    setStep(1);
+    reset();
+  };
 
   return (
     <div className="dashboard-layout">
@@ -92,43 +81,43 @@ const RenewalPayment = () => {
             padding: "20px",
           }}
         >
-          <div className="flex-container" style={{ display: "flex", gap: "20px" }}>
+          <div className="row">
             {/* Form Section */}
-            <div className="form-section" style={{ flex: 1 }}>
-              <div className="container-fluid renew-content">
-                <div style={{ display: step >= 1 ? "block" : "none" }}>
-                  <StepOne control={control} watch={watch} handleNext={handleNext} />
-                </div>
-                <div style={{ display: step >= 2 ? "block" : "none" }}>
-                  <StepTwo control={control} handleNext={handleNext} handleBack={handleBack} />
-                </div>
-                <div style={{ display: step >= 3 ? "block" : "none" }}>
-                  <StepThree
-                    control={control}
-                    watch={watch}
-                    handleNext={handleNext}
-                    handleBack={handleBack}
-                  />
-                </div>
-                <div style={{ display: step >= 4 ? "block" : "none" }}>
-                  <StepFour
-                    control={control}
-                    handleSubmit={handleSubmit}
-                    onSubmitPayment={onSubmitPayment}
-                    watch={watch}
-                    handleBack={handleBack}
-                  />
-                </div>
-              </div>
+            <div className="col-md-5">
+              <form className="pause-card" onSubmit={handleSubmit(onSubmitPayment)}>
+                {paymentConfirmed ? (
+                  <ThankYou setPaymentConfirmed={handleThankYouBack} />
+                ) : (
+                  <>
+                    {step === 1 && (
+                      <StepOne control={control} watch={watch} handleNext={handleNext} />
+                    )}
+                    {step === 2 && (
+                      <StepTwo control={control} handleNext={handleNext} handleBack={handleBack} />
+                    )}
+                    {step === 3 && (
+                      <StepThree
+                        control={control}
+                        watch={watch}
+                        handleNext={handleNext}
+                        handleBack={handleBack}
+                      />
+                    )}
+                    {step === 4 && (
+                      <StepFour
+                        control={control}
+                        watch={watch}
+                        handleBack={handleBack}
+                      />
+                    )}
+                  </>
+                )}
+              </form>
             </div>
 
             {/* Table Section */}
-            <div
-              className="renew-card table-section"
-              style={{ flex: 1, maxHeight: "80vh", overflowY: "auto" }}
-            >
-              
-              <RenewalPaymentTable />
+            <div className="col-md-7">
+              <RenewalPaymentTable data={submittedData} title="Renewal Payment Summary" />
             </div>
           </div>
         </main>

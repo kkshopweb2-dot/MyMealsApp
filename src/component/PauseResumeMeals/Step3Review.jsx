@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Step3Review({ orderNo, name, phone, email, plan, meals, handleFinalSubmit, handleBack }) {
   return (
-    <div className="pause-card">
+    <>
       <h3>Review Your Submission</h3>
       <p><b>Order No:</b> {orderNo}</p>
       <p><b>Name:</b> {name}</p>
@@ -24,8 +24,10 @@ export default function Step3Review({ orderNo, name, phone, email, plan, meals, 
         );
       })}
 
-      <button onClick={handleFinalSubmit}>Submit Final Request</button>
-      <button className="back-btn" onClick={handleBack}>Back & Edit Meals</button>
-    </div>
+      <div className="button-group">
+        <button className="back-btn" onClick={handleBack}>Back & Edit Meals</button>
+        <button onClick={handleFinalSubmit} className="submit-btn">Submit Final Request</button>
+      </div>
+    </>
   );
 }

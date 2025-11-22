@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
 
-const RenewalPaymentTable = ({ data = [] }) => {
+const RenewalPaymentTable = ({ data = [], title }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
 
@@ -25,7 +25,7 @@ const RenewalPaymentTable = ({ data = [] }) => {
 
   return (
     <div className="tableCard">
-      <h3 className="tableTitle">Renewal Payment Summary</h3>
+      {title && <h3 className="mb-4">{title}</h3>}
 
       {/* Search Bar */}
       <div className="tableSearch">
@@ -42,7 +42,7 @@ const RenewalPaymentTable = ({ data = [] }) => {
       </div>
 
       {/* Table */}
-      <div className="table-scroll">
+      <div className="table-responsive">
         <table className="tableWrapper">
           <thead>
             <tr>
@@ -64,6 +64,7 @@ const RenewalPaymentTable = ({ data = [] }) => {
               <th>Office Date</th>
               <th>Office Time</th>
               <th>Note</th>
+              <th>Screenshot</th>
             </tr>
           </thead>
 
@@ -89,12 +90,13 @@ const RenewalPaymentTable = ({ data = [] }) => {
                   <td>{row.officeDate}</td>
                   <td>{row.officeTime}</td>
                   <td>{row.note}</td>
+                  <td>{row.screenshot ? row.screenshot.name : 'N/A'}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="18" className="noData">
-                  No data found
+                <td colSpan="19" className="noData">
+                  No data available to display.
                 </td>
               </tr>
             )}
@@ -107,6 +109,7 @@ const RenewalPaymentTable = ({ data = [] }) => {
         <button
           onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
           disabled={activePage === 1}
+          className="arrow-btn"
         >
           &lt;
         </button>
@@ -124,6 +127,7 @@ const RenewalPaymentTable = ({ data = [] }) => {
         <button
           onClick={() => setActivePage((p) => Math.min(p + 1, totalPages))}
           disabled={activePage === totalPages}
+          className="arrow-btn"
         >
           &gt;
         </button>

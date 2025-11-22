@@ -32,7 +32,7 @@ export const initialMealState = () => ({
 });
 
 /* ---------- Reusable DataTable for Summary ---------- */
-const SummaryDataTable = ({ data }) => {
+const SummaryDataTable = ({ data, title }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
   const entriesPerPage = 5;
@@ -51,6 +51,7 @@ const SummaryDataTable = ({ data }) => {
 
   return (
     <div className="tableCard">
+      {title && <h3 className="mb-4">{title}</h3>}
       {/* Search Bar */}
       <div className="tableSearch">
         <input
@@ -65,49 +66,54 @@ const SummaryDataTable = ({ data }) => {
         <FaSearch />
       </div>
 
-      <table className="tableWrapper">
-        <thead>
-          <tr>
-            <th>Order No</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Plan</th>
-            <th>Meal</th>
-            <th>Pause</th>
-            <th>Resume</th>
-            <th>Pause Date</th>
-            <th>Resume Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row, index) => (
-              <tr key={index}>
-                <td>{row.orderNo}</td>
-                <td>{row.name}</td>
-                <td>{row.email}</td>
-                <td>{row.phone}</td>
-                <td>{row.plan}</td>
-                <td>{row.meal}</td>
-                <td>{row.pause}</td>
-                <td>{row.resume}</td>
-                <td>{row.pauseDate}</td>
-                <td>{row.resumeDate}</td>
-              </tr>
-            ))
-          ) : (
+      <div className="table-responsive">
+        <table className="tableWrapper">
+          <thead>
             <tr>
-              <td colSpan="10" className="noData">No data found</td>
+              <th>Order No</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Plan</th>
+              <th>Meal</th>
+              <th>Pause</th>
+              <th>Resume</th>
+              <th>Pause Date</th>
+              <th>Resume Date</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {paginatedData.length > 0 ? (
+              paginatedData.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.orderNo}</td>
+                  <td>{row.name}</td>
+                  <td>{row.email}</td>
+                  <td>{row.phone}</td>
+                  <td>{row.plan}</td>
+                  <td>{row.meal}</td>
+                  <td>{row.pause}</td>
+                  <td>{row.resume}</td>
+                  <td>{row.pauseDate}</td>
+                  <td>{row.resumeDate}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="10" className="noData">
+                  No data available to display.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       <div className="pagination">
         <button
           onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
           disabled={activePage === 1}
+          className="arrow-btn"
         >
           &lt;
         </button>
@@ -123,6 +129,7 @@ const SummaryDataTable = ({ data }) => {
         <button
           onClick={() => setActivePage((p) => Math.min(p + 1, totalPages))}
           disabled={activePage === totalPages}
+          className="arrow-btn"
         >
           &gt;
         </button>
@@ -211,48 +218,52 @@ export default function PauseResumeMeals() {
             backgroundPosition: "center",
           }}
         >
-          <div className="container-fluid pause-content row">
+          <div className="container-fluid pause-content">
 
-            {step === 1 && (
-              <Step1Info
-                orderNo={orderNo} setOrderNo={setOrderNo}
-                name={name} setName={setName}
-                phone={phone} setPhone={setPhone}
-                email={email} setEmail={setEmail}
-                plan={plan} setPlan={setPlan}
-                handleNext={handleNextFromInfo}
-              />
-            )}
+            {/* Steps Container */}
+            <div className="col-md-5">
+              <div className="pause-card">
+                {step === 1 && (
+                  <Step1Info
+                    orderNo={orderNo} setOrderNo={setOrderNo}
+                    name={name} setName={setName}
+                    phone={phone} setPhone={setPhone}
+                    email={email} setEmail={setEmail}
+                    plan={plan} setPlan={setPlan}
+                    handleNext={handleNextFromInfo}
+                  />
+                )}
 
-            {step === 2 && (
-              <Step2Meals
-                plan={plan} meals={meals}
-                setMealField={setMealField}
-                setMealDate={setMealDate}
-                handleSubmit={handleSubmitMeals}
-                handleBack={() => setStep(1)}
-              />
-            )}
+                {step === 2 && (
+                  <Step2Meals
+                    plan={plan} meals={meals}
+                    setMealField={setMealField}
+                    setMealDate={setMealDate}
+                    handleSubmit={handleSubmitMeals}
+                    handleBack={() => setStep(1)}
+                  />
+                )}
 
-            {step === 3 && (
-              <Step3Review
-                orderNo={orderNo}
-                name={name}
-                phone={phone}
-                email={email}
-                plan={plan}
-                meals={meals}
-                handleFinalSubmit={handleFinalSubmit}
-                handleBack={() => setStep(2)}
-              />
-            )}
+                {step === 3 && (
+                  <Step3Review
+                    orderNo={orderNo}
+                    name={name}
+                    phone={phone}
+                    email={email}
+                    plan={plan}
+                    meals={meals}
+                    handleFinalSubmit={handleFinalSubmit}
+                    handleBack={() => setStep(2)}
+                  />
+                )}
 
-            {step === 4 && <Step4ThankYou />}
+                {step === 4 && <Step4ThankYou />}
+              </div>
+            </div>
 
-            {/* New Searchable & Paginated Summary Table */}
-            <div className="pause-card col-md-7" style={{ marginLeft: '20px' }}>
-              <h3>Pause / Resume Summary</h3>
-              <SummaryDataTable data={tableData} />
+            {/* Summary Table */}
+            <div className="col-md-7">
+              <SummaryDataTable data={tableData} title="Pause / Resume Summary" />
             </div>
 
           </div>

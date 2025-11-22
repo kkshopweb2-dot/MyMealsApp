@@ -3,7 +3,7 @@ import { planToMeals } from "./PauseResumeMeals";
 
 export default function Step2Meals({ plan, meals, setMealField, setMealDate, handleSubmit, handleBack }) {
   return (
-    <div className="pause-card">
+    <>
       <h3>Select Meals to Pause / Resume</h3>
       {["Breakfast", "Lunch", "Dinner"].map((meal) => {
         const m = meals[meal];
@@ -35,8 +35,10 @@ export default function Step2Meals({ plan, meals, setMealField, setMealDate, han
         );
       })}
 
-      <button onClick={handleSubmit}>Submit</button>
-      <button className="back-btn" onClick={handleBack}>Back to Info</button>
-    </div>
+      <div className="button-group">
+        <button className="back-btn" onClick={handleBack}>Back to Info</button>
+        <button onClick={handleSubmit} className="submit-btn">Submit</button>
+      </div>
+    </>
   );
 }

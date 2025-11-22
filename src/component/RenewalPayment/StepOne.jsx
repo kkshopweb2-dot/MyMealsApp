@@ -1,19 +1,14 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import style from "../../css/Renewal.module.css";
-// import logo from "../../assets/images/logo.png";
 
 const StepOne = ({ control, watch, handleNext }) => {
   const watchLocation = watch("location");
 
   return (
-    <form className={style.formBox} onSubmit={(e) => e.preventDefault()}>
-      {/* <div className={style.logoContainer}>
-        <img src={logo} alt="MYMEALS Logo" className={style.logo} />
-      </div> */}
-      <h2 className={style.heading}>Renewal Form</h2>
+    <>
+      <h2>Renewal Form</h2>
 
-      <label className={style.label}>Order No.</label>
+      <label>Order No.</label>
       <Controller
         name="orderNo"
         control={control}
@@ -22,75 +17,77 @@ const StepOne = ({ control, watch, handleNext }) => {
           <input
             {...field}
             type="number"
-            className={style.input}
             placeholder="Enter Order Number"
             required
           />
         )}
       />
 
-      <label className={style.label}>Location *</label>
-      <p className={style.subtext}>
+      <label>Location *</label>
+      <p className="subtext">
         Proceed only if continuing with the same location or confirmed new
-        location with <span className={style.brand}>MYMEALS Team</span>.
+        location with <span className="brand">MYMEALS Team</span>.
       </p>
 
       <Controller
         name="location"
         control={control}
         render={({ field }) => (
-          <div className={style.radioGroup}>
-            <label className={style.radioOption}>
+          <div className="radio-group">
+            <label className="radio-option">
               <input
                 type="radio"
                 value="Old"
                 checked={field.value === "Old"}
                 onChange={() => field.onChange("Old")}
               />
-              Old
+              <span>Old</span>
             </label>
-            <label className={style.radioOption}>
+            <label className="radio-option">
               <input
                 type="radio"
                 value="New"
                 checked={field.value === "New"}
                 onChange={() => field.onChange("New")}
               />
-              New
+              <span>New</span>
             </label>
           </div>
         )}
       />
 
-      {watchLocation === "New" ? (
-        <Controller
-          name="locationConfirmed"
-          control={control}
-          render={({ field }) => (
-            <div className={style.checkboxGroup}>
-              <label className={style.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  checked={field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
-                />
-                I have confirmed the delivery location
-              </label>
-              {field.value && (
-                <button type="button" className={style.nextBtn} onClick={handleNext}>
-                  Next
-                </button>
-              )}
-            </div>
-          )}
-        />
-      ) : (
-        <button type="button" className={style.nextBtn} onClick={handleNext}>
-          Next
-        </button>
-      )}
-    </form>
+      <div className="button-group">
+        {watchLocation === "New" ? (
+          <Controller
+            name="locationConfirmed"
+            control={control}
+            render={({ field }) => (
+              <div className="checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                  />
+                  <span>I have confirmed the delivery location</span>
+                </label>
+                {field.value && (
+                  <button type="button" className="submit-btn" onClick={handleNext}>
+                    Next
+                  </button>
+                )}
+              </div>
+            )}
+          />
+        ) : (
+          <button type="button" className="submit-btn" onClick={handleNext}>
+            Next
+          </button>
+        )}
+      </div>
+    </>
   );
 };
 
 export default StepOne;
+

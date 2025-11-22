@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Step1Info({ orderNo, setOrderNo, name, setName, phone, setPhone, email, setEmail, plan, setPlan, handleNext }) {
   return (
-    <div className="pause-card col-md-4">
+    <>
       <h2>PAUSE AND RESUME YOUR MEAL</h2>
       <input type="text" placeholder="Order No. *" value={orderNo} onChange={(e) => setOrderNo(e.target.value)} />
       <input type="text" placeholder="Name *" value={name} onChange={(e) => setName(e.target.value)} />
@@ -19,7 +19,9 @@ export default function Step1Info({ orderNo, setOrderNo, name, setName, phone, s
         <option value="5">Monthly Breakfast</option>
       </select>
 
-      <button onClick={handleNext}>Next</button>
-    </div>
+      <div className="button-group">
+        <button onClick={handleNext} className="submit-btn">Next</button>
+      </div>
+    </>
   );
 }

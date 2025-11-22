@@ -1,14 +1,13 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import style from "../../css/Renewal.module.css";
 
 const StepThree = ({ control, watch, handleNext, handleBack }) => {
   const watchPlan = watch("plan");
 
   return (
-    <form className={style.formBox} onSubmit={(e) => e.preventDefault()}>
-      <label className={style.label}>Select Plan *</label>
-      <p className={style.subtext}>
+    <>
+      <label>Select Plan *</label>
+      <p className="subtext">
         Select your existing plan or the one you wish to continue with.
       </p>
 
@@ -17,7 +16,7 @@ const StepThree = ({ control, watch, handleNext, handleBack }) => {
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
-          <select {...field} className={style.select}>
+          <select {...field}>
             <option value="">-- Choose Plan --</option>
             <option value="comboLunchDinnerBreakfast">Combo Lunch, Dinner & Breakfast</option>
             <option value="comboLunchDinner">Combo Lunch & Dinner</option>
@@ -30,7 +29,8 @@ const StepThree = ({ control, watch, handleNext, handleBack }) => {
 
       {watchPlan && (
         <>
-          <p className={style.subtext}>
+          <label>Renewal Info *</label>
+          <p className="subtext">
             Example: 2nd month = 1st renewal, 3rd month = 2nd renewal, etc.
           </p>
           <Controller
@@ -38,23 +38,23 @@ const StepThree = ({ control, watch, handleNext, handleBack }) => {
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <input {...field} type="text" className={style.input} placeholder="Renewal Info *" required />
+              <input {...field} type="text" placeholder="e.g., 2nd Month" required />
             )}
           />
         </>
       )}
 
-      <div className={style.stepBtns}>
-        <button type="button" className={style.backBtn} onClick={handleBack}>
+      <div className="button-group">
+        <button type="button" className="back-btn" onClick={handleBack}>
           Back
         </button>
         {watchPlan && (
-          <button type="button" className={style.nextBtn} onClick={handleNext}>
+          <button type="button" className="submit-btn" onClick={handleNext}>
             Proceed to Payment
           </button>
         )}
       </div>
-    </form>
+    </>
   );
 };
 
