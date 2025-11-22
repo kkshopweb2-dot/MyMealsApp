@@ -1,19 +1,20 @@
 import React from "react";
 import { IoMailOutline } from "react-icons/io5";
 
-const UpdateForm = ({ formData, setFormData, setStep }) => {
-  const handleSubmit = (e) => {
+const UpdateForm = ({ formData, setFormData, setStep, handleSubmit }) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     const { orderNo, name, email, plan, oldPhone, newPhone } = formData;
     if (!orderNo || !name || !email || !plan || !oldPhone || !newPhone) {
       alert("Please fill all required fields");
       return;
     }
+    handleSubmit(formData);
     setStep("thankyou");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <h2 className="update-heading">Update Contact No.</h2>
 
       <label className="update-label">Order No. *</label>

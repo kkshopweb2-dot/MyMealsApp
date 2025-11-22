@@ -1,16 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import { FaSearch } from "react-icons/fa";
-import Header from '../Header';
-import Sidebar from '../Sidebar';
-import '../../css/dashboard.css';
+import { useState,useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import PauseResumeTable from "../PauseResumeTable";
+import { logout } from "../../redux/authSlice";
+import Header from "../Header";
+import Sidebar from "../Sidebar";
 import "../../css/PauseResumeMeals.css";
-import "../../css/DataTable.css"; // table styling like your example
-import bgImage from "../../assets/images/bg.png";
-
+import bgImage from "../../assets/images/bg.png"; 
+import { FaSearch } from "react-icons/fa";
+import "../../css/dashboard.css";
 import Step1Info from "./Step1Info";
 import Step2Meals from "./Step2Meals";
 import Step3Review from "./Step3Review";
 import Step4ThankYou from "./Step4ThankYou";
+import axios from "axios";
 
 // Map plan to available meals
 export const planToMeals = (plan) => {
@@ -26,9 +30,9 @@ export const planToMeals = (plan) => {
 
 // Initialize meal state
 export const initialMealState = () => ({
-  Breakfast: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null } },
-  Lunch: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null } },
-  Dinner: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null } },
+  Breakfast: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null }, reason: "" },
+  Lunch: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null }, reason: "" },
+  Dinner: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null }, reason: "" },
 });
 
 /* ---------- Reusable DataTable for Summary ---------- */
@@ -80,6 +84,7 @@ const SummaryDataTable = ({ data, title }) => {
               <th>Resume</th>
               <th>Pause Date</th>
               <th>Resume Date</th>
+              <th>Reason</th>
             </tr>
           </thead>
           <tbody>
@@ -96,11 +101,12 @@ const SummaryDataTable = ({ data, title }) => {
                   <td>{row.resume}</td>
                   <td>{row.pauseDate}</td>
                   <td>{row.resumeDate}</td>
+                  <td>{row.reason}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="10" className="noData">
+                <td colSpan="11" className="noData">
                   No data available to display.
                 </td>
               </tr>
@@ -145,6 +151,13 @@ const SummaryDataTable = ({ data, title }) => {
 export default function PauseResumeMeals() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [step, setStep] = useState(1);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
 
   const [orderNo, setOrderNo] = useState("");
   const [name, setName] = useState("");
@@ -152,6 +165,7 @@ export default function PauseResumeMeals() {
   const [email, setEmail] = useState("");
   const [plan, setPlan] = useState("");
   const [meals, setMeals] = useState(initialMealState());
+  const [reason, setReason] = useState("");
 
   const handleNextFromInfo = () => {
     if (!plan) return alert("Please select a plan.");
@@ -169,7 +183,27 @@ export default function PauseResumeMeals() {
     setStep(3);
   };
 
-  const handleFinalSubmit = () => setStep(4);
+  const handleFinalSubmit = async () => {
+    try {
+      const mealData = Object.entries(meals)
+        .filter(([_, data]) => data.checked)
+        .map(([meal, data]) => ({
+          meal_type: meal,
+          action: data.pause ? "Pause" : "Resume",
+          start_date: data.dates.pause,
+          end_date: data.dates.resume,
+          reason: reason,
+        }));
+
+      await axios.post("/api/pause-resume", {
+        order_no: orderNo,
+        meals: mealData,
+      });
+      setStep(4);
+    } catch (error) {
+      console.error("Failed to submit:", error);
+    }
+  };
 
   const setMealField = (meal, key, value) => {
     setMeals(prev => ({ ...prev, [meal]: { ...prev[meal], [key]: value } }));
@@ -197,8 +231,9 @@ export default function PauseResumeMeals() {
         resume: data.resume ? "Yes" : "No",
         pauseDate: data.dates.pause || "-",
         resumeDate: data.dates.resume || "-",
+        reason: reason || "-",
       }));
-  }, [meals, orderNo, name, email, phone, plan]);
+  }, [meals, orderNo, name, email, phone, plan, reason]);
 
   return (
     <div className="dashboard-layout">
@@ -208,7 +243,10 @@ export default function PauseResumeMeals() {
       />
 
       <div className={`dashboard-main ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <Header
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          onLogout={handleLogout}
+        />
 
         <main
           className="dashboard-content"
@@ -252,6 +290,8 @@ export default function PauseResumeMeals() {
                     email={email}
                     plan={plan}
                     meals={meals}
+                    reason={reason}
+                    setReason={setReason}
                     handleFinalSubmit={handleFinalSubmit}
                     handleBack={() => setStep(2)}
                   />

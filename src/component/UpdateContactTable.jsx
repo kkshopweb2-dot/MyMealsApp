@@ -2,20 +2,17 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
 
-const UpdateContactTable = ({ formData }) => {
+const UpdateContactTable = ({ rows, title }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
 
-  const entriesPerPage = 5;
+  const entriesPerPage = 10;
 
-  // Convert single formData to array for table structure
-  const data = formData ? [formData] : [];
-
-  const filteredData = data.filter(
+  const filteredData = rows.filter(
     (item) =>
-      item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.orderNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.email?.toLowerCase().includes(searchQuery.toLowerCase())
+      item.orderNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -27,15 +24,19 @@ const UpdateContactTable = ({ formData }) => {
 
   return (
     <div className="tableCard">
-      <h2 className="tableTitle">Update Contact Details</h2>
-
-      {/* Search */}
+        <div className="tableCardHeader">
+            <h2>{title}</h2>
+        </div>
+      {/* Search Bar */}
       <div className="tableSearch">
         <input
           type="text"
-          placeholder="Search by Order No / Name / Email"
+          placeholder="Search here..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setActivePage(1);
+          }}
         />
         <FaSearch />
       </div>
@@ -75,35 +76,33 @@ const UpdateContactTable = ({ formData }) => {
       </table>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="pagination">
-          <button
-            onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
-            disabled={activePage === 1}
-          >
-            &lt;
-          </button>
+      <div className="pagination">
+        <button
+          onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
+          disabled={activePage === 1}
+        >
+          &lt;
+        </button>
 
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              className={activePage === i + 1 ? "active" : ""}
-              onClick={() => setActivePage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-
+        {Array.from({ length: totalPages }, (_, i) => (
           <button
-            onClick={() =>
-              setActivePage((p) => Math.min(p + 1, totalPages))
-            }
-            disabled={activePage === totalPages}
+            key={i}
+            className={activePage === i + 1 ? "active" : ""}
+            onClick={() => setActivePage(i + 1)}
           >
-            &gt;
+            {i + 1}
           </button>
-        </div>
-      )}
+        ))}
+
+        <button
+          onClick={() =>
+            setActivePage((p) => Math.min(p + 1, totalPages))
+          }
+          disabled={activePage === totalPages}
+        >
+          &gt;
+        </button>
+      </div>
 
       {/* Entries Info */}
       <div className="entriesInfo">
@@ -114,3 +113,4 @@ const UpdateContactTable = ({ formData }) => {
 };
 
 export default UpdateContactTable;
+

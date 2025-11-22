@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css"; // reuse same CSS used by your DataTable
 
-const MealPreferenceTable = ({ rows }) => {
+const MealPreferenceTable = ({ rows, title }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
 
   const entriesPerPage = 10;
 
   const filteredData = rows.filter((item) =>
-    item.orderNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.plan.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.mealType.toLowerCase().includes(searchQuery.toLowerCase())
+    (item.orderNo && item.orderNo.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (item.email && item.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (item.plan && item.plan.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (item.mealType && item.mealType.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
+  
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
 
   const paginatedData = filteredData.slice(
@@ -25,6 +25,7 @@ const MealPreferenceTable = ({ rows }) => {
 
   return (
     <div className="tableCard">
+      {title && <h3 className="tableTitle">{title}</h3>}
 
       {/* Search Bar */}
       <div className="tableSearch">
@@ -50,6 +51,7 @@ const MealPreferenceTable = ({ rows }) => {
             <th>Plan</th>
             <th>Effective From</th>
             <th>Meal Type</th>
+            <th>Preference Details</th>
           </tr>
         </thead>
         <tbody>
@@ -62,11 +64,17 @@ const MealPreferenceTable = ({ rows }) => {
                 <td>{row.plan}</td>
                 <td>{row.effectiveFrom}</td>
                 <td>{row.mealType}</td>
+                <td>
+                  {row.preference_details &&
+                    Object.entries(JSON.parse(row.preference_details))
+                      .map(([key, value]) => `${key}: ${value}`)
+                      .join(", ")}
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="noData">
+              <td colSpan="7" className="noData">
                 No data found
               </td>
             </tr>

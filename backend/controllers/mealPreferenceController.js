@@ -1,7 +1,23 @@
 import db from "../db.js";
 
 export const getMealPreferences = (req, res) => {
-  const sql = "SELECT * FROM meal_preferences WHERE user_id = ? ORDER BY created_at DESC";
+  const sql = `
+    SELECT
+      mp.id,
+      mp.user_id,
+      mp.meal_type,
+      mp.preference_details,
+      mp.is_active,
+      mp.created_at,
+      u.name,
+      u.email,
+      o.plan
+    FROM meal_preferences mp
+    LEFT JOIN users u ON mp.user_id = u.id
+    LEFT JOIN orders o ON mp.order_no = o.order_no
+    WHERE mp.user_id = ?
+    ORDER BY mp.created_at DESC
+  `;
   db.query(sql, [req.userId], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);

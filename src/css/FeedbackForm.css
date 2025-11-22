@@ -38,7 +38,7 @@
 }
 
 .title {
-  color: #861f6a;
+  color: #056031;
   font-size: 26px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -63,7 +63,7 @@
 
 .input:focus,
 .textArea:focus {
-  border-color: #861f6a;
+  border-color: #056031;
   box-shadow: 0 0 8px rgba(134, 31, 106, 0.25);
   outline: none;
 }
@@ -90,7 +90,7 @@
 =============================== */
 .sectionCard {
   background: #fef9ff;
-  border-left: 5px solid #861f6a;
+  border-left: 5px solid #056031;
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 25px;
@@ -105,7 +105,7 @@
 
 .sectionTitle {
   font-size: 18px;
-  color: #861f6a;
+  color: #056031;
   font-weight: 600;
   margin-bottom: 10px;
 }
@@ -115,7 +115,7 @@
 =============================== */
 .label {
   font-size: 16px;
-  color: #861f6a;
+  color: #056031;
   font-weight: 500;
   display: block;
   margin: 10px 0 5px;
@@ -125,7 +125,7 @@
    Submit Button
 =============================== */
 .submitButton {
-  background: linear-gradient(135deg, #861f6a, #b74fb6);
+  background: linear-gradient(135deg, #056031, #056031);
   color: #fff;
   border: none;
   border-radius: 30px;
@@ -140,7 +140,7 @@
 }
 
 .submitButton:hover {
-  background: linear-gradient(135deg, #6a1755, #861f6a);
+  background: linear-gradient(135deg, #056031, #056031);
   transform: scale(1.03);
   box-shadow: 0 10px 25px rgba(134, 31, 106, 0.4);
 }
@@ -167,7 +167,7 @@
 }
 
 .thankYouText {
-  color: #861f6a;
+  color: #056031;
   font-size: 26px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -205,4 +205,12 @@
   .form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===============================
+   Feedback Table Container
+=============================== */
+.feedback-table-container {
+  flex: 1; /* Allows the table container to grow and shrink */
+  min-width: 300px; /* Ensures a minimum width for the table */
 }

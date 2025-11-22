@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css"; // same CSS as your DataTable
 
-const DeliveryLocationTable = ({ rows }) => {
+const DeliveryLocationTable = ({ rows, title }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
 
@@ -25,6 +25,9 @@ const DeliveryLocationTable = ({ rows }) => {
 
   return (
     <div className="tableCard">
+        <div className="tableCardHeader">
+            <h2>{title}</h2>
+        </div>
       {/* Search Bar */}
       <div className="tableSearch">
         <input

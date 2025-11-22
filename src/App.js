@@ -12,7 +12,7 @@ const Login = lazy(() => import("./component/login"));
 const Dashboard = lazy(() => import("./component/Dashboard"));
 const MenuModal = lazy(() => import("./component/MenuModal"));
 
-const DeliveryLocationTable = lazy(() => import("./pages/DeliveryLocationTable"));
+
 const PauseResumeTable = lazy(() => import("./component/PauseResumeTable"));
 
 const TransactionsTable = lazy(() => import("./component/TransactionsTable"));
@@ -53,7 +53,6 @@ const App = () => {
             <Route path="/MealPreferenceForm" element={<MealPreferenceFormPage />} />
             <Route path="/Changedeliverylocation" element={<ChangeDeliveryLocationPage />} />
             <Route path="/TransactionsTable" element={<TransactionsTable />} />
-            <Route path="/DeliveryLocationTable" element={<DeliveryLocationTable />} />
             <Route path="/PauseResumeTable" element={<PauseResumeTable />} />
             <Route path="/ComplaintTable" element={<ComplaintTable />} />
             <Route path="/RenewalPaymentTable" element={<RenewalPaymentTable />} />

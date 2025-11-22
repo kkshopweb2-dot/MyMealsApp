@@ -39,16 +39,17 @@ const MealPreferenceForm = () => {
     dishChoice: "",
   });
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/api/meal-preferences"); // replace with your API endpoint
+      setSubmittedData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch meal preferences:", error);
+    }
+  };
+
   /* === FETCH DATA FROM SERVER === */
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/meal-preferences"); // replace with your API endpoint
-        setSubmittedData(response.data);
-      } catch (error) {
-        console.error("Failed to fetch meal preferences:", error);
-      }
-    };
     fetchData();
   }, []);
 
@@ -73,11 +74,21 @@ const MealPreferenceForm = () => {
 
   const handleFinalConfirm = async () => {
     try {
+      const requestData = {
+        order_no: formData.orderNo,
+        meal_type: formData.mealType,
+        preference_details: JSON.stringify({
+          dishChoice: formData.dishChoice,
+          avoidNonVeg: formData.avoidNonVeg,
+          avoidVeg: formData.avoidVeg,
+        }),
+        is_active: true, // or some default value
+      };
       // POST data to server
-      await axios.post("/api/meal-preferences", formData); // replace with your API endpoint
+      await axios.post("/api/meal-preferences", requestData); // replace with your API endpoint
 
-      // Update local table
-      setSubmittedData((prev) => [...prev, formData]);
+      // Refetch data
+      fetchData();
       setSubmitted(true);
     } catch (error) {
       console.error("Failed to submit meal preference:", error);
@@ -119,81 +130,57 @@ const MealPreferenceForm = () => {
             backgroundPosition: "center",
           }}
         >
-          <div className="empty-dashboard">
-            {/* === SIDE-BY-SIDE FORM + TABLE WRAPPER === */}
-            <div
-              className={styles.formTableWrapper}
-              style={{
-                display: "flex",
-                gap: "20px",
-                alignItems: "flex-start",
-                flexWrap: "wrap", // makes it responsive on small screens
-              }}
-            >
+          <div className="container-fluid">
+            <div className="row">
               {/* === FORM CARD === */}
-              <div
-                className={styles.formCard}
-                style={{
-                  flex: 1,
-                  minWidth: "300px",
-                  maxWidth: "600px",
-                }}
-              >
-                {!submitted ? (
-                  <>
-                    <h2 className={styles.title}>Change Your Meal Preference</h2>
+              <div className="col-md-5">
+                <div className={styles.formCard}>
+                  {!submitted ? (
+                    <>
+                      <h2 className={styles.title}>
+                        Change Your Meal Preference
+                      </h2>
 
-                    {step === 1 && (
-                      <Step1UserInfo
-                        formData={formData}
-                        handleChange={handleChange}
-                        handleNext={handleNext}
-                      />
-                    )}
+                      {step === 1 && (
+                        <Step1UserInfo
+                          formData={formData}
+                          handleChange={handleChange}
+                          handleNext={handleNext}
+                        />
+                      )}
 
-                    {step === 2 && (
-                      <Step2MealDetails
-                        formData={formData}
-                        toggles={toggles}
-                        handleChange={handleChange}
-                        toggleSwitch={toggleSwitch}
-                        handleFinalSubmit={handleFinalSubmit}
-                        setStep={setStep}
-                      />
-                    )}
+                      {step === 2 && (
+                        <Step2MealDetails
+                          formData={formData}
+                          toggles={toggles}
+                          handleChange={handleChange}
+                          toggleSwitch={toggleSwitch}
+                          handleFinalSubmit={handleFinalSubmit}
+                          setStep={setStep}
+                        />
+                      )}
 
-                    {step === 3 && (
-                      <Step3Preview
-                        formData={formData}
-                        toggles={toggles}
-                        handleFinalConfirm={handleFinalConfirm}
-                        setStep={setStep}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <ThankYou handleNewSubmission={handleNewSubmission} />
-                )}
+                      {step === 3 && (
+                        <Step3Preview
+                          formData={formData}
+                          toggles={toggles}
+                          handleFinalConfirm={handleFinalConfirm}
+                          setStep={setStep}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <ThankYou handleNewSubmission={handleNewSubmission} />
+                  )}
+                </div>
               </div>
 
               {/* === TABLE CARD === */}
-              <div
-                style={{
-                  flex: 1,
-                  minWidth: "300px",
-                  maxWidth: "100%",
-                  minheight: "95vh",
-                  maxHeight: "600px",
-                  overflowY: "auto",
-                  background: "rgba(255, 255, 255, 0.85)", // semi-transparent white
-                  borderRadius: "12px",
-                  padding: "10px",
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
-                  backdropFilter: "blur(8px)", // optional: modern glass effect
-                }}
-              >
-
-                <MealPreferenceTable rows={submittedData} />
+              <div className="col-md-7">
+                <MealPreferenceTable
+                  rows={submittedData}
+                  title="Meal Preference History"
+                />
               </div>
             </div>
           </div>

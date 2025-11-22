@@ -140,7 +140,9 @@ const FeedbackForm = () => {
                   </form>
                 </div>
               </div>
-              <FeedbackTable />
+              <div className="feedback-table-container">
+                <FeedbackTable />
+              </div>
             </div>
           </div>
         </main>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../css/PauseResumeTable.module.css";
+import "../css/DataTable.css";
 
 const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => {
   const mealRows = Object.entries(meals).filter(([meal, data]) => data.checked);
@@ -44,11 +44,11 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
   };
 
   return (
-    <div className={styles.tableCard}>
-      <h3 className={styles.tableTitle}>Pause / Resume Summary</h3>
+    <div className="tableCard">
+      <h3 className="tableTitle">Pause / Resume Summary</h3>
 
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
+      <div className="tableWrapper">
+        <table className="tableWrapper">
           <thead>
             <tr>
               <th>Order No</th>
@@ -65,7 +65,6 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
           </thead>
 
           <tbody>
-            {/* Display meal entries */}
             {mealRows.length ? (
               mealRows.map(([meal, data], index) => (
                 <tr key={index}>
@@ -88,20 +87,19 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
               ))
             ) : (
               <tr>
-                <td colSpan="10" className={styles.noData}>
+                <td colSpan="10" className="noData">
                   No meal data found
                 </td>
               </tr>
             )}
 
-            {/* Blank Editable Rows */}
             {blankRows.map((row, index) => (
-              <tr key={index} className={styles.blankRow}>
+              <tr key={index} className="blankRow">
                 {Object.entries(row).map(([field, value]) => (
                   <td key={field}>
                     <input
                       type={field.includes("Date") ? "date" : "text"}
-                      className={styles.input}
+                      className="tableInput"
                       placeholder={field.replace(/([A-Z])/g, " $1")}
                       value={value}
                       onChange={(e) =>
@@ -115,8 +113,6 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
           </tbody>
         </table>
       </div>
-
-
     </div>
   );
 };

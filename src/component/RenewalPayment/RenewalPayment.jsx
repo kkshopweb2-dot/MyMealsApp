@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/authSlice";
 
 import Header from "../Header";
 import Sidebar from "../Sidebar";
@@ -20,6 +23,13 @@ const RenewalPayment = () => {
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [submittedData, setSubmittedData] = useState([]); // State for table data
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
 
   const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: {
@@ -70,7 +80,10 @@ const RenewalPayment = () => {
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
       />
       <div className={`dashboard-main ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <Header
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          onLogout={handleLogout}
+        />
 
         <main
           className="dashboard-content"

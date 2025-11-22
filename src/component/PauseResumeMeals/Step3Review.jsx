@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Step3Review({ orderNo, name, phone, email, plan, meals, handleFinalSubmit, handleBack }) {
+export default function Step3Review({ orderNo, name, phone, email, plan, meals, reason, setReason, handleFinalSubmit, handleBack }) {
   return (
     <>
       <h3>Review Your Submission</h3>
@@ -23,6 +23,16 @@ export default function Step3Review({ orderNo, name, phone, email, plan, meals, 
           </div>
         );
       })}
+      
+      <div className="form-group">
+          <label>Reason for submission</label>
+          <textarea
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Enter reason..."
+              className="form-control"
+          ></textarea>
+      </div>
 
       <div className="button-group">
         <button className="back-btn" onClick={handleBack}>Back & Edit Meals</button>

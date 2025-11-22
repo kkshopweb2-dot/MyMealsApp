@@ -9,12 +9,12 @@ export const getPauseResumeMeals = (req, res) => {
 };
 
 export const createPauseResumeMeal = (req, res) => {
-  const { start_date, end_date, reason, status } = req.body;
+  const { order_no, start_date, end_date, reason, status } = req.body;
   if (!start_date || !status) {
     return res.status(400).json({ error: "Start date and status are required" });
   }
-  const sql = "INSERT INTO pause_resume_meals (user_id, start_date, end_date, reason, status) VALUES (?, ?, ?, ?, ?)";
-  db.query(sql, [req.userId, start_date, end_date, reason, status], (err, results) => {
+  const sql = "INSERT INTO pause_resume_meals (user_id, order_no, start_date, end_date, reason, status) VALUES (?, ?, ?, ?, ?, ?)";
+  db.query(sql, [req.userId, order_no, start_date, end_date, reason, status], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json({ message: "Pause/resume record created successfully", id: results.insertId });
   });

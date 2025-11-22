@@ -34,6 +34,18 @@ const Complaint = () => {
     imageUri: null,
   });
 
+  const [submittedComplaints, setSubmittedComplaints] = useState([]);
+
+  const handleSubmit = (newComplaint) => {
+    const fullComplaint = {
+      ...orderData,
+      ...newComplaint,
+      date: new Date().toLocaleDateString(),
+    };
+    setSubmittedComplaints((prev) => [...prev, fullComplaint]);
+    setStep("thankyou");
+  };
+
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}
@@ -72,13 +84,14 @@ const Complaint = () => {
                     complaintData={complaintData}
                     setComplaintData={setComplaintData}
                     setStep={setStep}
+                    handleSubmit={handleSubmit}
                   />
                 )}
 
                 {step === "thankyou" && <ThankYou />}
               </div>
               <div className="table-container">
-                <ComplaintTable />
+                <ComplaintTable data={submittedComplaints} />
               </div>
             </div>
           </div>

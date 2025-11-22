@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import styles from "../../css/Changedeliverylocation.module.css";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { FaSearch } from "react-icons/fa";
-
+import DeliveryLocationTable from "../DeliveryLocationTable"; // Import the new component
+import styles from "../../css/Changedeliverylocation.module.css";
 import "../../css/dashboard.css";
 import bgImage from "../../assets/images/bg.png";
 
@@ -15,131 +14,6 @@ import Step5Address from "./Step5Address";
 import Step6Preview from "./Step6Preview";
 import Step7ThankYou from "./Step7ThankYou";
 
-// ================= TABLE COMPONENT =================
-const DeliveryLocationTable = ({ rows }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activePage, setActivePage] = useState(1);
-  const entriesPerPage = 10;
-
-  const filteredData = rows.filter((item) =>
-    `${item.orderNo} ${item.name} ${item.phone}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
-
-  const paginatedData = filteredData.slice(
-    (activePage - 1) * entriesPerPage,
-    activePage * entriesPerPage
-  );
-
-  return (
-    <div className="tableCard">
-      {/* Search Bar */}
-      <div className="tableSearch">
-        <input
-          type="text"
-          placeholder="Search here..."
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setActivePage(1);
-          }}
-        />
-        <FaSearch />
-      </div>
-
-      {/* Table */}
-      <div className="tableResponsive">
-        <table className="tableWrapper">
-          <thead>
-            <tr>
-              <th>Order No</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Plan</th>
-              <th>Effective Date</th>
-              <th>Meals</th>
-              <th>Change For</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row, index) => (
-                <tr key={index}>
-                  <td>{row.orderNo || "-"}</td>
-                  <td>{row.name || "-"}</td>
-                  <td>{row.email || "-"}</td>
-                  <td>{row.phone || "-"}</td>
-                  <td>{row.plan || "-"}</td>
-                  <td>{row.effectiveDate || "-"}</td>
-                  <td>
-                    {Array.isArray(row.meals)
-                      ? row.meals.join(", ")
-                      : "-"}
-                  </td>
-                  <td>{row.changeFor || "-"}</td>
-                  <td>
-                    {row.addressType === "primary"
-                      ? `${row.primaryAddress}, ${row.primaryCity}, ${row.primaryState} - ${row.primaryZip}`
-                      : `${row.secondaryAddress}, ${row.secondaryCity}, ${row.secondaryState} - ${row.secondaryZip}`}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="9" className="noData">
-                  No data found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="pagination">
-          <button
-            onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
-            disabled={activePage === 1}
-          >
-            &lt;
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              className={activePage === i + 1 ? "active" : ""}
-              onClick={() => setActivePage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-
-          <button
-            onClick={() =>
-              setActivePage((p) => Math.min(p + 1, totalPages))
-            }
-            disabled={activePage === totalPages}
-          >
-            &gt;
-          </button>
-        </div>
-      )}
-
-      <div className="entriesInfo">
-        Showing {paginatedData.length} of {filteredData.length} entries
-      </div>
-    </div>
-  );
-};
-
-// ================= MAIN COMPONENT =================
 const Changedeliverylocation = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [step, setStep] = useState(1);
@@ -215,11 +89,13 @@ const Changedeliverylocation = () => {
             backgroundImage: `url(${bgImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            padding: "20px",
           }}
         >
-          <div className="empty-dashboard">
-            <div className={styles.formTableWrapper}>
-              <div className={styles.formContainer}>
+          <div className="row">
+            {/* Form Section */}
+            <div className="col-md-5">
+              <div className={styles.deliveryFormCard}>
                 {step === 1 && (
                   <Step1BasicInfo {...{ formData, handleChange, confirmed, setConfirmed, nextStep }} />
                 )}
@@ -242,10 +118,11 @@ const Changedeliverylocation = () => {
                   <Step7ThankYou handleNewSubmission={handleNewSubmission} />
                 )}
               </div>
+            </div>
 
-              <div className={styles.tableCard}>
-                <DeliveryLocationTable rows={submittedData} />
-              </div>
+            {/* Table Section */}
+            <div className="col-md-7">
+              <DeliveryLocationTable rows={submittedData} title="Delivery Location Change Summary" />
             </div>
           </div>
         </main>
