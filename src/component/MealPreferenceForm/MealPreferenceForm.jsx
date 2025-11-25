@@ -11,7 +11,7 @@ import Step1UserInfo from "./Step1UserInfo";
 import Step2MealDetails from "./Step2MealDetails";
 import Step3Preview from "./Step3Preview";
 import ThankYou from "./ThankYou";
-import MealPreferenceTable from "../MealPreferenceTable"; // your table component
+import MealPreferenceTable from "../MealPreferenceTable";
 
 const MealPreferenceForm = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -114,77 +114,58 @@ const MealPreferenceForm = () => {
 
   /* === RENDER === */
   return (
-    <div className="dashboard-layout">
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      />
-      <div className={`dashboard-main ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+    <div className="container-fluid">
+      <div className="row">
+        {/* === FORM CARD === */}
+        <div className="col-md-4">
+          <div className={styles.formCard}>
+            {!submitted ? (
+              <>
+                <h2 className={styles.title}>
+                  Change Your Meal Preference
+                </h2>
 
-        <main
-          className="dashboard-content"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="container-fluid">
-            <div className="row">
-              {/* === FORM CARD === */}
-              <div className="col-md-5">
-                <div className={styles.formCard}>
-                  {!submitted ? (
-                    <>
-                      <h2 className={styles.title}>
-                        Change Your Meal Preference
-                      </h2>
+                {step === 1 && (
+                  <Step1UserInfo
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleNext={handleNext}
+                  />
+                )}
 
-                      {step === 1 && (
-                        <Step1UserInfo
-                          formData={formData}
-                          handleChange={handleChange}
-                          handleNext={handleNext}
-                        />
-                      )}
+                {step === 2 && (
+                  <Step2MealDetails
+                    formData={formData}
+                    toggles={toggles}
+                    handleChange={handleChange}
+                    toggleSwitch={toggleSwitch}
+                    handleFinalSubmit={handleFinalSubmit}
+                    setStep={setStep}
+                  />
+                )}
 
-                      {step === 2 && (
-                        <Step2MealDetails
-                          formData={formData}
-                          toggles={toggles}
-                          handleChange={handleChange}
-                          toggleSwitch={toggleSwitch}
-                          handleFinalSubmit={handleFinalSubmit}
-                          setStep={setStep}
-                        />
-                      )}
-
-                      {step === 3 && (
-                        <Step3Preview
-                          formData={formData}
-                          toggles={toggles}
-                          handleFinalConfirm={handleFinalConfirm}
-                          setStep={setStep}
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <ThankYou handleNewSubmission={handleNewSubmission} />
-                  )}
-                </div>
-              </div>
-
-              {/* === TABLE CARD === */}
-              <div className="col-md-7">
-                <MealPreferenceTable
-                  rows={submittedData}
-                  title="Meal Preference History"
-                />
-              </div>
-            </div>
+                {step === 3 && (
+                  <Step3Preview
+                    formData={formData}
+                    toggles={toggles}
+                    handleFinalConfirm={handleFinalConfirm}
+                    setStep={setStep}
+                  />
+                )}
+              </>
+            ) : (
+              <ThankYou handleNewSubmission={handleNewSubmission} />
+            )}
           </div>
-        </main>
+        </div>
+
+        {/* === TABLE CARD === */}
+        <div className="col-md-7">
+          <MealPreferenceTable
+            rows={submittedData}
+            title="Meal Preference History"
+          />
+        </div>
       </div>
     </div>
   );

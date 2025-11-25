@@ -74,60 +74,47 @@ const Changedeliverylocation = () => {
   };
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      />
 
-      <div className={`dashboard-main ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-
-        <main
-          className="dashboard-content"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            padding: "20px",
-          }}
-        >
-          <div className="row">
-            {/* Form Section */}
-            <div className="col-md-5">
-              <div className={styles.deliveryFormCard}>
-                {step === 1 && (
-                  <Step1BasicInfo {...{ formData, handleChange, confirmed, setConfirmed, nextStep }} />
-                )}
-                {step === 2 && (
-                  <Step2EffectiveDate {...{ formData, handleChange, nextStep, prevStep }} />
-                )}
-                {step === 3 && (
-                  <Step3Meals {...{ formData, handleChange, nextStep, prevStep }} />
-                )}
-                {step === 4 && (
-                  <Step4ChangeFor {...{ formData, handleChange, nextStep, prevStep }} />
-                )}
-                {step === 5 && (
-                  <Step5Address {...{ formData, handleChange, nextStep, prevStep }} />
-                )}
-                {step === 6 && (
-                  <Step6Preview {...{ formData, handleSubmit, prevStep }} />
-                )}
-                {step === 7 && (
-                  <Step7ThankYou handleNewSubmission={handleNewSubmission} />
-                )}
-              </div>
-            </div>
-
-            {/* Table Section */}
-            <div className="col-md-7">
-              <DeliveryLocationTable rows={submittedData} title="Delivery Location Change Summary" />
-            </div>
-          </div>
-        </main>
+    <div className="row">
+      {/* Form Section */}
+      <div className="col-md-5">
+        <div className={styles.deliveryFormCard}>
+          {step === 1 && (
+            <Step1BasicInfo {...{ formData, handleChange, confirmed, setConfirmed, nextStep }} />
+          )}
+          {step === 2 && (
+            <Step2EffectiveDate {...{ formData, handleChange, nextStep, prevStep }} />
+          )}
+          {step === 3 && (
+            <Step3Meals {...{ formData, handleChange, nextStep, prevStep }} />
+          )}
+          {step === 4 && (
+            <Step4ChangeFor {...{ formData, handleChange, nextStep, prevStep }} />
+          )}
+          {step === 5 && (
+            <Step5Address {...{ formData, handleChange, nextStep, prevStep }} />
+          )}
+          {step === 6 && (
+            <Step6Preview {...{ formData, handleSubmit, prevStep }} />
+          )}
+          {step === 7 && (
+            <Step7ThankYou handleNewSubmission={handleNewSubmission} />
+          )}
+        </div>
       </div>
+
+      {/* Table Section */}
+      <div className="col-md-7">
+        <DeliveryLocationTable
+          rows={submittedData}
+          title={<span style={{ color: "#104b45" }}>Delivery Location Change Summary</span>}
+        />
+      </div>
+
     </div>
+
+
+
   );
 };
 

@@ -14,7 +14,7 @@ const OrderDetailsForm = ({ orderData, setOrderData, setStep }) => {
 
   return (
     <form onSubmit={handleNext}>
-      <h2 className="heading">Order Details</h2>
+      
 
       {[
         { label: "Order No *", key: "orderNo" },

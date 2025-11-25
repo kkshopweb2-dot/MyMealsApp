@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,7 +11,7 @@ const WelcomePage = lazy(() => import("./component/Welcome/WelcomePage"));
 const Login = lazy(() => import("./component/login"));
 const Dashboard = lazy(() => import("./component/Dashboard"));
 const MenuModal = lazy(() => import("./component/MenuModal"));
-
+const Profile = lazy (() => import("./component/Profile"));
 
 const PauseResumeTable = lazy(() => import("./component/PauseResumeTable"));
 
@@ -38,7 +38,6 @@ const App = () => {
 
   return (
     <Router>
-      <Suspense fallback={<div className="loading">Loading...</div>}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -46,6 +45,7 @@ const App = () => {
 
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/Profile"   element={<Profile />}  />
             <Route path="/RenewalPayment" element={<RenewalPaymentPage />} />
             <Route path="/PauseResumeMeals" element={<PauseResumeMealsPage />} />
             <Route path="/FeedbackForm" element={<FeedbackFormPage />} />
@@ -63,7 +63,8 @@ const App = () => {
             <Route path="/complaint" element={<ComplaintPage />} />
           </Route>
         </Routes>
-      </Suspense>
+      {/* <Suspense fallback={<div className="loading">Loading...</div>}>
+      </Suspense> */}
     </Router>
   );
 };

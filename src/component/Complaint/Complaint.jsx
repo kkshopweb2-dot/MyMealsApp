@@ -47,57 +47,39 @@ const Complaint = () => {
   };
 
   return (
-    <div className="dashboard-layout">
-      {/* Sidebar */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      />
 
-      {/* Main Content */}
-      <div className={`dashboard-main ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+    <main>
+      <div className="empty-dashboard">
+        <div className="form-and-table-container">
+          <div className="form-wrapper">
+            {/* Step-based rendering inside card */}
+            <h2 className="heading">Raise a Complaint</h2>
+            {step === "order" && (
+              <OrderDetailsForm
+                orderData={orderData}
+                setOrderData={setOrderData}
+                setStep={setStep}
+              />
+            )}
 
-        <main
-          className="dashboard-content"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="empty-dashboard">
-            <div className="form-and-table-container">
-              <div className="form-wrapper">
-                {/* Step-based rendering inside card */}
-                <h2 className="heading">Raise a Complaint</h2>
-                {step === "order" && (
-                  <OrderDetailsForm
-                    orderData={orderData}
-                    setOrderData={setOrderData}
-                    setStep={setStep}
-                  />
-                )}
+            {step === "complaint" && (
+              <ComplaintForm
+                complaintData={complaintData}
+                setComplaintData={setComplaintData}
+                setStep={setStep}
+                handleSubmit={handleSubmit}
+              />
+            )}
 
-                {step === "complaint" && (
-                  <ComplaintForm
-                    complaintData={complaintData}
-                    setComplaintData={setComplaintData}
-                    setStep={setStep}
-                    handleSubmit={handleSubmit}
-                  />
-                )}
-
-                {step === "thankyou" && <ThankYou />}
-              </div>
-              <div className="table-container">
-                <ComplaintTable data={submittedComplaints} />
-              </div>
-            </div>
+            {step === "thankyou" && <ThankYou />}
           </div>
-        </main>
+          <div className="table-container">
+            <ComplaintTable data={submittedComplaints} />
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
+
   );
 };
 

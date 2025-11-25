@@ -1,4 +1,4 @@
-import { useState,useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { logout } from "../../redux/authSlice";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import "../../css/PauseResumeMeals.css";
-import bgImage from "../../assets/images/bg.png"; 
+import bgImage from "../../assets/images/bg.png";
 import { FaSearch } from "react-icons/fa";
 import "../../css/dashboard.css";
 import Step1Info from "./Step1Info";
@@ -236,79 +236,60 @@ export default function PauseResumeMeals() {
   }, [meals, orderNo, name, email, phone, plan, reason]);
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      />
+    <div className="container-fluid row">
 
-      <div className={`dashboard-main ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <Header
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-          onLogout={handleLogout}
-        />
+      {/* Steps Container */}
+      <div className="col-md-5">
+        <div className="pause-card">
+          {step === 1 && (
+            <Step1Info
+              orderNo={orderNo} setOrderNo={setOrderNo}
+              name={name} setName={setName}
+              phone={phone} setPhone={setPhone}
+              email={email} setEmail={setEmail}
+              plan={plan} setPlan={setPlan}
+              handleNext={handleNextFromInfo}
+            />
+          )}
 
-        <main
-          className="dashboard-content"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="container-fluid pause-content">
+          {step === 2 && (
+            <Step2Meals
+              plan={plan} meals={meals}
+              setMealField={setMealField}
+              setMealDate={setMealDate}
+              handleSubmit={handleSubmitMeals}
+              handleBack={() => setStep(1)}
+            />
+          )}
 
-            {/* Steps Container */}
-            <div className="col-md-5">
-              <div className="pause-card">
-                {step === 1 && (
-                  <Step1Info
-                    orderNo={orderNo} setOrderNo={setOrderNo}
-                    name={name} setName={setName}
-                    phone={phone} setPhone={setPhone}
-                    email={email} setEmail={setEmail}
-                    plan={plan} setPlan={setPlan}
-                    handleNext={handleNextFromInfo}
-                  />
-                )}
+          {step === 3 && (
+            <Step3Review
+              orderNo={orderNo}
+              name={name}
+              phone={phone}
+              email={email}
+              plan={plan}
+              meals={meals}
+              reason={reason}
+              setReason={setReason}
+              handleFinalSubmit={handleFinalSubmit}
+              handleBack={() => setStep(2)}
+            />
+          )}
 
-                {step === 2 && (
-                  <Step2Meals
-                    plan={plan} meals={meals}
-                    setMealField={setMealField}
-                    setMealDate={setMealDate}
-                    handleSubmit={handleSubmitMeals}
-                    handleBack={() => setStep(1)}
-                  />
-                )}
-
-                {step === 3 && (
-                  <Step3Review
-                    orderNo={orderNo}
-                    name={name}
-                    phone={phone}
-                    email={email}
-                    plan={plan}
-                    meals={meals}
-                    reason={reason}
-                    setReason={setReason}
-                    handleFinalSubmit={handleFinalSubmit}
-                    handleBack={() => setStep(2)}
-                  />
-                )}
-
-                {step === 4 && <Step4ThankYou />}
-              </div>
-            </div>
-
-            {/* Summary Table */}
-            <div className="col-md-7">
-              <SummaryDataTable data={tableData} title="Pause / Resume Summary" />
-            </div>
-
-          </div>
-        </main>
+          {step === 4 && <Step4ThankYou />}
+        </div>
       </div>
+
+      {/* Summary Table */}
+      <div className="col-md-7">
+        <SummaryDataTable
+          data={tableData}
+          title={<span style={{ color: "#104b45" }}>Pause / Resume Summary</span>}
+        />
+      </div>
+
+
     </div>
   );
 }

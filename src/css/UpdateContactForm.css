@@ -10,13 +10,20 @@
   background-color: rgba(255, 255, 255, 0.85); /* semi-transparent */
   backdrop-filter: blur(10px); /* optional glass effect */
 }
+.formTitle {
+  color: #104b45;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
 
 /* ===============================
    CARD
 =============================== */
 .update-card {
-  background: rgba(255, 255, 255, 0.75);
+  background: white;
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 35px 30px;
@@ -82,11 +89,10 @@
    HEADINGS
 =============================== */
 .update-heading {
-  text-align: center;
-  color: #2b5140;
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 25px;
+  color: #104b45;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
 }
 
 /* ===============================

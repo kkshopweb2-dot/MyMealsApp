@@ -2,19 +2,19 @@
    Feedback Card Container
 =============================== */
 .feedback-card {
-  background: rgba(255, 255, 255, 0.5); /* semi-transparent */
-  padding: 40px 35px;
+  background: #ffffff;
+  padding: 40px 30px;
   border-radius: 20px;
   max-width: 650px;
   width: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  margin-top: 1px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px); /* optional glass effect */
 }
 
 .feedback-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
 }
 
 
@@ -38,12 +38,13 @@
 }
 
 .title {
-  color: #056031;
+  color: #104b45;
   font-size: 26px;
   font-weight: 700;
   letter-spacing: 0.5px;
   margin-bottom: 15px;
 }
+
 
 /* ===============================
    Inputs and Textarea
@@ -51,20 +52,20 @@
 .input,
 .textArea {
   width: 100%;
-  padding: 14px 16px; /* increased padding to avoid placeholder overlap */
-  border-radius: 10px;
-  border: 1px solid #cdb6db;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #dcdcdc;
   background-color: #fafafa;
   font-size: 15px;
   transition: all 0.3s ease;
   color: #333;
-  box-sizing: border-box; /* ensures padding does not overflow */
+  box-sizing: border-box;
 }
 
 .input:focus,
 .textArea:focus {
-  border-color: #056031;
-  box-shadow: 0 0 8px rgba(134, 31, 106, 0.25);
+  border-color: #104b45;
+  box-shadow: 0 0 0 3px rgba(5, 96, 49, 0.15);
   outline: none;
 }
 
@@ -72,8 +73,8 @@
 .textArea::placeholder {
   color: #999;
   font-size: 15px;
-  opacity: 1; /* ensures placeholder text is fully visible */
 }
+
 
 /* ===============================
    Form Layout
@@ -85,22 +86,23 @@
   margin-bottom: 20px;
 }
 
+
 /* ===============================
    Section Card
 =============================== */
 .sectionCard {
-  background: #fef9ff;
-  border-left: 5px solid #056031;
+  background: #f6fbf8;
+  border-left: 5px solid #104b45;
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 25px;
-  box-shadow: 0 3px 10px rgba(134, 31, 106, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
 
 .sectionCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(134, 31, 106, 0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
 .sectionTitle {
@@ -110,22 +112,24 @@
   margin-bottom: 10px;
 }
 
+
 /* ===============================
    Labels
 =============================== */
 .label {
-  font-size: 16px;
-  color: #056031;
-  font-weight: 500;
+  font-size: 15px;
+  color: #104b45;
+  font-weight: 600;
   display: block;
   margin: 10px 0 5px;
 }
+
 
 /* ===============================
    Submit Button
 =============================== */
 .submitButton {
-  background: linear-gradient(135deg, #056031, #056031);
+  background: linear-gradient(135deg, #104b45, #104b45);
   color: #fff;
   border: none;
   border-radius: 30px;
@@ -136,14 +140,14 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 15px;
-  box-shadow: 0 6px 20px rgba(134, 31, 106, 0.3);
+  box-shadow: 0 8px 22px rgba(5, 96, 49, 0.35);
 }
 
 .submitButton:hover {
-  background: linear-gradient(135deg, #056031, #056031);
-  transform: scale(1.03);
-  box-shadow: 0 10px 25px rgba(134, 31, 106, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(5, 96, 49, 0.45);
 }
+
 
 /* ===============================
    Error Text
@@ -154,12 +158,13 @@
   margin-top: 4px;
 }
 
+
 /* ===============================
    Thank You Screen
 =============================== */
 .thankYouContainer {
   text-align: center;
-  background: linear-gradient(135deg, #f8f5ff, #e9dcff);
+  background: linear-gradient(135deg, #f7fff9, #e1f7ec);
   padding: 100px 25px;
   border-radius: 25px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -167,7 +172,7 @@
 }
 
 .thankYouText {
-  color: #056031;
+  color: #104b45;
   font-size: 26px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -178,6 +183,7 @@
   font-size: 16px;
 }
 
+
 /* ===============================
    Animations
 =============================== */
@@ -185,6 +191,7 @@
   from { opacity: 0; transform: translateY(25px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 
 /* ===============================
    Responsive
@@ -207,10 +214,11 @@
   }
 }
 
+
 /* ===============================
    Feedback Table Container
 =============================== */
 .feedback-table-container {
-  flex: 1; /* Allows the table container to grow and shrink */
-  min-width: 300px; /* Ensures a minimum width for the table */
+  flex: 1;
+  min-width: 300px;
 }

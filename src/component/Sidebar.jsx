@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import {
   FaHome,
   FaUserAlt,
@@ -10,36 +11,70 @@ import {
   FaCommentDots,
 } from "react-icons/fa";
 import "../css/Sidebar.css";
+import logo from "../assets/images/logo.png";   
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+
+const Sidebar = ({ isOpen }) => {
   return (
     <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
-      <div className="logo">MyMeal</div>
+      {/* LOGO IMAGE */}
+      <div className="logo">
+        <img src={logo} alt="MyMeal Logo" className="logo-img" />
+      </div>
+
       <nav className="sidebar-nav">
         <ul>
-          <li className="active">
-            <FaHome /> Dashboard
-          </li>
           <li>
-            <FaUserAlt /> <a href="PauseResumeMeals">Pause and Resume</a>
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                isActive ? "menu-link active" : "menu-link"
+              }
+            >
+              <FaHome /> Dashboard
+            </NavLink>
           </li>
+
           <li>
-            <FaRedoAlt /> <a href="RenewalPayment">Renewal</a>
+            <NavLink to="/PauseResumeMeals" className="menu-link">
+              <FaUserAlt /> Pause and Resume
+            </NavLink>
           </li>
+
           <li>
-            <FaUtensils /> <a href="MealPreferenceForm">Change Your Meal Preference</a> 
+            <NavLink to="/RenewalPayment" className="menu-link">
+              <FaRedoAlt /> Renewal
+            </NavLink>
           </li>
+
           <li>
-            <FaMapMarkerAlt /><a href="Changedeliverylocation">Change Your Delivery Location</a> 
+            <NavLink to="/MealPreferenceForm" className="menu-link">
+              <FaUtensils /> Change Your Meal Preference
+            </NavLink>
           </li>
+
           <li>
-            <FaPhoneAlt /><a href="UpdateContactForm">Update Contact No.</a> 
+            <NavLink to="/Changedeliverylocation" className="menu-link">
+              <FaMapMarkerAlt /> Change Your Delivery Location
+            </NavLink>
           </li>
+
           <li>
-            <FaExclamationCircle /><a href="Complaint"> Raise a Complaint</a>
+            <NavLink to="/UpdateContactForm" className="menu-link">
+              <FaPhoneAlt /> Update Contact No.
+            </NavLink>
           </li>
+
           <li>
-            <FaCommentDots /><a href="FeedbackForm">Feedback</a> 
+            <NavLink to="/Complaint" className="menu-link">
+              <FaExclamationCircle /> Raise a Complaint
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink to="/FeedbackForm" className="menu-link">
+              <FaCommentDots /> Feedback
+            </NavLink>
           </li>
         </ul>
       </nav>

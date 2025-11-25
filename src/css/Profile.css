@@ -1,0 +1,47 @@
+.profile-page {
+  padding: 2rem;
+}
+
+.profile-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 380px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.profile-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.profile-info input {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.profile-actions button {
+  margin-top: 1rem;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.save-btn {
+  background: #22c55e;
+  color: white;
+}

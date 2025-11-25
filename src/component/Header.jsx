@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from "react-router-dom";
 import { FaBars, FaBell, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import '../css/header.css';
 
@@ -40,9 +41,10 @@ const Header = ({ toggleSidebar, onLogout, username = "User" }) => {
         </div>
 
         {/* Profile */}
-        <div className="profile-avatar">
+        <NavLink to="/Profile" className="profile-avatar">
           <img src="https://i.pravatar.cc/40" alt="User Avatar" />
-        </div>
+        </NavLink>
+
 
         {/* Logout */}
         <button className="logout-btn" onClick={onLogout}>

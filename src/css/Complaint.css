@@ -4,7 +4,7 @@
 
 /* Elegant glass card */
 .form-wrapper {
-  background: rgba(255, 255, 255, 0.5); /* more transparent */
+  background: white;
   backdrop-filter: blur(12px); /* maintains glass effect */
   border-radius: 22px;
   padding: 35px 30px;
@@ -37,12 +37,10 @@
 
 /* Heading styling */
 .heading {
-  font-size: 22px;
-  font-weight: 600;
-  color: #295b52;
-  text-align: center;
-  margin-bottom: 22px;
-  margin-top: 10px; /* keeps space between logo and title */
+  color: #104b45;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
 }
 
 label {

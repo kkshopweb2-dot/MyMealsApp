@@ -4,13 +4,13 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/authSlice";
 
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import RenewalPaymentTable from "../RenewalPaymentTable"; 
+// import Header from "../Header";
+// import Sidebar from "../Sidebar";
+import RenewalPaymentTable from "../RenewalPaymentTable";
 
 import "../../css/dashboard.css";
 import "../../css/PauseResumeMeals.css";
-import bgImage from "../../assets/images/bg.png"; 
+// import bgImage from "../../assets/images/bg.png";
 
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -21,7 +21,7 @@ import ThankYou from "./ThankYou";
 const RenewalPayment = () => {
   const [step, setStep] = useState(1);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [submittedData, setSubmittedData] = useState([]); // State for table data
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -74,67 +74,48 @@ const RenewalPayment = () => {
   };
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      />
-      <div className={`dashboard-main ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <Header
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-          onLogout={handleLogout}
-        />
-
-        <main
-          className="dashboard-content"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            padding: "20px",
-          }}
-        >
-          <div className="row">
-            {/* Form Section */}
-            <div className="col-md-5">
-              <form className="pause-card" onSubmit={handleSubmit(onSubmitPayment)}>
-                {paymentConfirmed ? (
-                  <ThankYou setPaymentConfirmed={handleThankYouBack} />
-                ) : (
-                  <>
-                    {step === 1 && (
-                      <StepOne control={control} watch={watch} handleNext={handleNext} />
-                    )}
-                    {step === 2 && (
-                      <StepTwo control={control} handleNext={handleNext} handleBack={handleBack} />
-                    )}
-                    {step === 3 && (
-                      <StepThree
-                        control={control}
-                        watch={watch}
-                        handleNext={handleNext}
-                        handleBack={handleBack}
-                      />
-                    )}
-                    {step === 4 && (
-                      <StepFour
-                        control={control}
-                        watch={watch}
-                        handleBack={handleBack}
-                      />
-                    )}
-                  </>
-                )}
-              </form>
-            </div>
-
-            {/* Table Section */}
-            <div className="col-md-7">
-              <RenewalPaymentTable data={submittedData} title="Renewal Payment Summary" />
-            </div>
-          </div>
-        </main>
+    <div className="row">
+      {/* Form Section */}
+      <div className="col-md-5">
+        <form className="pause-card" onSubmit={handleSubmit(onSubmitPayment)}>
+          {paymentConfirmed ? (
+            <ThankYou setPaymentConfirmed={handleThankYouBack} />
+          ) : (
+            <>
+              {step === 1 && (
+                <StepOne control={control} watch={watch} handleNext={handleNext} />
+              )}
+              {step === 2 && (
+                <StepTwo control={control} handleNext={handleNext} handleBack={handleBack} />
+              )}
+              {step === 3 && (
+                <StepThree
+                  control={control}
+                  watch={watch}
+                  handleNext={handleNext}
+                  handleBack={handleBack}
+                />
+              )}
+              {step === 4 && (
+                <StepFour
+                  control={control}
+                  watch={watch}
+                  handleBack={handleBack}
+                />
+              )}
+            </>
+          )}
+        </form>
       </div>
+
+      {/* Table Section */}
+      <div className="col-md-7">
+        <RenewalPaymentTable
+          data={submittedData}
+          title={<span style={{ color: "#104b45" }}>Renewal Payment Summary</span>}
+        />
+      </div>
+
     </div>
   );
 };

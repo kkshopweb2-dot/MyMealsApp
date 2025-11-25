@@ -1,5 +1,5 @@
 .sidebar {
-  width: 14rem;
+  width: 16rem;
   background-color: #fff;
   border-right: 1px solid #e0e0e0;
   height: 100vh;
@@ -9,7 +9,11 @@
   padding: 1.5rem;
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
+
+  display: flex;
+  flex-direction: column;
 }
+
 
 .sidebar.closed {
   transform: translateX(-100%);
@@ -20,11 +24,22 @@
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-  color: #444;
+  text-align: center;
+  padding: 10px 0;
+  margin-bottom: 30px;   /* ✅ Creates space between logo & menu */
 }
+
+.logo-img {
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Push menu down properly */
+.sidebar-nav {
+  margin-top: 10px;
+}
+
 
 .sidebar-nav ul {
   list-style: none;
