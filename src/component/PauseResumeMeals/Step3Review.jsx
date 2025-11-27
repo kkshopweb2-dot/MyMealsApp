@@ -37,7 +37,7 @@ export default function Step3Review({ orderNo, name, phone, email, plan, meals, 
 
       <div className="button-group">
         <button className="back-btn" onClick={handleBack}>Back & Edit Meals</button>
-        <button onClick={handleFinalSubmit} className="submit-btn">Submit Final Request</button>
+        <button onClick={() => { console.log("Submit button clicked!"); handleFinalSubmit(); }} className="submit-btn">Submit Final Request</button>
       </div>
     </>
   );

@@ -9,14 +9,30 @@ export const getPauseResumeMeals = (req, res) => {
 };
 
 export const createPauseResumeMeal = (req, res) => {
-  const { order_no, start_date, end_date, reason, status } = req.body;
-  if (!start_date || !status) {
-    return res.status(400).json({ error: "Start date and status are required" });
+  const { order_no, meals } = req.body;
+
+  if (!order_no || !meals || !Array.isArray(meals)) {
+    return res.status(400).json({ error: "Order number and a valid meals array are required" });
   }
-  const sql = "INSERT INTO pause_resume_meals (user_id, order_no, start_date, end_date, reason, status) VALUES (?, ?, ?, ?, ?, ?)";
-  db.query(sql, [req.userId, order_no, start_date, end_date, reason, status], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: "Pause/resume record created successfully", id: results.insertId });
+
+  const sql = "INSERT INTO pause_resume_meals (user_id, order_no, start_date, end_date, reason, status, meal_type) VALUES ?";
+  
+  const values = meals.map(meal => [
+    req.userId,
+    order_no,
+    meal.start_date,
+    meal.end_date,
+    meal.reason,
+    meal.action, // 'Pause' or 'Resume'
+    meal.meal_type
+  ]);
+
+  db.query(sql, [values], (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.status(201).json({ message: "Pause/resume records created successfully", insertedCount: results.affectedRows });
   });
 };
 

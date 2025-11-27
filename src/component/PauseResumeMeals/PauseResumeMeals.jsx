@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import axios from "axios";
+import api from "../../api/axios";
 
 import PauseResumeTable from "../PauseResumeTable";
 import { logout } from "../../redux/authSlice";
@@ -147,30 +147,11 @@ export default function PauseResumeMeals() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // ✅ GET TOKEN (adjust if your token is stored differently)
-  const token = localStorage.getItem("token,");
-  console.log("Token:", token);
-
-  // Create Axios instance
-  const api = axios.create({
-    baseURL: "http://localhost:5000/api/pause-resume",
-  });
-  // Add interceptor AFTER creation
-  api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token"); // fetch latest token
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  });
-
-
-
   // ================= FETCH EXISTING DATA =================
   useEffect(() => {
     const fetchPauseResumeData = async () => {
       try {
-        const response = await api.get("/");
+        const response = await api.get("/pause-resume");
         console.log("✅ Fetched Pause/Resume Data:", response.data);
       } catch (error) {
         console.error("❌ Error fetching pause/resume data:", error.response?.data || error.message);
@@ -178,7 +159,7 @@ export default function PauseResumeMeals() {
     };
 
     fetchPauseResumeData();
-  }, []);
+  }, [api]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -212,6 +193,7 @@ export default function PauseResumeMeals() {
 
   // ✅ FINAL SUBMIT WITH TOKEN
   const handleFinalSubmit = async () => {
+    console.log("handleFinalSubmit called");
     try {
       const mealData = Object.entries(meals)
         .filter(([_, data]) => data.checked)
@@ -223,7 +205,9 @@ export default function PauseResumeMeals() {
           reason: reason,
         }));
 
-      const response = await api.post("/", {
+      console.log("mealData to be submitted:", mealData);
+
+      const response = await api.post("/pause-resume", {
         order_no: orderNo,
         meals: mealData,
       });
