@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import path from "path"; // Import path
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
@@ -22,6 +23,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the "uploads" directory
+app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 
 // Middleware to sanitize the request URL
 app.use((req, res, next) => {

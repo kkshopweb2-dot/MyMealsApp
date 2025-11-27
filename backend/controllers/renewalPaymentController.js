@@ -38,15 +38,18 @@ export const createRenewalPayment = (req, res) => {
   } = req.body;
 
   let screenshotPath = null;
-  if (req.files && req.files.screenshot) {
-    const screenshot = req.files.screenshot[0];
-    const uploadDir = path.join(__dirname, "../uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
+  if (req.files && req.files.length > 0) {
+    const screenshotFile = req.files.find(file => file.fieldname === 'screenshot');
+    if (screenshotFile) {
+        const screenshot = screenshotFile;
+        const uploadDir = path.join(__dirname, "../uploads");
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir);
+        }
+        screenshotPath = path.join(uploadDir, `${Date.now()}_${screenshot.originalname}`);
+        fs.writeFileSync(screenshotPath, screenshot.buffer);
+        screenshotPath = `/uploads/${path.basename(screenshotPath)}`;
     }
-    screenshotPath = path.join(uploadDir, `${Date.now()}_${screenshot.originalname}`);
-    fs.writeFileSync(screenshotPath, screenshot.buffer);
-    screenshotPath = `/uploads/${path.basename(screenshotPath)}`;
   }
 
   const sql = `
@@ -101,7 +104,7 @@ export const createRenewalPayment = (req, res) => {
 
   db.query(sql, values, (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: "Renewal payment created successfully", id: results.insertId });
+    res.status(201).json({ message: "Renewal payment created successfully", id: results.insertId, screenshotUrl: screenshotPath });
   });
 };
 

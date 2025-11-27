@@ -77,7 +77,7 @@ const RenewalPayment = () => {
 
       console.log("Backend Response:", response.data);
 
-      setSubmittedData(prevData => [...prevData, data]);
+      setSubmittedData(prevData => [...prevData, { ...data, screenshotUrl: response.data.screenshotUrl }]);
       setPaymentConfirmed(true);
 
     } catch (error) {

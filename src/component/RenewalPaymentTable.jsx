@@ -90,7 +90,13 @@ const RenewalPaymentTable = ({ data = [], title }) => {
                   <td>{row.officeDate}</td>
                   <td>{row.officeTime}</td>
                   <td>{row.note}</td>
-                  <td>{row.screenshot ? row.screenshot.name : 'N/A'}</td>
+                  <td>
+                    {row.screenshotUrl ? (
+                      <img src={row.screenshotUrl} alt="Screenshot" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                    ) : row.screenshot instanceof File ? (
+                      <img src={URL.createObjectURL(row.screenshot)} alt="Screenshot" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                    ) : 'N/A'}
+                  </td>
                 </tr>
               ))
             ) : (
