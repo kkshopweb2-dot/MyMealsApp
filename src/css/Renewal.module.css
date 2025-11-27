@@ -26,15 +26,13 @@
 
 
 /* ====== LOGO ====== */
-.logoContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
+/* ✅ Logo Styling */
 .logo {
-  width: 120px;
+  width: 140px;
+  max-width: 100%;
   height: auto;
+  margin: 0 auto 15px;
+  display: block;
 }
 
 /* ====== HEADINGS ====== */

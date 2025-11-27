@@ -14,6 +14,7 @@ import deliveryLocationRoutes from "./routes/deliveryLocations.js";
 import mealPreferenceRoutes from "./routes/mealPreferences.js";
 import pauseResumeMealRoutes from "./routes/pauseResumeMeals.js";
 import paymentRoutes from "./routes/payments.js";
+import renewalPaymentRoutes from "./routes/renewalPayments.js";
 import userContactUpdateRoutes from "./routes/userContactUpdates.js";
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api/delivery-locations", deliveryLocationRoutes);
 app.use("/api/meal-preferences", mealPreferenceRoutes);
 app.use("/api/pause-resume", pauseResumeMealRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/renewal-payment", renewalPaymentRoutes);
 app.use("/api/user-contact-updates", userContactUpdateRoutes);
 
 app.listen(5000, () =>

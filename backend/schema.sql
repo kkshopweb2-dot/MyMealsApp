@@ -91,8 +91,7 @@ CREATE TABLE IF NOT EXISTS meal_preferences (
     preference_details TEXT,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (order_no) REFERENCES orders(order_no)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS pause_resume_meals (
@@ -149,12 +148,3 @@ CREATE TABLE IF NOT EXISTS cash_payments (
     note TEXT,
     FOREIGN KEY (order_id) REFERENCES orders(id)
 );
-
-ALTER TABLE orders
-ADD COLUMN qr_amount DECIMAL(10, 2),
-ADD COLUMN qr_transaction_id VARCHAR(255),
-ADD COLUMN qr_note TEXT,
-ADD COLUMN qr_screenshot VARCHAR(255);
-
-ALTER TABLE pause_resume_meals
-ADD COLUMN meal_type VARCHAR(255);

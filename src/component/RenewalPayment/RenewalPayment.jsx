@@ -2,15 +2,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
 import { logout } from "../../redux/authSlice";
 
-// import Header from "../Header";
-// import Sidebar from "../Sidebar";
 import RenewalPaymentTable from "../RenewalPaymentTable";
 
 import "../../css/dashboard.css";
 import "../../css/PauseResumeMeals.css";
-// import bgImage from "../../assets/images/bg.png";
 
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -21,8 +19,8 @@ import ThankYou from "./ThankYou";
 const RenewalPayment = () => {
   const [step, setStep] = useState(1);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [submittedData, setSubmittedData] = useState([]); // State for table data
+  const [submittedData, setSubmittedData] = useState([]);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -61,10 +59,30 @@ const RenewalPayment = () => {
   const handleNext = () => setStep(prev => prev + 1);
   const handleBack = () => setStep(prev => prev - 1);
 
-  const onSubmitPayment = (data) => {
-    console.log("Payment Data:", data);
-    setSubmittedData(prevData => [...prevData, data]); // Add new data to the table state
-    setPaymentConfirmed(true);
+  // ✅ SUBMIT WITH AXIOS
+  const onSubmitPayment = async (data) => {
+    try {
+      console.log("Frontend Form Data:", data);
+
+      // If screenshot is file, send as FormData
+      const formData = new FormData();
+      Object.keys(data).forEach(key => {
+        formData.append(key, data[key]);
+      });
+
+      const response = await axios.post(
+        "/renewal-payment",
+        formData
+      );
+
+      console.log("Backend Response:", response.data);
+
+      setSubmittedData(prevData => [...prevData, data]);
+      setPaymentConfirmed(true);
+
+    } catch (error) {
+      console.error("Axios Error:", error.response?.data || error.message);
+    }
   };
 
   const handleThankYouBack = () => {
@@ -83,11 +101,21 @@ const RenewalPayment = () => {
           ) : (
             <>
               {step === 1 && (
-                <StepOne control={control} watch={watch} handleNext={handleNext} />
+                <StepOne
+                  control={control}
+                  watch={watch}
+                  handleNext={handleNext}
+                />
               )}
+
               {step === 2 && (
-                <StepTwo control={control} handleNext={handleNext} handleBack={handleBack} />
+                <StepTwo
+                  control={control}
+                  handleNext={handleNext}
+                  handleBack={handleBack}
+                />
               )}
+
               {step === 3 && (
                 <StepThree
                   control={control}
@@ -96,6 +124,7 @@ const RenewalPayment = () => {
                   handleBack={handleBack}
                 />
               )}
+
               {step === 4 && (
                 <StepFour
                   control={control}
@@ -112,10 +141,13 @@ const RenewalPayment = () => {
       <div className="col-md-7">
         <RenewalPaymentTable
           data={submittedData}
-          title={<span style={{ color: "#104b45" }}>Renewal Payment Summary</span>}
+          title={
+            <span style={{ color: "#104b45" }}>
+              Renewal Payment Summary
+            </span>
+          }
         />
       </div>
-
     </div>
   );
 };

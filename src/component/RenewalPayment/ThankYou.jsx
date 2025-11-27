@@ -3,7 +3,7 @@ import logo from "../../assets/images/logo.png";
 
 const ThankYou = ({ setPaymentConfirmed }) => (
   <div className="thank-you-content">
-    <img src={logo} alt="MYMEALS Logo" className="logo" />
+    
     <h2 className="thank-you-title">Thank You! 🎉</h2>
     <p className="thank-you-text">Your payment has been received successfully.</p>
     <div className="reminder">

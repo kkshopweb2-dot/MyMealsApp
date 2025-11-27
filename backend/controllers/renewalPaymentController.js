@@ -1,4 +1,10 @@
 import db from "../db.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const getRenewalPayments = (req, res) => {
   const sql = "SELECT * FROM renewal_payments WHERE user_id = ? ORDER BY payment_date DESC";
@@ -9,12 +15,91 @@ export const getRenewalPayments = (req, res) => {
 };
 
 export const createRenewalPayment = (req, res) => {
-  const { amount, payment_date, next_renewal_date, status } = req.body;
-  if (!amount || !payment_date || !status) {
-    return res.status(400).json({ error: "Amount, payment date, and status are required" });
+  const {
+    orderNo,
+    location,
+    name,
+    email,
+    phone,
+    address,
+    plan,
+    renewalMonth,
+    amountPaid,
+    transactionId,
+    cashPaid,
+    paymentMode,
+    deliveryBoyName,
+    deliveryBoyPhone,
+    deliveryDate,
+    deliveryTime,
+    officeDate,
+    officeTime,
+    note,
+  } = req.body;
+
+  let screenshotPath = null;
+  if (req.files && req.files.screenshot) {
+    const screenshot = req.files.screenshot[0];
+    const uploadDir = path.join(__dirname, "../uploads");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    screenshotPath = path.join(uploadDir, `${Date.now()}_${screenshot.originalname}`);
+    fs.writeFileSync(screenshotPath, screenshot.buffer);
+    screenshotPath = `/uploads/${path.basename(screenshotPath)}`;
   }
-  const sql = "INSERT INTO renewal_payments (user_id, amount, payment_date, next_renewal_date, status) VALUES (?, ?, ?, ?, ?)";
-  db.query(sql, [req.userId, amount, payment_date, next_renewal_date, status], (err, results) => {
+
+  const sql = `
+    INSERT INTO renewal_payments (
+      user_id,
+      order_no,
+      location,
+      name,
+      email,
+      phone,
+      address,
+      plan,
+      renewal_month,
+      amount_paid,
+      transaction_id,
+      cash_paid,
+      payment_mode,
+      delivery_boy_name,
+      delivery_boy_phone,
+      delivery_date,
+      delivery_time,
+      office_date,
+      office_time,
+      note,
+      screenshot
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    req.userId,
+    orderNo,
+    location,
+    name,
+    email,
+    phone,
+    address,
+    plan,
+    renewalMonth,
+    amountPaid,
+    transactionId,
+    cashPaid,
+    paymentMode,
+    deliveryBoyName,
+    deliveryBoyPhone,
+    deliveryDate,
+    deliveryTime,
+    officeDate,
+    officeTime,
+    note,
+    screenshotPath,
+  ];
+
+  db.query(sql, values, (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json({ message: "Renewal payment created successfully", id: results.insertId });
   });

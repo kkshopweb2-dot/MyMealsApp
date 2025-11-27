@@ -19,8 +19,9 @@ db.connect((err) => {
   console.log("✅ Connected to MySQL database!");
 
   const schema = fs.readFileSync("backend/schema.sql", "utf8");
+  const addColumns = fs.readFileSync("backend/add_columns_to_renewal_payments.sql", "utf8");
 
-  db.query(schema, (err, results) => {
+  db.query(schema + addColumns, (err, results) => {
     if (err) {
       console.error("❌ Error executing schema:", err.message);
       db.end();
