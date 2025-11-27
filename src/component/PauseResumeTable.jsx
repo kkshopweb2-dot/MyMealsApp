@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "../css/DataTable.css";
 
 const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => {
@@ -19,9 +19,23 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
     },
   ]);
 
+  /* ================= PAGINATION ================= */
+  const [activePage, setActivePage] = useState(1);
+  const rowsPerPage = 5;
+
+  const filteredData = mealRows;
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const paginatedData = useMemo(() => {
+    const start = (activePage - 1) * rowsPerPage;
+    return filteredData.slice(start, start + rowsPerPage);
+  }, [filteredData, activePage]);
+  /* ================================================= */
+
   const handleAddRow = () => {
-    setBlankRows([
-      ...blankRows,
+    setBlankRows(prev => [
+      ...prev,
       {
         orderNo: "",
         name: "",
@@ -48,7 +62,7 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
       <h3 className="tableTitle">Pause / Resume Summary</h3>
 
       <div className="tableWrapper">
-        <table className="tableWrapper">
+        <table className="dataTable">
           <thead>
             <tr>
               <th>Order No</th>
@@ -65,24 +79,24 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
           </thead>
 
           <tbody>
-            {mealRows.length ? (
-              mealRows.map(([meal, data], index) => (
+            {paginatedData.length ? (
+              paginatedData.map(([meal, data], index) => (
                 <tr key={index}>
                   {index === 0 && (
                     <>
-                      <td rowSpan={mealRows.length}>{orderNo || "-"}</td>
-                      <td rowSpan={mealRows.length}>{name || "-"}</td>
-                      <td rowSpan={mealRows.length}>{email || "-"}</td>
-                      <td rowSpan={mealRows.length}>{phone || "-"}</td>
-                      <td rowSpan={mealRows.length}>{plan || "-"}</td>
+                      <td rowSpan={paginatedData.length}>{orderNo || "-"}</td>
+                      <td rowSpan={paginatedData.length}>{name || "-"}</td>
+                      <td rowSpan={paginatedData.length}>{email || "-"}</td>
+                      <td rowSpan={paginatedData.length}>{phone || "-"}</td>
+                      <td rowSpan={paginatedData.length}>{plan || "-"}</td>
                     </>
                   )}
 
                   <td>{meal}</td>
                   <td>{data.pause ? "Yes" : "No"}</td>
                   <td>{data.resume ? "Yes" : "No"}</td>
-                  <td>{data.dates.pause || "-"}</td>
-                  <td>{data.dates.resume || "-"}</td>
+                  <td>{data.dates?.pause || "-"}</td>
+                  <td>{data.dates?.resume || "-"}</td>
                 </tr>
               ))
             ) : (
@@ -93,6 +107,7 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
               </tr>
             )}
 
+            {/* Editable Blank Rows */}
             {blankRows.map((row, index) => (
               <tr key={index} className="blankRow">
                 {Object.entries(row).map(([field, value]) => (
@@ -112,6 +127,45 @@ const PauseResumeTable = ({ orderNo, name, email, phone, plan, meals = {} }) => 
             ))}
           </tbody>
         </table>
+      </div>
+
+      <button className="addRowBtn" onClick={handleAddRow}>
+        + Add Row
+      </button>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            onClick={() => setActivePage(p => Math.max(p - 1, 1))}
+            disabled={activePage === 1}
+            className="arrow-btn"
+          >
+            &lt;
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={activePage === i + 1 ? "active" : ""}
+              onClick={() => setActivePage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setActivePage(p => Math.min(p + 1, totalPages))}
+            disabled={activePage === totalPages}
+            className="arrow-btn"
+          >
+            &gt;
+          </button>
+        </div>
+      )}
+
+      <div className="entriesInfo">
+        Showing {paginatedData.length} of {filteredData.length} entries
       </div>
     </div>
   );

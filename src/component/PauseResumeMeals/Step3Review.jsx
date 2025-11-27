@@ -4,11 +4,12 @@ export default function Step3Review({ orderNo, name, phone, email, plan, meals, 
   return (
     <>
       <h3>Review Your Submission</h3>
-      <p><b>Order No:</b> {orderNo}</p>
-      <p><b>Name:</b> {name}</p>
-      <p><b>Phone:</b> {phone}</p>
-      <p><b>Email:</b> {email}</p>
-      <p><b>Plan:</b> {plan}</p>
+      <p style={{ color: "#333" }}><b>Order No:</b> {orderNo}</p>
+<p style={{ color: "#333" }}><b>Name:</b> {name}</p>
+<p style={{ color: "#333" }}><b>Phone:</b> {phone}</p>
+<p style={{ color: "#333" }}><b>Email:</b> {email}</p>
+<p style={{ color: "#333" }}><b>Plan:</b> {plan}</p>
+
 
       <h4>Meals & Dates</h4>
       {["Breakfast", "Lunch", "Dinner"].map((meal) => {

@@ -106,11 +106,7 @@ const RenewalPaymentTable = ({ data = [], title }) => {
 
       {/* Pagination */}
       <div className="pagination">
-        <button
-          onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
-          disabled={activePage === 1}
-          className="arrow-btn"
-        >
+        <button onClick={() => setActivePage(p => Math.max(p - 1, 1))} disabled={activePage === 1}>
           &lt;
         </button>
 
@@ -124,16 +120,11 @@ const RenewalPaymentTable = ({ data = [], title }) => {
           </button>
         ))}
 
-        <button
-          onClick={() => setActivePage((p) => Math.min(p + 1, totalPages))}
-          disabled={activePage === totalPages}
-          className="arrow-btn"
-        >
+        <button onClick={() => setActivePage(p => Math.min(p + 1, totalPages))} disabled={activePage === totalPages}>
           &gt;
         </button>
       </div>
 
-      {/* Entries Info */}
       <div className="entriesInfo">
         Showing {paginatedData.length} of {filteredData.length} entries
       </div>

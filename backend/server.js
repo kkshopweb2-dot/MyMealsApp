@@ -38,7 +38,7 @@ app.use("/api/complaints", complaintRoutes);
 app.use("/api/feedbacks", feedbackRoutes);
 app.use("/api/delivery-locations", deliveryLocationRoutes);
 app.use("/api/meal-preferences", mealPreferenceRoutes);
-app.use("/api/pause-resume-meals", pauseResumeMealRoutes);
+app.use("/api/pause-resume", pauseResumeMealRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/user-contact-updates", userContactUpdateRoutes);
 

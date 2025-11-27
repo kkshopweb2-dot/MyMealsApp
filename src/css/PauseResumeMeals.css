@@ -182,6 +182,8 @@ button.back-btn:hover {
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 12px;
+  font-size: 14px;
+  color: #333;
 }
 
 .subtext {

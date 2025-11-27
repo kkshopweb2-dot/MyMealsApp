@@ -1,22 +1,23 @@
-import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useMemo, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
+import axios from "axios";
+
 import PauseResumeTable from "../PauseResumeTable";
 import { logout } from "../../redux/authSlice";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import "../../css/PauseResumeMeals.css";
-import bgImage from "../../assets/images/bg.png";
-import { FaSearch } from "react-icons/fa";
-import "../../css/dashboard.css";
 import Step1Info from "./Step1Info";
 import Step2Meals from "./Step2Meals";
 import Step3Review from "./Step3Review";
 import Step4ThankYou from "./Step4ThankYou";
-import axios from "axios";
 
-// Map plan to available meals
+import "../../css/PauseResumeMeals.css";
+import "../../css/dashboard.css";
+import bgImage from "../../assets/images/bg.png";
+
+// ================= HELPERS =================
 export const planToMeals = (plan) => {
   switch (plan) {
     case "1": return ["Lunch", "Dinner"];
@@ -28,14 +29,13 @@ export const planToMeals = (plan) => {
   }
 };
 
-// Initialize meal state
 export const initialMealState = () => ({
   Breakfast: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null }, reason: "" },
   Lunch: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null }, reason: "" },
   Dinner: { checked: false, pause: false, resume: false, dates: { pause: null, resume: null }, reason: "" },
 });
 
-/* ---------- Reusable DataTable for Summary ---------- */
+// ================= SUMMARY TABLE =================
 const SummaryDataTable = ({ data, title }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
@@ -56,7 +56,7 @@ const SummaryDataTable = ({ data, title }) => {
   return (
     <div className="tableCard">
       {title && <h3 className="mb-4">{title}</h3>}
-      {/* Search Bar */}
+
       <div className="tableSearch">
         <input
           type="text"
@@ -106,23 +106,18 @@ const SummaryDataTable = ({ data, title }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="11" className="noData">
-                  No data available to display.
-                </td>
+                <td colSpan="11" className="noData">No data available to display.</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-
+      {/* Pagination */}
       <div className="pagination">
-        <button
-          onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
-          disabled={activePage === 1}
-          className="arrow-btn"
-        >
+        <button onClick={() => setActivePage(p => Math.max(p - 1, 1))} disabled={activePage === 1}>
           &lt;
         </button>
+
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
@@ -132,11 +127,8 @@ const SummaryDataTable = ({ data, title }) => {
             {i + 1}
           </button>
         ))}
-        <button
-          onClick={() => setActivePage((p) => Math.min(p + 1, totalPages))}
-          disabled={activePage === totalPages}
-          className="arrow-btn"
-        >
+
+        <button onClick={() => setActivePage(p => Math.min(p + 1, totalPages))} disabled={activePage === totalPages}>
           &gt;
         </button>
       </div>
@@ -144,21 +136,56 @@ const SummaryDataTable = ({ data, title }) => {
       <div className="entriesInfo">
         Showing {paginatedData.length} of {filteredData.length} entries
       </div>
+
     </div>
   );
 };
 
+// ================= MAIN COMPONENT =================
 export default function PauseResumeMeals() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [step, setStep] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // ✅ GET TOKEN (adjust if your token is stored differently)
+  const token = localStorage.getItem("token,");
+  console.log("Token:", token);
+
+  // Create Axios instance
+  const api = axios.create({
+    baseURL: "http://localhost:5000/api/pause-resume",
+  });
+  // Add interceptor AFTER creation
+  api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token"); // fetch latest token
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
+
+
+
+  // ================= FETCH EXISTING DATA =================
+  useEffect(() => {
+    const fetchPauseResumeData = async () => {
+      try {
+        const response = await api.get("/");
+        console.log("✅ Fetched Pause/Resume Data:", response.data);
+      } catch (error) {
+        console.error("❌ Error fetching pause/resume data:", error.response?.data || error.message);
+      }
+    };
+
+    fetchPauseResumeData();
+  }, []);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
 
+  // ================= FORM STATE =================
   const [orderNo, setOrderNo] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -183,6 +210,7 @@ export default function PauseResumeMeals() {
     setStep(3);
   };
 
+  // ✅ FINAL SUBMIT WITH TOKEN
   const handleFinalSubmit = async () => {
     try {
       const mealData = Object.entries(meals)
@@ -195,13 +223,15 @@ export default function PauseResumeMeals() {
           reason: reason,
         }));
 
-      await axios.post("/api/pause-resume", {
+      const response = await api.post("/", {
         order_no: orderNo,
         meals: mealData,
       });
+
+      console.log("✅ Submitted:", response.data);
       setStep(4);
     } catch (error) {
-      console.error("Failed to submit:", error);
+      console.error("❌ Failed to submit:", error.response?.data || error.message);
     }
   };
 
@@ -216,7 +246,6 @@ export default function PauseResumeMeals() {
     }));
   };
 
-  // Convert meals to flat table data
   const tableData = useMemo(() => {
     return Object.entries(meals)
       .filter(([_, data]) => data.checked)
@@ -237,8 +266,6 @@ export default function PauseResumeMeals() {
 
   return (
     <div className="container-fluid row">
-
-      {/* Steps Container */}
       <div className="col-md-5">
         <div className="pause-card">
           {step === 1 && (
@@ -281,15 +308,12 @@ export default function PauseResumeMeals() {
         </div>
       </div>
 
-      {/* Summary Table */}
       <div className="col-md-7">
         <SummaryDataTable
           data={tableData}
           title={<span style={{ color: "#104b45" }}>Pause / Resume Summary</span>}
         />
       </div>
-
-
     </div>
   );
 }
