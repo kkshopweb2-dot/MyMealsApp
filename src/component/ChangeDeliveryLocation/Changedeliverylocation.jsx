@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import axios from "../../api/axios";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import DeliveryLocationTable from "../DeliveryLocationTable"; // Import the new component
+import DeliveryLocationTable from "../DeliveryLocationTable";
 import styles from "../../css/Changedeliverylocation.module.css";
 import "../../css/dashboard.css";
 import bgImage from "../../assets/images/bg.png";
@@ -62,8 +63,32 @@ const Changedeliverylocation = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = (e) => {
+  // ✅ AXIOS SUBMIT WITH CONSOLE LOG
+  const handleSubmit = async (e) => {
     if (e) e.preventDefault();
+
+    const deliveryData = {
+      address_line_1: formData.primaryAddress,
+      address_line_2: formData.secondaryAddress,
+      city: formData.primaryCity,
+      state: formData.primaryState,
+      zip_code: formData.primaryZip,
+      is_default: formData.addressType === 'primary',
+    };
+
+    console.log("Data being sent:", deliveryData);
+
+    try {
+      const response = await axios.post(
+        "/delivery-locations",
+        deliveryData
+      );
+
+      console.log("Server Response:", response.data);
+    } catch (error) {
+      console.error("Axios Error:", error);
+    }
+
     setSubmittedData((prev) => [...prev, formData]);
     setStep(7);
   };
@@ -74,7 +99,6 @@ const Changedeliverylocation = () => {
   };
 
   return (
-
     <div className="row">
       {/* Form Section */}
       <div className="col-md-5">
@@ -97,9 +121,7 @@ const Changedeliverylocation = () => {
           {step === 6 && (
             <Step6Preview {...{ formData, handleSubmit, prevStep }} />
           )}
-          {step === 7 && (
-            <Step7ThankYou handleNewSubmission={handleNewSubmission} />
-          )}
+          {step === 7 && <Step7ThankYou handleNewSubmission={handleNewSubmission} />}
         </div>
       </div>
 
@@ -110,11 +132,7 @@ const Changedeliverylocation = () => {
           title={<span style={{ color: "#104b45" }}>Delivery Location Change Summary</span>}
         />
       </div>
-
     </div>
-
-
-
   );
 };
 
