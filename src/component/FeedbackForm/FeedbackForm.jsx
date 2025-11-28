@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../../api/axios";
 import "../../css/FeedbackForm.css";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-
 import "../../css/dashboard.css";
 import bgImage from "../../assets/images/bg.png";
 
@@ -10,12 +10,12 @@ import FeedbackInputs from "./FeedbackInputs";
 import FeedbackSection from "./FeedbackSection";
 import OverallFeedback from "./OverallFeedback";
 import ThankYou from "./ThankYou";
-
 import FeedbackTable from "../FeedbackTable";
 
 const FeedbackForm = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ✅ Added
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [feedbackList, setFeedbackList] = useState([]);
 
   const [formData, setFormData] = useState({
     orderNo: "",
@@ -32,6 +32,31 @@ const FeedbackForm = () => {
     delivery: { rating: "", feedback: "" },
     management: { rating: "", feedback: "" },
   });
+
+  // ✅ FETCH FEEDBACK (GET)
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const res = await axios.get("/feedbacks");
+        console.log("Fetched feedback:", res.data);
+        const formattedData = res.data.map(item => ({
+          orderNo: item.order_no,
+          name: item.customer_name,
+          phone: item.phone_number,
+          plan: item.plan_name,
+          food: item.food_rating,
+          delivery: item.delivery_rating,
+          management: item.management_rating,
+          feedback: item.overall_comments,
+          date: new Date(item.created_at).toLocaleDateString(),
+        }));
+        setFeedbackList(formattedData);
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    };
+    fetchFeedback();
+  }, []); // Empty dependency array means this runs once on mount
 
   const plans = [
     { label: "Combo Lunch and Dinner", value: "combo_lunch_dinner" },
@@ -58,75 +83,120 @@ const FeedbackForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // ✅ SUBMIT FEEDBACK (POST)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) return;
 
-    setIsSubmitted(true);
+    const payload = {
+      orderNo: formData.orderNo,
+      customer_name: formData.name,
+      phone_number: formData.phoneNumber,
+      plan_name: formData.plan,
+      overall_comments: formData.feedbackText,
+      selected_date: formData.selectedDate,
+      food_rating: ratings.food.rating,
+      food_comments: ratings.food.feedback,
+      delivery_rating: ratings.delivery.rating,
+      delivery_comments: ratings.delivery.feedback,
+      management_rating: ratings.management.rating,
+      management_comments: ratings.management.feedback,
+    };
 
-    // Reset form after showing thank you (optional)
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        orderNo: "",
-        name: "",
-        phoneNumber: "",
-        plan: "",
-        feedbackText: "",
-        selectedDate: "",
-      });
-      setRatings({
-        food: { rating: "", feedback: "" },
-        delivery: { rating: "", feedback: "" },
-        management: { rating: "", feedback: "" },
-      });
-    }, 3000);
+    console.log("Sending feedback:", payload);
+
+    try {
+      const response = await axios.post("/feedbacks", payload);
+      console.log("Backend response:", response.data);
+
+      setIsSubmitted(true);
+
+      // refresh list after submit
+      const res = await axios.get("/feedbacks");
+      const formattedData = res.data.map(item => ({
+        orderNo: item.order_no,
+        name: item.customer_name,
+        phone: item.phone_number,
+        plan: item.plan_name,
+        food: item.food_rating,
+        delivery: item.delivery_rating,
+        management: item.management_rating,
+        feedback: item.overall_comments,
+        date: new Date(item.created_at).toLocaleDateString(),
+      }));
+      setFeedbackList(formattedData);
+
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          orderNo: "",
+          name: "",
+          phoneNumber: "",
+          plan: "",
+          feedbackText: "",
+          selectedDate: "",
+        });
+        setRatings({
+          food: { rating: "", feedback: "" },
+          delivery: { rating: "", feedback: "" },
+          management: { rating: "", feedback: "" },
+        });
+      }, 3000);
+
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+    }
   };
-
-  if (isSubmitted) {
-    return <ThankYou />;
-  }
 
   return (
     <main>
       <div className="empty-dashboard">
         <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
+          
           <div className="feedback-wrapper">
             <div className="feedback-card">
-              <h2 className="title">Customer Feedback Form</h2>
-              <form onSubmit={handleSubmit}>
-                <FeedbackInputs
-                  formData={formData}
-                  handleChange={handleChange}
-                  errors={errors}
-                  plans={plans}
-                />
+              {isSubmitted ? (
+                <ThankYou />
+              ) : (
+                <>
+                  <h2 className="title">Customer Feedback Form</h2>
+                  <form onSubmit={handleSubmit}>
+                    <FeedbackInputs
+                      formData={formData}
+                      handleChange={handleChange}
+                      errors={errors}
+                      plans={plans}
+                    />
 
-                {["Food", "Delivery", "Management"].map((section) => (
-                  <FeedbackSection
-                    key={section}
-                    section={section}
-                    ratings={ratings}
-                    setRatings={setRatings}
-                    ratingOptions={ratingOptions}
-                  />
-                ))}
+                    {["Food", "Delivery", "Management"].map((section) => (
+                      <FeedbackSection
+                        key={section}
+                        section={section}
+                        ratings={ratings}
+                        setRatings={setRatings}
+                        ratingOptions={ratingOptions}
+                      />
+                    ))}
 
-                <OverallFeedback
-                  formData={formData}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
+                    <OverallFeedback
+                      formData={formData}
+                      handleChange={handleChange}
+                      errors={errors}
+                    />
 
-                <button type="submit" className="submitButton">
-                  Submit Feedback
-                </button>
-              </form>
+                    <button type="submit" className="submitButton">
+                      Submit Feedback
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
           </div>
+
           <div className="feedback-table-container">
-            <FeedbackTable />
+            <FeedbackTable data={feedbackList} />
           </div>
+
         </div>
       </div>
     </main>

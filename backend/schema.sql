@@ -64,8 +64,18 @@ CREATE TABLE IF NOT EXISTS complaints (
 CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    rating INT,
-    comments TEXT,
+    order_no VARCHAR(255),
+    customer_name VARCHAR(255),
+    phone_number VARCHAR(255),
+    plan_name VARCHAR(255),
+    overall_comments TEXT,
+    selected_date DATE,
+    food_rating VARCHAR(255),
+    food_comments TEXT,
+    delivery_rating VARCHAR(255),
+    delivery_comments TEXT,
+    management_rating VARCHAR(255),
+    management_comments TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

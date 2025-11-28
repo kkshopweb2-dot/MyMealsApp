@@ -11,10 +11,10 @@ const FeedbackTable = ({ data = [] }) => {   // ✅ default empty array
   // ✅ Safe filtering
   const filteredData = Array.isArray(data)
     ? data.filter((item) =>
-        item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.orderNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.phone?.includes(searchQuery)
-      )
+      item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.orderNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.phone?.includes(searchQuery)
+    )
     : [];
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -26,7 +26,13 @@ const FeedbackTable = ({ data = [] }) => {   // ✅ default empty array
 
   return (
     <div className="tableCard">
-      <h2 className="tableTitle">Feedback Data Table</h2>
+      <h2
+        className="tableTitle"
+        style={{ color: "#000", fontWeight: "600", marginBottom: "10px" }}
+      >
+        Feedback Data Table
+      </h2>
+
 
       {/* Search */}
       <div className="tableSearch">
