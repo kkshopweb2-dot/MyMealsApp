@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
-import path from "path"; // Import path
+import multer from "multer";
+import path from "path";
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
@@ -19,9 +19,10 @@ import renewalPaymentRoutes from "./routes/renewalPayments.js";
 import userContactUpdateRoutes from "./routes/userContactUpdates.js";
 
 const app = express();
+const upload = multer();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the "uploads" directory
@@ -45,7 +46,7 @@ app.use("/api/delivery-locations", deliveryLocationRoutes);
 app.use("/api/meal-preferences", mealPreferenceRoutes);
 app.use("/api/pause-resume", pauseResumeMealRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api/renewal-payment", renewalPaymentRoutes);
+app.use("/api/renewal-payment", upload.any(), renewalPaymentRoutes);
 app.use("/api/user-contact-updates", userContactUpdateRoutes);
 
 app.listen(5000, () =>
