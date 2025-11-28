@@ -9,8 +9,8 @@ const Step6Preview = ({ formData, handleSubmit, prevStep }) => {
         {JSON.stringify(formData, null, 2)}
       </pre>
       <div className={styles.btnGroup}>
-        <button onClick={prevStep}>Back</button>
-        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={prevStep} className={`${styles.btn} ${styles.secondaryBtn}`}>Back</button>
+        <button onClick={handleSubmit} className={`${styles.btn} ${styles.primaryBtn}`}>Submit</button>
       </div>
     </div>
   );

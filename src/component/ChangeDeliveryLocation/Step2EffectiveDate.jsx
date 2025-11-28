@@ -14,8 +14,8 @@ const Step2EffectiveDate = ({ formData, handleChange, nextStep, prevStep }) => {
         required
       />
       <div className={styles.btnGroup}>
-        <button onClick={prevStep}>Back</button>
-        <button onClick={nextStep}>Next</button>
+        <button onClick={prevStep} className={`${styles.btn} ${styles.secondaryBtn}`}>Back</button>
+        <button onClick={nextStep} className={`${styles.btn} ${styles.primaryBtn}`}>Next</button>
       </div>
     </div>
   );

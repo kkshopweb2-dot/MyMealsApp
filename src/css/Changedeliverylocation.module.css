@@ -115,6 +115,39 @@
 }
 
 /* ===============================
+   BUTTONS
+================================ */
+.btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.primaryBtn {
+  background: #104b45;
+  color: #fff;
+}
+
+.primaryBtn:hover {
+  opacity: 0.9;
+}
+
+.secondaryBtn {
+  background: #fff;
+  border: 1px solid #104b45;
+  color: #104b45;
+}
+
+.secondaryBtn:hover {
+  background: #104b45;
+  color: #fff;
+}
+
+
+/* ===============================
    PAGINATION
 ================================ */
 .pagination {
@@ -169,96 +202,56 @@ font-weight: 600;
   color: #555;
 }
 
-/* ===============================
-   FORM INPUTS
-================================ */
-.inputField {
-  width: 100%;
-  padding: 12px 15px;
+.infoText {
+  color: #555;
   margin-bottom: 15px;
-  border: 1px solid #c9e0d8;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border 0.3s, box-shadow 0.3s;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
-.inputField:focus {
-  border-color: #2e7d5c;
-  box-shadow: 0 0 5px rgba(46, 125, 92, 0.3);
-  outline: none;
-}
-
-/* ===============================
-   BUTTONS
-================================ */
 .btnGroup {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
+  width: 100%;
 }
 
-button {
-  background-color: #2e7d5c;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #104b45;
+  font-weight: 500;
+}
+
+/* ===============================
+   FORM INPUTS
+================================ */
+.inputField {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #c9e0d8;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
 }
-
-button:hover {
-  background-color: #24664b;
-  transform: translateY(-2px);
+.step h3 {
+  color: #104b45;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
-
-/* ===============================
-   ADDRESS GRID
-================================ */
-.addressGroup {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
+.previewBox {
+  background-color: #f5f5f5; /* A light grey background */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  color: #333; /* Dark text color */
+  white-space: pre-wrap; /* Ensures the text wraps */
+  word-wrap: break-word; /* Breaks long strings */
+  text-align: left; /* Align text to the left */
 }
-
-/* ===============================
-   RESPONSIVE
-================================ */
-@media (max-width: 1024px) {
-  .formTableWrapper {
-    flex-direction: column;
-  }
-
-  .formContainer,
-  .tableCard {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .addressGroup {
-    grid-template-columns: 1fr;
-  }
-
-  .pagination {
-    gap: 4px;
-  }
-
-  .tableWrapper th,
-  .tableWrapper td {
-    font-size: 12px;
-    padding: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .entriesInfo {
-    text-align: center;
-  }
-}
-
 .deliveryFormCard {
   background: #ffffff; /* Slightly more transparent */
   border-radius: 12px; /* Slightly less rounded */
@@ -272,4 +265,40 @@ button:hover {
   display: flex; /* Added for layout */
   flex-direction: column; /* Added for layout */
   align-items: center; /* Added for layout */
+}
+
+/* ===============================
+   THANK YOU
+================================ */
+
+.thankYou {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.thankYou h2 {
+  font-size: 2.5rem;
+  color: #104b45;
+  margin-bottom: 10px;
+}
+
+.thankYou p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

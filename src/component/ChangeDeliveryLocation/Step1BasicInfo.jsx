@@ -32,7 +32,11 @@ const Step1UserInfo = ({
           <input
             type={field === "email" ? "email" : "text"}
             name={field}
-            placeholder={`Enter ${field}`}
+            placeholder={`Enter ${
+              field === "orderNo"
+                ? "Order No"
+                : field.charAt(0).toUpperCase() + field.slice(1)
+            }`}
             value={formData[field]}
             onChange={handleChange}
             className={styles.inputField}
@@ -69,7 +73,7 @@ const Step1UserInfo = ({
       </label>
 
       {confirmed && (
-        <button onClick={nextStep} className={styles.nextBtn}>
+        <button onClick={nextStep} className={`${styles.btn} ${styles.primaryBtn}`}>
           Next
         </button>
       )}

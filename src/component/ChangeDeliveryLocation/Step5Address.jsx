@@ -11,7 +11,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
           <input
             type="text"
             name="primaryAddress"
-            placeholder="Address"
+            placeholder="Enter Address"
             value={formData.primaryAddress}
             onChange={handleChange}
             className={styles.inputField}
@@ -19,7 +19,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
           <input
             type="text"
             name="primaryCity"
-            placeholder="City"
+            placeholder="Enter City"
             value={formData.primaryCity}
             onChange={handleChange}
             className={styles.inputField}
@@ -27,7 +27,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
           <input
             type="text"
             name="primaryLandmark"
-            placeholder="Landmark"
+            placeholder="Enter Landmark"
             value={formData.primaryLandmark}
             onChange={handleChange}
             className={styles.inputField}
@@ -35,7 +35,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
           <input
             type="text"
             name="primaryState"
-            placeholder="State"
+            placeholder="Enter State"
             value={formData.primaryState}
             onChange={handleChange}
             className={styles.inputField}
@@ -43,7 +43,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
           <input
             type="text"
             name="primaryZip"
-            placeholder="ZIP Code"
+            placeholder="Enter ZIP Code"
             value={formData.primaryZip}
             onChange={handleChange}
             className={styles.inputField}
@@ -73,7 +73,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="primaryAddress"
-                placeholder="Primary Address"
+                placeholder="Enter Primary Address"
                 value={formData.primaryAddress}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -81,7 +81,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="primaryCity"
-                placeholder="Primary City"
+                placeholder="Enter Primary City"
                 value={formData.primaryCity}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -89,7 +89,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="primaryLandmark"
-                placeholder="Primary Landmark"
+                placeholder="Enter Primary Landmark"
                 value={formData.primaryLandmark}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -97,7 +97,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="primaryState"
-                placeholder="Primary State"
+                placeholder="Enter Primary State"
                 value={formData.primaryState}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -105,7 +105,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="primaryZip"
-                placeholder="Primary ZIP"
+                placeholder="Enter Primary ZIP"
                 value={formData.primaryZip}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -118,7 +118,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="secondaryAddress"
-                placeholder="Secondary Address"
+                placeholder="Enter Secondary Address"
                 value={formData.secondaryAddress}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -126,7 +126,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="secondaryCity"
-                placeholder="Secondary City"
+                placeholder="Enter Secondary City"
                 value={formData.secondaryCity}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -134,7 +134,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="secondaryLandmark"
-                placeholder="Secondary Landmark"
+                placeholder="Enter Secondary Landmark"
                 value={formData.secondaryLandmark}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -142,7 +142,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="secondaryState"
-                placeholder="Secondary State"
+                placeholder="Enter Secondary State"
                 value={formData.secondaryState}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -150,7 +150,7 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
               <input
                 type="text"
                 name="secondaryZip"
-                placeholder="Secondary ZIP"
+                placeholder="Enter Secondary ZIP"
                 value={formData.secondaryZip}
                 onChange={handleChange}
                 className={styles.inputField}
@@ -161,8 +161,8 @@ const Step5Address = ({ formData, handleChange, nextStep, prevStep }) => {
       )}
 
       <div className={styles.btnGroup}>
-        <button onClick={prevStep}>Back</button>
-        <button onClick={nextStep}>Next</button>
+        <button onClick={prevStep} className={`${styles.btn} ${styles.secondaryBtn}`}>Back</button>
+        <button onClick={nextStep} className={`${styles.btn} ${styles.primaryBtn}`}>Next</button>
       </div>
     </div>
   );
