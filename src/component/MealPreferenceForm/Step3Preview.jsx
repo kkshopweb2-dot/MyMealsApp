@@ -4,7 +4,10 @@ import styles from "../../css/MealPreference.module.css";
 const Step3Preview = ({ formData, toggles, handleFinalConfirm, setStep }) => {
   return (
     <div className={styles.formStep}>
-      <h3 className={styles.subtitle}>Your Preferences</h3>
+      <h3 className={styles.subtitle} style={{ color: "black" }}>
+        Your Preferences
+      </h3>
+
       <div className={styles.summaryBox}>
         {Object.entries({
           "Order No.": formData.orderNo,

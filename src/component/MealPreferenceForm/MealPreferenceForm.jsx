@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // make sure to install via npm
+import axios from "axios";
 import styles from "../../css/MealPreference.module.css";
 
 import Header from "../Header";
@@ -39,21 +39,24 @@ const MealPreferenceForm = () => {
     dishChoice: "",
   });
 
+  // === FETCH DATA FROM SERVER WITH CONSOLE LOG ===
   const fetchData = async () => {
     try {
-      const response = await axios.get("/api/meal-preferences"); // replace with your API endpoint
+      const response = await axios.get("/api/meal-preferences");
+
+      console.log("✅ Fetched Meal Preferences Data:", response.data); // CONSOLE OUTPUT
+
       setSubmittedData(response.data);
     } catch (error) {
-      console.error("Failed to fetch meal preferences:", error);
+      console.error("❌ Failed to fetch meal preferences:", error);
     }
   };
 
-  /* === FETCH DATA FROM SERVER === */
   useEffect(() => {
     fetchData();
   }, []);
 
-  /* === HANDLERS === */
+  // === HANDLERS ===
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -82,16 +85,17 @@ const MealPreferenceForm = () => {
           avoidNonVeg: formData.avoidNonVeg,
           avoidVeg: formData.avoidVeg,
         }),
-        is_active: true, // or some default value
+        is_active: true,
       };
-      // POST data to server
-      await axios.post("/api/meal-preferences", requestData); // replace with your API endpoint
 
-      // Refetch data
+      const response = await axios.post("/api/meal-preferences", requestData);
+
+      console.log("✅ Submitted Meal Preference Response:", response.data); // POST LOG
+
       fetchData();
       setSubmitted(true);
     } catch (error) {
-      console.error("Failed to submit meal preference:", error);
+      console.error("❌ Failed to submit meal preference:", error);
     }
   };
 
@@ -112,11 +116,10 @@ const MealPreferenceForm = () => {
     setStep(1);
   };
 
-  /* === RENDER === */
   return (
     <div className="container-fluid">
       <div className="row">
-        {/* === FORM CARD === */}
+        {/* FORM CARD */}
         <div className="col-md-4">
           <div className={styles.formCard}>
             {!submitted ? (
@@ -159,7 +162,7 @@ const MealPreferenceForm = () => {
           </div>
         </div>
 
-        {/* === TABLE CARD === */}
+        {/* TABLE CARD */}
         <div className="col-md-7">
           <MealPreferenceTable
             rows={submittedData}

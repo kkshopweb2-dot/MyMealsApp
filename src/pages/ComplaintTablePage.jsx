@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
 
@@ -8,7 +8,6 @@ const ComplaintTable = ({ data = [] }) => {
 
   const entriesPerPage = 10;
 
-  // Ensure data is always an array
   const safeData = Array.isArray(data) ? data : [];
 
   const filteredData = safeData.filter(
@@ -25,9 +24,15 @@ const ComplaintTable = ({ data = [] }) => {
     activePage * entriesPerPage
   );
 
+  useEffect(() => {
+    setActivePage(1);
+  }, [searchQuery]);
+
   return (
     <div className="tableCard">
-      <h3 className="complaint-title">Complaint Summary</h3>
+      <h3 className="complaint-title" style={{ color: "black" }}>
+        Complaint Summary
+      </h3>
 
       {/* Search Bar */}
       <div className="tableSearch">
@@ -35,10 +40,7 @@ const ComplaintTable = ({ data = [] }) => {
           type="text"
           placeholder="Search complaints..."
           value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setActivePage(1);
-          }}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <FaSearch />
       </div>
@@ -90,8 +92,8 @@ const ComplaintTable = ({ data = [] }) => {
         </tbody>
       </table>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
+      {/* ✅ Pagination - now always visible if needed */}
+      {filteredData.length > entriesPerPage && (
         <div className="pagination">
           <button
             onClick={() => setActivePage((p) => Math.max(p - 1, 1))}

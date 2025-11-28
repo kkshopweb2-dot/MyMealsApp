@@ -125,6 +125,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  color: #111827;
 }
 
 .toggleSwitch {
@@ -148,7 +149,10 @@
   border-radius: 20px;
   transition: 0.4s;
 }
-
+.h3{
+  font-size: 1.75rem;
+  color: #111827;
+}
 .slider:before {
   position: absolute;
   content: "";
@@ -167,6 +171,12 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(20px);
 }
+.blackLabel {
+  color: #000;   /* black color */
+}
+.blackRadioLabel {
+  color: #000; /* black */
+}
 
 /* ANIMATION */
 .fadeIn {
@@ -184,6 +194,7 @@ input:checked + .slider:before {
   padding: 20px;
   border-radius: 12px;
   width: 100%;
+  color: #111827;
 }
 
 .summaryItem {
