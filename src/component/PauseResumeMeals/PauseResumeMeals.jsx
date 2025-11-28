@@ -212,16 +212,34 @@ export default function PauseResumeMeals() {
   // ✅ FINAL SUBMIT WITH TOKEN
   const handleFinalSubmit = async () => {
     console.log("handleFinalSubmit called");
+
+    // --- VALIDATION ---
+    const checkedMeals = Object.entries(meals).filter(([_, data]) => data.checked);
+
+    if (checkedMeals.length === 0) {
+      return alert("Please select at least one meal to pause or resume.");
+    }
+
+    for (const [meal, data] of checkedMeals) {
+      if (data.pause && !data.dates.pause) {
+        return alert(`Please select a pause date for ${meal}.`);
+      }
+      if (data.resume && !data.dates.resume) {
+        return alert(`Please select a resume date for ${meal}.`);
+      }
+      if (!data.pause && !data.resume) {
+        return alert(`Please select 'Pause' or 'Resume' for ${meal}.`);
+      }
+    }
+
     try {
-      const mealData = Object.entries(meals)
-        .filter(([_, data]) => data.checked)
-        .map(([meal, data]) => ({
-          meal_type: meal,
-          action: data.pause ? "Pause" : "Resume",
-          start_date: data.dates.pause,
-          end_date: data.dates.resume,
-          reason: reason,
-        }));
+      const mealData = checkedMeals.map(([meal, data]) => ({
+        meal_type: meal,
+        action: data.pause ? "Pause" : "Resume",
+        start_date: data.dates.pause,
+        end_date: data.dates.resume,
+        reason: reason,
+      }));
 
       console.log("mealData to be submitted:", mealData);
 
