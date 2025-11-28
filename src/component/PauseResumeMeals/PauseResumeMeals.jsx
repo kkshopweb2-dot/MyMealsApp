@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import api from "../../api/axios";
+import { jwtDecode } from "jwt-decode"; 
 
 import PauseResumeTable from "../PauseResumeTable";
 import { logout } from "../../redux/authSlice";
@@ -151,15 +152,32 @@ export default function PauseResumeMeals() {
   useEffect(() => {
     const fetchPauseResumeData = async () => {
       try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && user.token) {
+          const decodedToken = jwtDecode(user.token);
+          if (decodedToken.exp * 1000 < Date.now()) {
+            dispatch(logout());
+            navigate("/");
+            return;
+          }
+        } else {
+            dispatch(logout());
+            navigate("/");
+            return;
+        }
         const response = await api.get("/pause-resume");
         console.log("✅ Fetched Pause/Resume Data:", response.data);
       } catch (error) {
         console.error("❌ Error fetching pause/resume data:", error.response?.data || error.message);
+        if (error.response?.status === 500 || error.response?.status === 403) {
+            dispatch(logout());
+            navigate("/");
+        }
       }
     };
 
     fetchPauseResumeData();
-  }, [api]);
+  }, [dispatch, navigate]);
 
   const handleLogout = () => {
     dispatch(logout());

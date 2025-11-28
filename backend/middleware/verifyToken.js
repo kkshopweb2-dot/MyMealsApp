@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "your_jwt_secret"; // It's recommended to use an environment variable for this
+const JWT_SECRET = "jklmn";
 
 const verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"] || req.headers["authorization"];

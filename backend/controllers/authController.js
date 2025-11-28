@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import db from "../db.js";
 
-const JWT_SECRET = "your_jwt_secret";
+const JWT_SECRET = "jklmn";
 
 export const register = (req, res) => {
   console.log(req.body.name);
@@ -36,8 +36,7 @@ export const login = (req, res) => {
       return res.status(400).json({ error: "Invalid credentials" });
 
     const user = results[0];
-    // const passwordIsValid = bcrypt.compareSync(password, user.password);
-    const passwordIsValid = 1;
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
     if (!passwordIsValid)
       return res.status(400).json({ error: "Invalid credentials" });
 
@@ -45,6 +44,15 @@ export const login = (req, res) => {
       expiresIn: 86400, // 24 hours
     });
 
-    res.json({ auth: true, token });
+    res.json({
+      auth: true,
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+      },
+    });
   });
 };

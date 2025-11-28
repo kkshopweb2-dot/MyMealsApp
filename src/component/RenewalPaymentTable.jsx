@@ -10,10 +10,10 @@ const RenewalPaymentTable = ({ data = [], title }) => {
 
   // 🔍 Filter logic for multiple fields
   const filteredData = data.filter((item) =>
-    item.orderNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.transactionId.toLowerCase().includes(searchQuery.toLowerCase())
+    String(item.orderNo).toLowerCase().includes(searchQuery.toLowerCase()) ||
+    String(item.name).toLowerCase().includes(searchQuery.toLowerCase()) ||
+    String(item.phone).toLowerCase().includes(searchQuery.toLowerCase()) ||
+    String(item.transactionId).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);

@@ -1,23 +1,7 @@
 import db from "../db.js";
 
 export const getMealPreferences = (req, res) => {
-  const sql = `
-    SELECT
-      mp.id,
-      mp.user_id,
-      mp.meal_type,
-      mp.preference_details,
-      mp.is_active,
-      mp.created_at,
-      u.name,
-      u.email,
-      o.plan
-    FROM meal_preferences mp
-    LEFT JOIN users u ON mp.user_id = u.id
-    LEFT JOIN orders o ON mp.order_no = o.order_no
-    WHERE mp.user_id = ?
-    ORDER BY mp.created_at DESC
-  `;
+  const sql = "SELECT * FROM meal_preferences WHERE user_id = ?";
   db.query(sql, [req.userId], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
@@ -25,15 +9,22 @@ export const getMealPreferences = (req, res) => {
 };
 
 export const createMealPreference = (req, res) => {
-  const { meal_type, preference_details, is_active } = req.body;
-  if (!meal_type) {
-    return res.status(400).json({ error: "Meal type is required" });
-  }
-  const sql = "INSERT INTO meal_preferences (user_id, meal_type, preference_details, is_active) VALUES (?, ?, ?, ?)";
-  db.query(sql, [req.userId, meal_type, preference_details, is_active === undefined ? true : is_active], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: "Meal preference created successfully", id: results.insertId });
-  });
+  const { order_no, meal_type, preference_details, is_active } = req.body;
+  const sql =
+    "INSERT INTO meal_preferences (user_id, order_no, meal_type, preference_details, is_active) VALUES (?, ?, ?, ?, ?)";
+  db.query(
+    sql,
+    [req.userId, order_no, meal_type, preference_details, is_active],
+    (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: err.message });
+      }
+      res
+        .status(201)
+        .json({ message: "Meal preference created successfully", id: results.insertId });
+    }
+  );
 };
 
 export const getMealPreference = (req, res) => {

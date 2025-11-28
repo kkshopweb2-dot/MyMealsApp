@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 import styles from "../../css/MealPreference.module.css";
 
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import "../../css/dashboard.css";
-import bgImage from "../../assets/images/bg.png";
 
 import Step1UserInfo from "./Step1UserInfo";
 import Step2MealDetails from "./Step2MealDetails";
@@ -42,7 +41,7 @@ const MealPreferenceForm = () => {
   // === FETCH DATA FROM SERVER WITH CONSOLE LOG ===
   const fetchData = async () => {
     try {
-      const response = await axios.get("/api/meal-preferences");
+      const response = await axios.get("/meal-preferences");
 
       console.log("✅ Fetched Meal Preferences Data:", response.data); // CONSOLE OUTPUT
 
@@ -88,14 +87,29 @@ const MealPreferenceForm = () => {
         is_active: true,
       };
 
-      const response = await axios.post("/api/meal-preferences", requestData);
+      const response = await axios.post("/meal-preferences", requestData);
 
       console.log("✅ Submitted Meal Preference Response:", response.data); // POST LOG
 
-      fetchData();
+      window.alert("Meal preference submitted successfully!");
+
+      const newSubmission = {
+        ...formData,
+        orderNo: formData.orderNo,
+        preference_details: JSON.stringify({
+          dishChoice: formData.dishChoice,
+          avoidNonVeg: formData.avoidNonVeg,
+          avoidVeg: formData.avoidVeg,
+        }),
+      };
+
+      setSubmittedData(prevData => [...prevData, newSubmission]);
       setSubmitted(true);
     } catch (error) {
       console.error("❌ Failed to submit meal preference:", error);
+      window.alert(
+        "Failed to submit meal preference. Please make sure you are logged in and try again."
+      );
     }
   };
 
@@ -175,3 +189,4 @@ const MealPreferenceForm = () => {
 };
 
 export default MealPreferenceForm;
+
