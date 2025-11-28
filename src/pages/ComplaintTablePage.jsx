@@ -93,7 +93,7 @@ const ComplaintTable = ({ data = [] }) => {
       </table>
 
       {/* ✅ Pagination - now always visible if needed */}
-      {filteredData.length > entriesPerPage && (
+      {totalPages >= 1 && (
         <div className="pagination">
           <button
             onClick={() => setActivePage((p) => Math.max(p - 1, 1))}

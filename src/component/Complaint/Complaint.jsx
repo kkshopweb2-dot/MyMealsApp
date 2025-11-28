@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import axios from "../../api/axios";
 import "../../css/Complaint.css";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-
 import "../../css/dashboard.css";
 import bgImage from "../../assets/images/bg.png";
 
@@ -36,24 +36,37 @@ const Complaint = () => {
 
   const [submittedComplaints, setSubmittedComplaints] = useState([]);
 
-  const handleSubmit = (newComplaint) => {
+  // ✅ Submit & send data to backend
+  const handleSubmit = async (newComplaint) => {
     const fullComplaint = {
       ...orderData,
-      ...newComplaint,
+      ...newComplaint, // Keep original fields for the table
+      subject: newComplaint.complaint.join(", "), // Add field for backend
+      description: newComplaint.issue, // Add field for backend
       date: new Date().toLocaleDateString(),
     };
-    setSubmittedComplaints((prev) => [...prev, fullComplaint]);
-    setStep("thankyou");
+
+    console.log("Sending complaint data:", fullComplaint);
+
+    try {
+      const response = await axios.post("/complaints", fullComplaint);
+
+      console.log("Backend response:", response.data);
+
+      setSubmittedComplaints((prev) => [...prev, fullComplaint]);
+      setStep("thankyou");
+    } catch (error) {
+      console.error("Error sending complaint:", error);
+    }
   };
 
   return (
-
     <main>
       <div className="empty-dashboard">
         <div className="form-and-table-container">
           <div className="form-wrapper">
-            {/* Step-based rendering inside card */}
             <h2 className="heading">Raise a Complaint</h2>
+
             {step === "order" && (
               <OrderDetailsForm
                 orderData={orderData}
@@ -66,20 +79,19 @@ const Complaint = () => {
               <ComplaintForm
                 complaintData={complaintData}
                 setComplaintData={setComplaintData}
-                setStep={setStep}
                 handleSubmit={handleSubmit}
               />
             )}
 
             {step === "thankyou" && <ThankYou />}
           </div>
+
           <div className="table-container">
             <ComplaintTable data={submittedComplaints} />
           </div>
         </div>
       </div>
     </main>
-
   );
 };
 

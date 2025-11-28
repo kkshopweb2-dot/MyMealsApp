@@ -1,6 +1,10 @@
 import React from "react";
 
-const ComplaintForm = ({ complaintData, setComplaintData, setStep }) => {
+const ComplaintForm = ({
+  complaintData,
+  setComplaintData,
+  handleSubmit,
+}) => {
   const toggleComplaintType = (type) => {
     setComplaintData((prev) => ({
       ...prev,
@@ -13,23 +17,24 @@ const ComplaintForm = ({ complaintData, setComplaintData, setStep }) => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setComplaintData({ ...complaintData, imageUri: URL.createObjectURL(file) });
+      setComplaintData({
+        ...complaintData,
+        imageUri: URL.createObjectURL(file),
+      });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!complaintData.complaint.length || !complaintData.issue) {
       alert("Please complete all required fields");
       return;
     }
-    setStep("thankyou");
+    handleSubmit(complaintData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-     
-
+    <form onSubmit={handleFormSubmit}>
       <label>Complaint Type *</label>
       <div className="checkbox-group">
         {["Food", "Delivery", "Management", "Other"].map((item) => (

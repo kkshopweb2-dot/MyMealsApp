@@ -90,6 +90,7 @@ textarea {
   background: #fff;
   cursor: pointer;
   transition: all 0.25s ease;
+  color: #444;
 }
 
 .checkbox.selected {
