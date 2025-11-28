@@ -10,9 +10,12 @@ const UpdateContactTable = ({ rows, title }) => {
 
   const filteredData = rows.filter(
     (item) =>
-      item.orderNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchQuery.toLowerCase())
+      (item.field_name &&
+        item.field_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.old_value &&
+        item.old_value.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.new_value &&
+        item.new_value.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -45,29 +48,25 @@ const UpdateContactTable = ({ rows, title }) => {
       <table className="tableWrapper">
         <thead>
           <tr>
-            <th>Order No</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Plan</th>
-            <th>Old Phone</th>
-            <th>New Phone</th>
+            <th>Field</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {paginatedData.length > 0 ? (
             paginatedData.map((row, index) => (
               <tr key={index}>
-                <td>{row.orderNo}</td>
-                <td>{row.name}</td>
-                <td>{row.email}</td>
-                <td>{row.plan}</td>
-                <td>{row.oldPhone}</td>
-                <td>{row.newPhone}</td>
+                <td>{row.field_name}</td>
+                <td>{row.old_value}</td>
+                <td>{row.new_value}</td>
+                <td>{row.status}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="noData">
+              <td colSpan="4" className="noData">
                 No data found
               </td>
             </tr>
@@ -113,4 +112,3 @@ const UpdateContactTable = ({ rows, title }) => {
 };
 
 export default UpdateContactTable;
-

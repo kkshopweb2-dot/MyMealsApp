@@ -9,7 +9,13 @@ const UpdateForm = ({ formData, setFormData, setStep, handleSubmit }) => {
       alert("Please fill all required fields");
       return;
     }
-    handleSubmit(formData);
+    const transformedData = {
+      field_name: "phone",
+      old_value: oldPhone,
+      new_value: newPhone,
+    };
+    console.log("Submitting transformed data:", transformedData);
+    handleSubmit(transformedData);
     setStep("thankyou");
   };
 
@@ -22,7 +28,7 @@ const UpdateForm = ({ formData, setFormData, setStep, handleSubmit }) => {
         type="number"
         className="update-input"
         value={formData.orderNo}
-        onChange={(e) => setFormData({ ...formData, orderNo: e.target.value })}
+        onChange={(e) => setFormData({ ...formData, orderNo: parseInt(e.target.value) })}
         placeholder="Enter your order number"
       />
 

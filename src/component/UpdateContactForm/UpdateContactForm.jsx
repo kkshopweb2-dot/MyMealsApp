@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../../api/axios";
 import "../../css/UpdateContactForm.css";
 import "../../css/dashboard.css";
 
@@ -19,19 +20,37 @@ const UpdateContactForm = () => {
     newPhone: "",
   });
 
-  const handleSubmit = (data) => {
-    setSubmittedData((prev) => [...prev, data]);
-    setStep("thankyou");
+  // ✅ FETCH DATA AND LOG TO CONSOLE
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/user-contact-updates");
+        console.log("Fetched Data from Backend:", response.data);
+        setSubmittedData(response.data); // optional: show in table
+      } catch (error) {
+        console.error("Error fetching update contact data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSubmit = async (data) => {
+    try {
+      await axios.post("/user-contact-updates", data);
+      setSubmittedData((prev) => [...prev, data]);
+      setStep("thankyou");
+    } catch (error) {
+      console.error("Error submitting update contact data:", error);
+    }
   };
 
   return (
-
-
-    <main >
+    <main>
       <div className="container-fluid">
         <div className="row">
 
-          {/* LEFT - FORM (col-md-6) */}
+          {/* LEFT - FORM */}
           <div className="col-md-4">
             <div className="update-card">
               {step === "form" ? (
@@ -46,7 +65,8 @@ const UpdateContactForm = () => {
               )}
             </div>
           </div>
-          {/* RIGHT - TABLE (col-md-6) */}
+
+          {/* RIGHT - TABLE */}
           <div className="col-md-8">
             <UpdateContactTable
               rows={submittedData}
@@ -54,11 +74,9 @@ const UpdateContactForm = () => {
             />
           </div>
 
-
         </div>
       </div>
     </main>
-
   );
 };
 
