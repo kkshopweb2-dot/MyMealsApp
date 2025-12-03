@@ -11,6 +11,17 @@
 }
 
 /* ===============================
+   Table Title
+================================ */
+.tableTitle {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #171414; /* Dark gray color */
+  margin-bottom: 20px;
+}
+
+/* ===============================
    SEARCH BAR
 ================================ */
 .tableSearch {
@@ -141,6 +152,22 @@
   text-align: right;
   font-size: 13px;
   color: #667580;
+}
+
+/* ===============================
+   Current Preference Row Styling
+================================ */
+.tableWrapper tbody tr.currentPreferenceRow {
+  background-color: #e6f7ff; /* Light blue background */
+  font-weight: bold;
+}
+
+.tableWrapper tbody tr.currentPreferenceRow:hover {
+  background-color: #cceeff; /* Slightly darker blue on hover */
+}
+
+.currentPreferenceCell {
+  color: #007bff; /* Blue text for emphasis */
 }
 
 /* ===============================

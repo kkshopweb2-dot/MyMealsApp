@@ -52,12 +52,13 @@ const MealPreferenceTable = ({ rows, title }) => {
             <th>Effective From</th>
             <th>Meal Type</th>
             <th>Preference Details</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {paginatedData.length > 0 ? (
             paginatedData.map((row, index) => (
-              <tr key={index}>
+              <tr key={index} className={row.isCurrent ? "currentPreferenceRow" : ""}>
                 <td>{row.orderNo}</td>
                 <td>{row.name}</td>
                 <td>{row.email}</td>
@@ -69,6 +70,9 @@ const MealPreferenceTable = ({ rows, title }) => {
                     Object.entries(JSON.parse(row.preference_details))
                       .map(([key, value]) => `${key}: ${value}`)
                       .join(", ")}
+                </td>
+                <td className={row.isCurrent ? "currentPreferenceCell" : ""}>
+                  {row.isCurrent ? "Current" : "Previous"}
                 </td>
               </tr>
             ))

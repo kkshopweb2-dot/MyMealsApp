@@ -38,19 +38,45 @@ const MealPreferenceForm = () => {
     dishChoice: "",
   });
 
-  // === FETCH DATA FROM SERVER WITH CONSOLE LOG ===
+  // === FETCH DATA FROM SERVER & PREFILL LATEST ===
   const fetchData = async () => {
     try {
       const response = await axios.get("/meal-preferences");
 
-      console.log("✅ Fetched Meal Preferences Data:", response.data);
-
-      // Ensure it's always an array
       const dataArray = Array.isArray(response.data) ? response.data : [];
       setSubmittedData(dataArray);
+
+      console.log("Fetched:", dataArray);
+
+      // PREFILL FORM FROM MOST RECENT RECORD
+      if (dataArray.length > 0) {
+        const last = dataArray[dataArray.length - 1];
+
+        let parsedPrefs = {};
+        try {
+          parsedPrefs = last.preference_details
+            ? JSON.parse(last.preference_details)
+            : {};
+        } catch (e) {
+          console.log("Error parsing preference details:", e);
+        }
+
+        setFormData({
+          orderNo: last.order_no || "",
+          name: last.name || "",
+          email: last.email || "",
+          phone: last.phone || "",
+          plan: last.plan || "",
+          effectiveFrom: last.effectiveFrom || "",
+          mealType: last.meal_type || "",
+          avoidNonVeg: parsedPrefs.avoidNonVeg || "",
+          avoidVeg: parsedPrefs.avoidVeg || "",
+          dishChoice: parsedPrefs.dishChoice || "",
+        });
+      }
     } catch (error) {
       console.error("❌ Failed to fetch meal preferences:", error);
-      setSubmittedData([]); // fallback to empty array
+      setSubmittedData([]);
     }
   };
 
@@ -92,27 +118,19 @@ const MealPreferenceForm = () => {
 
       const response = await axios.post("/meal-preferences", requestData);
 
-      console.log("✅ Submitted Meal Preference Response:", response.data);
-
+      console.log("Submitted:", response.data);
       window.alert("Meal preference submitted successfully!");
 
+      // Add new submission to table, previous data stays
       const newSubmission = {
         ...formData,
-        orderNo: formData.orderNo,
-        preference_details: JSON.stringify({
-          dishChoice: formData.dishChoice,
-          avoidNonVeg: formData.avoidNonVeg,
-          avoidVeg: formData.avoidVeg,
-        }),
+        preference_details: requestData.preference_details,
       };
-
-      setSubmittedData(prevData => [...prevData, newSubmission]);
+      setSubmittedData((prev) => [...prev, newSubmission]);
       setSubmitted(true);
     } catch (error) {
       console.error("❌ Failed to submit meal preference:", error);
-      window.alert(
-        "Failed to submit meal preference. Please make sure you are logged in and try again."
-      );
+      window.alert("Failed to submit meal preference. Please try again.");
     }
   };
 
@@ -133,6 +151,20 @@ const MealPreferenceForm = () => {
     setStep(1);
   };
 
+  // === COMBINE PREVIOUS + CURRENT RECORD (ALWAYS DISPLAY) ===
+  const combinedRows = [
+    ...submittedData,
+    {
+      ...formData,
+      preference_details: JSON.stringify({
+        dishChoice: formData.dishChoice,
+        avoidNonVeg: formData.avoidNonVeg,
+        avoidVeg: formData.avoidVeg,
+      }),
+      isCurrent: !submitted, // mark as current if not submitted
+    },
+  ];
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -141,9 +173,7 @@ const MealPreferenceForm = () => {
           <div className={styles.formCard}>
             {!submitted ? (
               <>
-                <h2 className={styles.title}>
-                  Change Your Meal Preference
-                </h2>
+                <h2 className={styles.title}>Change Your Meal Preference</h2>
 
                 {step === 1 && (
                   <Step1UserInfo
@@ -182,7 +212,7 @@ const MealPreferenceForm = () => {
         {/* TABLE CARD */}
         <div className="col-md-7">
           <MealPreferenceTable
-            rows={Array.isArray(submittedData) ? submittedData : []}
+            rows={combinedRows}
             title="Meal Preference History"
           />
         </div>
