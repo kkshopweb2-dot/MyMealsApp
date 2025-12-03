@@ -275,6 +275,17 @@ export default function PauseResumeMeals() {
     }
   };
 
+  const handleAnotherRequest = () => {
+    setStep(1);
+    setOrderNo("");
+    setName("");
+    setPhone("");
+    setEmail("");
+    setPlan("");
+    setMeals(initialMealState());
+    setReason("");
+  };
+
   const setMealField = (meal, key, value) => {
     setMeals(prev => ({ ...prev, [meal]: { ...prev[meal], [key]: value } }));
   };
@@ -348,7 +359,7 @@ export default function PauseResumeMeals() {
             />
           )}
 
-          {step === 4 && <Step4ThankYou />}
+          {step === 4 && <Step4ThankYou handleAnotherRequest={handleAnotherRequest} />}
         </div>
       </div>
 
