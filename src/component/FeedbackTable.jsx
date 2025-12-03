@@ -2,27 +2,24 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
 
-const FeedbackTable = ({ data = [] }) => {   // ✅ default empty array
+const FeedbackTable = ({ data = [], onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
 
   const entriesPerPage = 10;
 
-  // ✅ Safe filtering
-  const filteredData = Array.isArray(data)
-    ? data.filter((item) =>
-      item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.orderNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.phone?.includes(searchQuery)
-    )
-    : [];
+  const totalPages = Math.ceil(data.length / entriesPerPage);
 
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
-
-  const paginatedData = filteredData.slice(
+  const paginatedData = data.slice(
     (activePage - 1) * entriesPerPage,
     activePage * entriesPerPage
   );
+
+  const handleSearch = () => {
+    if (onSearch) {
+      onSearch(searchQuery);
+    }
+  };
 
   return (
     <div className="tableCard">
@@ -33,7 +30,6 @@ const FeedbackTable = ({ data = [] }) => {   // ✅ default empty array
         Feedback Data Table
       </h2>
 
-
       {/* Search */}
       <div className="tableSearch">
         <input
@@ -41,8 +37,15 @@ const FeedbackTable = ({ data = [] }) => {   // ✅ default empty array
           placeholder="Search by name, order no or phone..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
         />
-        <FaSearch />
+        <button onClick={handleSearch} className="search-button">
+          <FaSearch />
+        </button>
       </div>
 
       {/* Table */}
@@ -114,7 +117,7 @@ const FeedbackTable = ({ data = [] }) => {   // ✅ default empty array
       </div>
 
       <div className="entriesInfo">
-        Showing {paginatedData.length} of {filteredData.length} entries
+        Showing {paginatedData.length} of {data.length} entries
       </div>
     </div>
   );

@@ -67,8 +67,7 @@ export const createFeedback = (req, res) => {
 
   db.query(sql, values, (err, results) => {
     if (err) {
-      console.error("Database error while creating feedback - Message:", err.message);
-      console.error("Database error while creating feedback - Code:", err.code);
+      console.error("Database error while creating feedback:", err.message);
       return res.status(500).json({ error: "Database error while creating feedback.", details: err.message });
     }
     res.status(201).json({ message: "Feedback created successfully", id: results.insertId });
@@ -125,5 +124,52 @@ export const deleteFeedback = (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     if (results.affectedRows === 0) return res.status(404).json({ error: "Feedback not found or not authorized" });
     res.json({ message: "Feedback deleted successfully" });
+  });
+};
+
+/* ---------------------------------------------
+   🔍 SEARCH FEEDBACK (Keyword + Date Filter)
+------------------------------------------------ */
+export const searchFeedbacks = (req, res) => {
+  const { keyword, date } = req.query;
+
+  let sql = `
+    SELECT * 
+    FROM feedback 
+    WHERE user_id = ?
+  `;
+  
+  const values = [req.userId];
+
+  // Search by keyword (order number, name, comments)
+  if (keyword) {
+    sql += `
+      AND (
+        order_no LIKE ? OR
+        customer_name LIKE ? OR
+        overall_comments LIKE ? OR
+        food_comments LIKE ? OR
+        delivery_comments LIKE ? OR
+        management_comments LIKE ?
+      )
+    `;
+    const key = `%${keyword}%`;
+    values.push(key, key, key, key, key, key);
+  }
+
+  // Filter by date
+  if (date) {
+    sql += ` AND DATE(selected_date) = ?`;
+    values.push(date);
+  }
+
+  sql += " ORDER BY created_at DESC";
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error("Database search error:", err.message);
+      return res.status(500).json({ error: "Database error while searching feedbacks." });
+    }
+    res.json(results);
   });
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "../../api/axios";
 import "../../css/FeedbackForm.css";
 import Header from "../Header";
@@ -24,7 +24,6 @@ const FeedbackForm = () => {
     plan: "",
     feedbackText: "",
     selectedDate: "",
-  
   });
 
   const [errors, setErrors] = useState({});
@@ -34,30 +33,35 @@ const FeedbackForm = () => {
     management: { rating: "", feedback: "" },
   });
 
-  // ✅ FETCH FEEDBACK (GET)
+  const fetchFeedback = useCallback(async (query = "") => {
+    try {
+      const url = query ? `/feedbacks/search?keyword=${query}` : "/feedbacks";
+      const res = await axios.get(url);
+      console.log("Fetched feedback:", res.data);
+      const formattedData = res.data.map((item) => ({
+        orderNo: item.order_no,
+        name: item.customer_name,
+        phone: item.phone_number,
+        plan: item.plan_name,
+        food: item.food_rating,
+        delivery: item.delivery_rating,
+        management: item.management_rating,
+        feedback: item.overall_comments,
+        date: new Date(item.created_at).toLocaleDateString(),
+      }));
+      setFeedbackList(formattedData);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchFeedback = async () => {
-      try {
-        const res = await axios.get("/feedbacks");
-        console.log("Fetched feedback:", res.data);
-        const formattedData = res.data.map(item => ({
-          orderNo: item.order_no,
-          name: item.customer_name,
-          phone: item.phone_number,
-          plan: item.plan_name,
-          food: item.food_rating,
-          delivery: item.delivery_rating,
-          management: item.management_rating,
-          feedback: item.overall_comments,
-          date: new Date(item.created_at).toLocaleDateString(),
-        }));
-        setFeedbackList(formattedData);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      }
-    };
     fetchFeedback();
-  }, []); // Empty dependency array means this runs once on mount
+  }, [fetchFeedback]);
+
+  const handleSearch = (query) => {
+    fetchFeedback(query);
+  };
 
   const plans = [
     { label: "Combo Lunch and Dinner", value: "combo_lunch_dinner" },
@@ -77,14 +81,15 @@ const FeedbackForm = () => {
     const newErrors = {};
     if (!formData.orderNo.trim()) newErrors.orderNo = "Order number is required";
     if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required";
+    if (!formData.phoneNumber.trim())
+      newErrors.phoneNumber = "Phone number is required";
     if (!formData.plan) newErrors.plan = "Please select a plan";
-    if (!formData.feedbackText.trim()) newErrors.feedbackText = "Please provide overall feedback";
+    if (!formData.feedbackText.trim())
+      newErrors.feedbackText = "Please provide overall feedback";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // ✅ SUBMIT FEEDBACK (POST)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) return;
@@ -112,20 +117,7 @@ const FeedbackForm = () => {
 
       setIsSubmitted(true);
 
-      // refresh list after submit
-      const res = await axios.get("/feedbacks");
-      const formattedData = res.data.map(item => ({
-        orderNo: item.order_no,
-        name: item.customer_name,
-        phone: item.phone_number,
-        plan: item.plan_name,
-        food: item.food_rating,
-        delivery: item.delivery_rating,
-        management: item.management_rating,
-        feedback: item.overall_comments,
-        date: new Date(item.created_at).toLocaleDateString(),
-      }));
-      setFeedbackList(formattedData);
+      fetchFeedback(); // Refresh the list
 
       setTimeout(() => {
         setIsSubmitted(false);
@@ -143,7 +135,6 @@ const FeedbackForm = () => {
           management: { rating: "", feedback: "" },
         });
       }, 3000);
-
     } catch (error) {
       console.error("Error submitting feedback:", error);
     }
@@ -153,7 +144,6 @@ const FeedbackForm = () => {
     <main>
       <div className="empty-dashboard">
         <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
-          
           <div className="feedback-wrapper">
             <div className="feedback-card">
               {isSubmitted ? (
@@ -195,9 +185,8 @@ const FeedbackForm = () => {
           </div>
 
           <div className="feedback-table-container">
-            <FeedbackTable data={feedbackList} />
+            <FeedbackTable data={feedbackList} onSearch={handleSearch} />
           </div>
-
         </div>
       </div>
     </main>
