@@ -23,6 +23,7 @@ const RenewalPayment = () => {
   const [submittedData, setSubmittedData] = useState([]);
   const [page, setPage] = useState(1);        // <-- For backend pagination
   const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,31 +60,47 @@ const RenewalPayment = () => {
     },
   });
 
-  const handleNext = () => setStep(prev => prev + 1);
-  const handleBack = () => setStep(prev => prev - 1);
-
-  // ==============================
-  // FETCH PAGINATED DATA
-  // ==============================
-  const fetchRenewalPayments = async (pageNumber = 1) => {
+  const fetchRenewalPayments = async (pageNumber = 1, searchQuery = "") => {
     try {
-      const response = await axios.get(`/renewal-payment?page=${pageNumber}`);
-
+      const response = await axios.get(
+        `/renewal-payment?page=${pageNumber}&search=${searchQuery}`
+      );
       console.log("Fetched from backend:", response.data);
-
-      setSubmittedData(response.data.data);    // <-- table records
-      setTotalPages(response.data.totalPages); // <-- for pagination UI later
+      setSubmittedData(response.data.data);
+      setTotalPages(response.data.totalPages);
       setPage(response.data.page);
-
     } catch (error) {
       console.error("Fetch Error:", error.response?.data || error.message);
     }
   };
 
-  // Load on mount
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    fetchRenewalPayments(1, query);
+  };
+
   useEffect(() => {
-    fetchRenewalPayments(1);
-  }, []);
+    const fetchLatestOrderNo = async () => {
+      try {
+        const response = await axios.get("/renewal-payment/order-no");
+        if (response.data.orderNo) {
+          reset(formValues => ({
+            ...formValues,
+            orderNo: response.data.orderNo,
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch latest order number:", error);
+      } finally {
+        fetchRenewalPayments(1, searchQuery);
+      }
+    };
+
+    fetchLatestOrderNo();
+  }, [reset, searchQuery]);
+
+  const handleNext = () => setStep(prev => prev + 1);
+  const handleBack = () => setStep(prev => prev - 1);
 
   // ==============================
   // SUBMIT FORM
@@ -147,6 +164,7 @@ const RenewalPayment = () => {
           page={page}
           totalPages={totalPages}
           onPageChange={fetchRenewalPayments}
+          onSearch={handleSearch}
         />
       </div>
     </div>

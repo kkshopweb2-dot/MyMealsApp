@@ -2,26 +2,19 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
 
-const RenewalPaymentTable = ({ data = [], title }) => {
+const RenewalPaymentTable = ({
+  data = [],
+  title,
+  page,
+  totalPages,
+  onPageChange,
+  onSearch,
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activePage, setActivePage] = useState(1);
 
-  const entriesPerPage = 10;
-
-  // 🔍 Filter logic for multiple fields
-  const filteredData = data.filter((item) =>
-    String(item.orderNo).toLowerCase().includes(searchQuery.toLowerCase()) ||
-    String(item.name).toLowerCase().includes(searchQuery.toLowerCase()) ||
-    String(item.phone).toLowerCase().includes(searchQuery.toLowerCase()) ||
-    String(item.transactionId).toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
-
-  const paginatedData = filteredData.slice(
-    (activePage - 1) * entriesPerPage,
-    activePage * entriesPerPage
-  );
+  const handleSearch = () => {
+    onSearch(searchQuery);
+  };
 
   return (
     <div className="tableCard">
@@ -33,12 +26,12 @@ const RenewalPaymentTable = ({ data = [], title }) => {
           type="text"
           placeholder="Search by Order No, Name, Phone or Transaction ID..."
           value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setActivePage(1);
-          }}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && handleSearch()}
         />
-        <FaSearch />
+        <button onClick={handleSearch} className="search-button">
+          <FaSearch />
+        </button>
       </div>
 
       {/* Table */}
@@ -69,8 +62,8 @@ const RenewalPaymentTable = ({ data = [], title }) => {
           </thead>
 
           <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row, index) => (
+            {data.length > 0 ? (
+              data.map((row, index) => (
                 <tr key={index}>
                   <td>{row.orderNo}</td>
                   <td>{row.location}</td>
@@ -92,10 +85,28 @@ const RenewalPaymentTable = ({ data = [], title }) => {
                   <td>{row.note}</td>
                   <td>
                     {row.screenshotUrl ? (
-                      <img src={row.screenshotUrl} alt="Screenshot" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                      <img
+                        src={row.screenshotUrl}
+                        alt="Screenshot"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }}
+                      />
                     ) : row.screenshot instanceof File ? (
-                      <img src={URL.createObjectURL(row.screenshot)} alt="Screenshot" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                    ) : 'N/A'}
+                      <img
+                        src={URL.createObjectURL(row.screenshot)}
+                        alt="Screenshot"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      "N/A"
+                    )}
                   </td>
                 </tr>
               ))
@@ -112,27 +123,33 @@ const RenewalPaymentTable = ({ data = [], title }) => {
 
       {/* Pagination */}
       <div className="pagination">
-        <button onClick={() => setActivePage(p => Math.max(p - 1, 1))} disabled={activePage === 1}>
+        <button
+          onClick={() => onPageChange(page - 1)}
+          disabled={page === 1}
+        >
           &lt;
         </button>
 
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={activePage === i + 1 ? "active" : ""}
-            onClick={() => setActivePage(i + 1)}
+            className={page === i + 1 ? "active" : ""}
+            onClick={() => onPageChange(i + 1)}
           >
             {i + 1}
           </button>
         ))}
 
-        <button onClick={() => setActivePage(p => Math.min(p + 1, totalPages))} disabled={activePage === totalPages}>
+        <button
+          onClick={() => onPageChange(page + 1)}
+          disabled={page === totalPages}
+        >
           &gt;
         </button>
       </div>
 
       <div className="entriesInfo">
-        Showing {paginatedData.length} of {filteredData.length} entries
+        Showing {data.length} of {totalPages * 10} entries
       </div>
     </div>
   );

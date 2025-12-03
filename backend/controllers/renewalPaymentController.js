@@ -6,33 +6,89 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ===========================================
-// GET ALL WITH PAGINATION (10 PER PAGE)
-// ===========================================
-export const getRenewalPayments = (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = 10;  // <--- Show 10 records per page
-  const offset = (page - 1) * limit;
-
-  const countSql =
-    "SELECT COUNT(*) AS total FROM renewal_payments WHERE user_id = ?";
-
-  const dataSql = `
-    SELECT * FROM renewal_payments
-    WHERE user_id = ?
-    ORDER BY payment_date DESC
-    LIMIT ? OFFSET ?
+// ==================================================
+// GET LATEST ORDER NO FOR LOGGED USER
+// ==================================================
+export const getLatestOrderNo = (req, res) => {
+  const sql = `
+    SELECT order_no 
+    FROM orders 
+    WHERE user_id = ? 
+    ORDER BY id DESC 
+    LIMIT 1
   `;
 
-  // Step 1: Get total count for pagination
-  db.query(countSql, [req.userId], (err, countResult) => {
+  db.query(sql, [req.userId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    if (results.length === 0) {
+      return res.json({ orderNo: null });
+    }
+
+    res.json({ orderNo: results[0].order_no });
+  });
+};
+
+// ==================================================
+// GET ALL WITH PAGINATION (10 PER PAGE)
+// ==================================================
+export const getRenewalPayments = (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+  const search = req.query.search || "";
+
+  let countSql = "SELECT COUNT(*) AS total FROM renewal_payments WHERE user_id = ?";
+  let dataSql = `
+    SELECT
+      id,
+      user_id,
+      order_no AS orderNo,
+      location,
+      name,
+      email,
+      phone,
+      address,
+      plan,
+      renewal_month,
+      amount_paid,
+      transaction_id,
+      cash_paid,
+      payment_mode,
+      delivery_boy_name,
+      delivery_boy_phone,
+      delivery_date,
+      delivery_time,
+      office_date,
+      office_time,
+      note,
+      screenshot,
+      payment_date
+    FROM renewal_payments
+    WHERE user_id = ?
+  `;
+
+  const params = [req.userId];
+  const countParams = [req.userId];
+
+  if (search) {
+    const searchTerm = `%${search}%`;
+    countSql += " AND (order_no LIKE ? OR name LIKE ? OR phone LIKE ? OR transaction_id LIKE ?)";
+    dataSql += " AND (order_no LIKE ? OR name LIKE ? OR phone LIKE ? OR transaction_id LIKE ?)";
+    params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+    countParams.push(searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+
+  dataSql += " ORDER BY payment_date DESC LIMIT ? OFFSET ?";
+  params.push(limit, offset);
+
+  db.query(countSql, countParams, (err, countResult) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
-    // Step 2: Fetch paginated data
-    db.query(dataSql, [req.userId, limit, offset], (err, results) => {
+    db.query(dataSql, params, (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
 
       res.json({
@@ -46,11 +102,11 @@ export const getRenewalPayments = (req, res) => {
   });
 };
 
-// ===========================================
+// ==================================================
 // CREATE RENEWAL PAYMENT
-// ===========================================
+// ==================================================
 export const createRenewalPayment = (req, res) => {
-  const {
+  let {
     orderNo,
     location,
     name,
@@ -72,73 +128,60 @@ export const createRenewalPayment = (req, res) => {
     note,
   } = req.body;
 
-  let screenshotPath = null;
-
-  // Handle Screenshot Upload
-  if (req.files && req.files.length > 0) {
-    const file = req.files.find((f) => f.fieldname === "screenshot");
-    if (file) {
-      const uploadDir = path.join(__dirname, "../uploads");
-      if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
-
-      screenshotPath = path.join(
-        uploadDir,
-        `${Date.now()}_${file.originalname}`
-      );
-
-      fs.writeFileSync(screenshotPath, file.buffer);
-
-      screenshotPath = `/uploads/${path.basename(screenshotPath)}`;
-    }
+  if (!orderNo || orderNo.trim() === "") {
+    orderNo = null;
   }
 
-  const sql = `
-    INSERT INTO renewal_payments (
-      user_id, order_no, location, name, email, phone, address, 
-      plan, renewal_month, amount_paid, transaction_id, cash_paid,
-      payment_mode, delivery_boy_name, delivery_boy_phone, delivery_date,
-      delivery_time, office_date, office_time, note, screenshot
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
+  const checkExistingSql = "SELECT id FROM renewal_payments WHERE order_no = ? AND user_id = ?";
+  db.query(checkExistingSql, [orderNo, req.userId], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: "Database error during duplicate check." });
+    }
+    if (rows.length > 0) {
+      return res.status(409).json({ error: "A renewal payment for this order number already exists." });
+    }
 
-  const values = [
-    req.userId,
-    orderNo,
-    location,
-    name,
-    email,
-    phone,
-    address,
-    plan,
-    renewalMonth,
-    amountPaid,
-    transactionId,
-    cashPaid,
-    paymentMode,
-    deliveryBoyName,
-    deliveryBoyPhone,
-    deliveryDate,
-    deliveryTime,
-    officeDate,
-    officeTime,
-    note,
-    screenshotPath,
-  ];
+    let screenshotPath = null;
+    if (req.files && req.files.length > 0) {
+      const file = req.files.find((f) => f.fieldname === "screenshot");
+      if (file) {
+        const uploadDir = path.join(__dirname, "../uploads");
+        if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+        screenshotPath = path.join(uploadDir, `${Date.now()}_${file.originalname}`);
+        fs.writeFileSync(screenshotPath, file.buffer);
+        screenshotPath = `/uploads/${path.basename(screenshotPath)}`;
+      }
+    }
 
-  db.query(sql, values, (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
+    const sql = `
+      INSERT INTO renewal_payments (
+        user_id, order_no, location, name, email, phone, address, 
+        plan, renewal_month, amount_paid, transaction_id, cash_paid,
+        payment_mode, delivery_boy_name, delivery_boy_phone, delivery_date,
+        delivery_time, office_date, office_time, note, screenshot
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+      req.userId, orderNo, location, name, email, phone, address,
+      plan, renewalMonth, amountPaid, transactionId, cashPaid,
+      paymentMode, deliveryBoyName, deliveryBoyPhone, deliveryDate,
+      deliveryTime, officeDate, officeTime, note, screenshotPath,
+    ];
 
-    res.status(201).json({
-      message: "Renewal payment created successfully",
-      id: results.insertId,
-      screenshotUrl: screenshotPath,
+    db.query(sql, values, (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(201).json({
+        message: "Renewal payment created successfully",
+        id: results.insertId,
+        screenshotUrl: screenshotPath,
+      });
     });
   });
 };
 
-// ===========================================
+// ==================================================
 // GET SINGLE PAYMENT
-// ===========================================
+// ==================================================
 export const getRenewalPayment = (req, res) => {
   const sql = "SELECT * FROM renewal_payments WHERE id = ? AND user_id = ?";
 
@@ -151,9 +194,9 @@ export const getRenewalPayment = (req, res) => {
   });
 };
 
-// ===========================================
+// ==================================================
 // UPDATE PAYMENT
-// ===========================================
+// ==================================================
 export const updateRenewalPayment = (req, res) => {
   const { amount, payment_date, next_renewal_date, status } = req.body;
 
@@ -171,7 +214,8 @@ export const updateRenewalPayment = (req, res) => {
 
       if (results.affectedRows === 0)
         return res.status(404).json({
-          error: "Payment not found or you don't have permission to update it.",
+          error:
+            "Payment not found or you don't have permission to update it.",
         });
 
       res.json({ message: "Payment updated successfully" });
@@ -179,9 +223,9 @@ export const updateRenewalPayment = (req, res) => {
   );
 };
 
-// ===========================================
+// ==================================================
 // DELETE PAYMENT
-// ===========================================
+// ==================================================
 export const deleteRenewalPayment = (req, res) => {
   const sql =
     "DELETE FROM renewal_payments WHERE id = ? AND user_id = ?";
@@ -191,7 +235,8 @@ export const deleteRenewalPayment = (req, res) => {
 
     if (results.affectedRows === 0)
       return res.status(404).json({
-        error: "Payment not found or you don't have permission to delete it.",
+        error:
+          "Payment not found or you don't have permission to delete it.",
       });
 
     res.status(204).send();
