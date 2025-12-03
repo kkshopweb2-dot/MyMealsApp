@@ -43,11 +43,14 @@ const MealPreferenceForm = () => {
     try {
       const response = await axios.get("/meal-preferences");
 
-      console.log("✅ Fetched Meal Preferences Data:", response.data); // CONSOLE OUTPUT
+      console.log("✅ Fetched Meal Preferences Data:", response.data);
 
-      setSubmittedData(response.data);
+      // Ensure it's always an array
+      const dataArray = Array.isArray(response.data) ? response.data : [];
+      setSubmittedData(dataArray);
     } catch (error) {
       console.error("❌ Failed to fetch meal preferences:", error);
+      setSubmittedData([]); // fallback to empty array
     }
   };
 
@@ -89,7 +92,7 @@ const MealPreferenceForm = () => {
 
       const response = await axios.post("/meal-preferences", requestData);
 
-      console.log("✅ Submitted Meal Preference Response:", response.data); // POST LOG
+      console.log("✅ Submitted Meal Preference Response:", response.data);
 
       window.alert("Meal preference submitted successfully!");
 
@@ -179,7 +182,7 @@ const MealPreferenceForm = () => {
         {/* TABLE CARD */}
         <div className="col-md-7">
           <MealPreferenceTable
-            rows={submittedData}
+            rows={Array.isArray(submittedData) ? submittedData : []}
             title="Meal Preference History"
           />
         </div>
@@ -189,4 +192,3 @@ const MealPreferenceForm = () => {
 };
 
 export default MealPreferenceForm;
-

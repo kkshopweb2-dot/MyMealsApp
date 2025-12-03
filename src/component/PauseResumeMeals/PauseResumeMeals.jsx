@@ -3,12 +3,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import api from "../../api/axios";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode"; // ✅ named import
 
-import PauseResumeTable from "../PauseResumeTable";
 import { logout } from "../../redux/authSlice";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
 import Step1Info from "./Step1Info";
 import Step2Meals from "./Step2Meals";
 import Step3Review from "./Step3Review";
@@ -16,7 +13,6 @@ import Step4ThankYou from "./Step4ThankYou";
 
 import "../../css/PauseResumeMeals.css";
 import "../../css/dashboard.css";
-import bgImage from "../../assets/images/bg.png";
 
 // ================= HELPERS =================
 export const planToMeals = (plan) => {
@@ -91,7 +87,7 @@ const SummaryDataTable = ({ data, title }) => {
           <tbody>
             {paginatedData.length > 0 ? (
               paginatedData.map((row, index) => (
-                <tr key={index}>
+                <tr key={index} className={row.isCurrent ? "current-row" : "submitted-row"}>
                   <td>{row.orderNo}</td>
                   <td>{row.name}</td>
                   <td>{row.email}</td>
@@ -113,7 +109,7 @@ const SummaryDataTable = ({ data, title }) => {
           </tbody>
         </table>
       </div>
-      {/* Pagination */}
+
       <div className="pagination">
         <button onClick={() => setActivePage(p => Math.max(p - 1, 1))} disabled={activePage === 1}>
           &lt;
@@ -137,7 +133,6 @@ const SummaryDataTable = ({ data, title }) => {
       <div className="entriesInfo">
         Showing {paginatedData.length} of {filteredData.length} entries
       </div>
-
     </div>
   );
 };
@@ -149,6 +144,8 @@ export default function PauseResumeMeals() {
   const navigate = useNavigate();
 
   // ================= FETCH EXISTING DATA =================
+  const [previousData, setPreviousData] = useState([]);
+
   useEffect(() => {
     const fetchPauseResumeData = async () => {
       try {
@@ -161,28 +158,41 @@ export default function PauseResumeMeals() {
             return;
           }
         } else {
-            dispatch(logout());
-            navigate("/");
-            return;
+          dispatch(logout());
+          navigate("/");
+          return;
         }
+
         const response = await api.get("/pause-resume");
-        console.log("✅ Fetched Pause/Resume Data:", response.data);
+
+        const mappedData = response.data.map(item => ({
+          orderNo: item.order_no || "-",
+          name: item.name || "-",
+          email: item.email || "-",
+          phone: item.phone || "-",
+          plan: item.plan || "-",
+          meal: item.meal_type || "-",
+          pause: item.action === "Pause" ? "Yes" : "No",
+          resume: item.action === "Resume" ? "Yes" : "No",
+          pauseDate: item.start_date || "-",
+          resumeDate: item.end_date || "-",
+          reason: item.reason || "-",
+          isCurrent: false, // previous entries are not current
+        }));
+
+        setPreviousData(mappedData);
+
       } catch (error) {
         console.error("❌ Error fetching pause/resume data:", error.response?.data || error.message);
         if (error.response?.status === 500 || error.response?.status === 403) {
-            dispatch(logout());
-            navigate("/");
+          dispatch(logout());
+          navigate("/");
         }
       }
     };
 
     fetchPauseResumeData();
   }, [dispatch, navigate]);
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-  };
 
   // ================= FORM STATE =================
   const [orderNo, setOrderNo] = useState("");
@@ -209,11 +219,7 @@ export default function PauseResumeMeals() {
     setStep(3);
   };
 
-  // ✅ FINAL SUBMIT WITH TOKEN
   const handleFinalSubmit = async () => {
-    console.log("handleFinalSubmit called");
-
-    // --- VALIDATION ---
     const checkedMeals = Object.entries(meals).filter(([_, data]) => data.checked);
 
     if (checkedMeals.length === 0) {
@@ -241,15 +247,29 @@ export default function PauseResumeMeals() {
         reason: reason,
       }));
 
-      console.log("mealData to be submitted:", mealData);
-
       const response = await api.post("/pause-resume", {
         order_no: orderNo,
         meals: mealData,
       });
 
-      console.log("✅ Submitted:", response.data);
+      const newEntries = mealData.map(md => ({
+        orderNo,
+        name,
+        email,
+        phone,
+        plan,
+        meal: md.meal_type,
+        pause: md.action === "Pause" ? "Yes" : "No",
+        resume: md.action === "Resume" ? "Yes" : "No",
+        pauseDate: md.start_date || "-",
+        resumeDate: md.end_date || "-",
+        reason: md.reason || "-",
+        isCurrent: false, // mark submitted as not current
+      }));
+
+      setPreviousData(prev => [...prev, ...newEntries]);
       setStep(4);
+
     } catch (error) {
       console.error("❌ Failed to submit:", error.response?.data || error.message);
     }
@@ -266,8 +286,9 @@ export default function PauseResumeMeals() {
     }));
   };
 
+  // ================= COMBINED TABLE DATA =================
   const tableData = useMemo(() => {
-    return Object.entries(meals)
+    const currentData = Object.entries(meals)
       .filter(([_, data]) => data.checked)
       .map(([meal, data]) => ({
         orderNo: orderNo || "-",
@@ -281,8 +302,11 @@ export default function PauseResumeMeals() {
         pauseDate: data.dates.pause || "-",
         resumeDate: data.dates.resume || "-",
         reason: reason || "-",
+        isCurrent: true, // mark current form data
       }));
-  }, [meals, orderNo, name, email, phone, plan, reason]);
+
+    return [...previousData, ...currentData];
+  }, [meals, orderNo, name, email, phone, plan, reason, previousData]);
 
   return (
     <div className="container-fluid row">

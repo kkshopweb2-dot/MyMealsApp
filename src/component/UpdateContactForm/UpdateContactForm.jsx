@@ -20,15 +20,19 @@ const UpdateContactForm = () => {
     newPhone: "",
   });
 
-  // ✅ FETCH DATA AND LOG TO CONSOLE
+  // ✅ FETCH DATA AND ENSURE ARRAY
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/user-contact-updates");
         console.log("Fetched Data from Backend:", response.data);
-        setSubmittedData(response.data); // optional: show in table
+
+        // Ensure data is an array
+        const dataArray = Array.isArray(response.data) ? response.data : [];
+        setSubmittedData(dataArray);
       } catch (error) {
         console.error("Error fetching update contact data:", error);
+        setSubmittedData([]); // fallback to empty array
       }
     };
 
@@ -38,7 +42,10 @@ const UpdateContactForm = () => {
   const handleSubmit = async (data) => {
     try {
       await axios.post("/user-contact-updates", data);
-      setSubmittedData((prev) => [...prev, data]);
+
+      // Ensure newly submitted data is added as an array
+      setSubmittedData(prev => [...prev, data]);
+
       setStep("thankyou");
     } catch (error) {
       console.error("Error submitting update contact data:", error);
@@ -69,7 +76,7 @@ const UpdateContactForm = () => {
           {/* RIGHT - TABLE */}
           <div className="col-md-8">
             <UpdateContactTable
-              rows={submittedData}
+              rows={Array.isArray(submittedData) ? submittedData : []}
               title={<span style={{ color: "#104b45" }}>Contact Update History</span>}
             />
           </div>
