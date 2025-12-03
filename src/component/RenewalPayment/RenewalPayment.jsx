@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,10 @@ import ThankYou from "./ThankYou";
 const RenewalPayment = () => {
   const [step, setStep] = useState(1);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+
   const [submittedData, setSubmittedData] = useState([]);
+  const [page, setPage] = useState(1);        // <-- For backend pagination
+  const [totalPages, setTotalPages] = useState(1);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,25 +62,44 @@ const RenewalPayment = () => {
   const handleNext = () => setStep(prev => prev + 1);
   const handleBack = () => setStep(prev => prev - 1);
 
-  // ✅ SUBMIT WITH AXIOS
+  // ==============================
+  // FETCH PAGINATED DATA
+  // ==============================
+  const fetchRenewalPayments = async (pageNumber = 1) => {
+    try {
+      const response = await axios.get(`/renewal-payment?page=${pageNumber}`);
+
+      console.log("Fetched from backend:", response.data);
+
+      setSubmittedData(response.data.data);    // <-- table records
+      setTotalPages(response.data.totalPages); // <-- for pagination UI later
+      setPage(response.data.page);
+
+    } catch (error) {
+      console.error("Fetch Error:", error.response?.data || error.message);
+    }
+  };
+
+  // Load on mount
+  useEffect(() => {
+    fetchRenewalPayments(1);
+  }, []);
+
+  // ==============================
+  // SUBMIT FORM
+  // ==============================
   const onSubmitPayment = async (data) => {
     try {
-      console.log("Frontend Form Data:", data);
-
-      // If screenshot is file, send as FormData
       const formData = new FormData();
       Object.keys(data).forEach(key => {
         formData.append(key, data[key]);
       });
 
-      const response = await axios.post(
-        "/renewal-payment",
-        formData
-      );
+      await axios.post("/renewal-payment", formData);
 
-      console.log("Backend Response:", response.data);
+      // Refresh table after submit
+      fetchRenewalPayments(1);
 
-      setSubmittedData(prevData => [...prevData, { ...data, screenshotUrl: response.data.screenshotUrl }]);
       setPaymentConfirmed(true);
 
     } catch (error) {
@@ -101,36 +123,16 @@ const RenewalPayment = () => {
           ) : (
             <>
               {step === 1 && (
-                <StepOne
-                  control={control}
-                  watch={watch}
-                  handleNext={handleNext}
-                />
+                <StepOne control={control} watch={watch} handleNext={handleNext} />
               )}
-
               {step === 2 && (
-                <StepTwo
-                  control={control}
-                  handleNext={handleNext}
-                  handleBack={handleBack}
-                />
+                <StepTwo control={control} handleNext={handleNext} handleBack={handleBack} />
               )}
-
               {step === 3 && (
-                <StepThree
-                  control={control}
-                  watch={watch}
-                  handleNext={handleNext}
-                  handleBack={handleBack}
-                />
+                <StepThree control={control} watch={watch} handleNext={handleNext} handleBack={handleBack} />
               )}
-
               {step === 4 && (
-                <StepFour
-                  control={control}
-                  watch={watch}
-                  handleBack={handleBack}
-                />
+                <StepFour control={control} watch={watch} handleBack={handleBack} />
               )}
             </>
           )}
@@ -141,11 +143,10 @@ const RenewalPayment = () => {
       <div className="col-md-7">
         <RenewalPaymentTable
           data={submittedData}
-          title={
-            <span style={{ color: "#104b45" }}>
-              Renewal Payment Summary
-            </span>
-          }
+          title={<span style={{ color: "#104b45" }}>Renewal Payment Summary</span>}
+          page={page}
+          totalPages={totalPages}
+          onPageChange={fetchRenewalPayments}
         />
       </div>
     </div>
