@@ -22,6 +22,8 @@ export const getFeedbackById = (req, res) => {
 
 /* CREATE FEEDBACK */
 export const createFeedback = (req, res) => {
+  console.log("Request body:", req.body);
+  console.log("User ID from token:", req.userId);
   const {
     orderNo,
     customer_name,
@@ -67,7 +69,7 @@ export const createFeedback = (req, res) => {
     if (err) {
       console.error("Database error while creating feedback - Message:", err.message);
       console.error("Database error while creating feedback - Code:", err.code);
-      return res.status(500).json({ error: "Database error while creating feedback." });
+      return res.status(500).json({ error: "Database error while creating feedback.", details: err.message });
     }
     res.status(201).json({ message: "Feedback created successfully", id: results.insertId });
   });
