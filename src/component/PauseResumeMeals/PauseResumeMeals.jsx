@@ -1,9 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import api from "../../api/axios";
-import { jwtDecode } from "jwt-decode"; // ✅ named import
+import { jwtDecode } from "jwt-decode";
 
 import { logout } from "../../redux/authSlice";
 import Step1Info from "./Step1Info";
@@ -13,6 +13,7 @@ import Step4ThankYou from "./Step4ThankYou";
 
 import "../../css/PauseResumeMeals.css";
 import "../../css/dashboard.css";
+import "../../css/DataTable.css";
 
 // ================= HELPERS =================
 export const planToMeals = (plan) => {
@@ -33,22 +34,39 @@ export const initialMealState = () => ({
 });
 
 // ================= SUMMARY TABLE =================
-const SummaryDataTable = ({ data, title }) => {
+const SummaryDataTable = ({ data, title, onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
-  const entriesPerPage = 5;
+  const entriesPerPage = 10;
+  const isInitialMount = useRef(true);
+  const debounceTimeout = useRef(null);
 
-  const filteredData = data.filter((item) =>
-    `${item.orderNo} ${item.name} ${item.email} ${item.phone} ${item.plan} ${item.meal}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
 
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage) || 1;
-  const paginatedData = filteredData.slice(
-    (activePage - 1) * entriesPerPage,
-    activePage * entriesPerPage
-  );
+    clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      if (onSearch) onSearch(searchQuery, activePage);
+    }, 300); // Debounce search
+
+    return () => {
+      clearTimeout(debounceTimeout.current);
+    };
+  }, [searchQuery, activePage, onSearch]);
+
+  const handleSearchClick = () => {
+    clearTimeout(debounceTimeout.current);
+    if (onSearch) {
+      onSearch(searchQuery, 1);
+    }
+    setActivePage(1);
+  };
+
+  const totalPages = Math.ceil(data.total / entriesPerPage) || 1;
+  const paginatedData = data.data || [];
 
   return (
     <div className="tableCard">
@@ -61,10 +79,16 @@ const SummaryDataTable = ({ data, title }) => {
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
-            setActivePage(1);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearchClick();
+            }
           }}
         />
-        <FaSearch />
+        <div style={{ cursor: "pointer" }} onClick={handleSearchClick}>
+          <FaSearch />
+        </div>
       </div>
 
       <div className="table-responsive">
@@ -131,7 +155,7 @@ const SummaryDataTable = ({ data, title }) => {
       </div>
 
       <div className="entriesInfo">
-        Showing {paginatedData.length} of {filteredData.length} entries
+        Showing {paginatedData.length} of {data.total || 0} entries
       </div>
     </div>
   );
@@ -143,57 +167,6 @@ export default function PauseResumeMeals() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // ================= FETCH EXISTING DATA =================
-  const [previousData, setPreviousData] = useState([]);
-
-  useEffect(() => {
-    const fetchPauseResumeData = async () => {
-      try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user && user.token) {
-          const decodedToken = jwtDecode(user.token);
-          if (decodedToken.exp * 1000 < Date.now()) {
-            dispatch(logout());
-            navigate("/");
-            return;
-          }
-        } else {
-          dispatch(logout());
-          navigate("/");
-          return;
-        }
-
-        const response = await api.get("/pause-resume");
-
-        const mappedData = response.data.map(item => ({
-          orderNo: item.order_no || "-",
-          name: item.name || "-",
-          email: item.email || "-",
-          phone: item.phone || "-",
-          plan: item.plan || "-",
-          meal: item.meal_type || "-",
-          pause: item.action === "Pause" ? "Yes" : "No",
-          resume: item.action === "Resume" ? "Yes" : "No",
-          pauseDate: item.start_date || "-",
-          resumeDate: item.end_date || "-",
-          reason: item.reason || "-",
-          isCurrent: false, // previous entries are not current
-        }));
-
-        setPreviousData(mappedData);
-
-      } catch (error) {
-        console.error("❌ Error fetching pause/resume data:", error.response?.data || error.message);
-        if (error.response?.status === 500 || error.response?.status === 403) {
-          dispatch(logout());
-          navigate("/");
-        }
-      }
-    };
-
-    fetchPauseResumeData();
-  }, [dispatch, navigate]);
-
   // ================= FORM STATE =================
   const [orderNo, setOrderNo] = useState("");
   const [name, setName] = useState("");
@@ -203,6 +176,63 @@ export default function PauseResumeMeals() {
   const [meals, setMeals] = useState(initialMealState());
   const [reason, setReason] = useState("");
 
+  // ================= TABLE DATA =================
+  const [tableData, setTableData] = useState({ data: [], total: 0 });
+  const [loading, setLoading] = useState(true);
+
+  const fetchTableData = useCallback(async (search = "", page = 1) => {
+    setLoading(true);
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user.token) {
+        dispatch(logout());
+        navigate("/");
+        return;
+      }
+
+      const decodedToken = jwtDecode(user.token);
+      if (decodedToken.exp * 1000 < Date.now()) {
+        dispatch(logout());
+        navigate("/");
+        return;
+      }
+
+      const response = await api.get("/pause-resume", {
+        params: { search, page }
+      });
+
+      const mappedData = response.data.data.map(item => ({
+        orderNo: item.order_no || "-",
+        name: item.name || "-",
+        email: item.email || "-",
+        phone: item.phone || "-",
+        plan: item.plan || "-",
+        meal: item.meal_type || "-",
+        pause: item.status === "Pause" ? "Yes" : "No",
+        resume: item.status === "Resume" ? "Yes" : "No",
+        pauseDate: item.start_date || "-",
+        resumeDate: item.end_date || "-",
+        reason: item.reason || "-",
+        isCurrent: false,
+      }));
+
+      setTableData({ data: mappedData, total: response.data.total });
+    } catch (err) {
+      console.error(err);
+      if (err.response?.status === 403 || err.response?.status === 500) {
+        dispatch(logout());
+        navigate("/");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    fetchTableData();
+  }, [fetchTableData]);
+
+  // ================= FORM HANDLERS =================
   const handleNextFromInfo = () => {
     if (!plan) return alert("Please select a plan.");
     const enabledMeals = planToMeals(plan);
@@ -227,15 +257,9 @@ export default function PauseResumeMeals() {
     }
 
     for (const [meal, data] of checkedMeals) {
-      if (data.pause && !data.dates.pause) {
-        return alert(`Please select a pause date for ${meal}.`);
-      }
-      if (data.resume && !data.dates.resume) {
-        return alert(`Please select a resume date for ${meal}.`);
-      }
-      if (!data.pause && !data.resume) {
-        return alert(`Please select 'Pause' or 'Resume' for ${meal}.`);
-      }
+      if (data.pause && !data.dates.pause) return alert(`Please select a pause date for ${meal}.`);
+      if (data.resume && !data.dates.resume) return alert(`Please select a resume date for ${meal}.`);
+      if (!data.pause && !data.resume) return alert(`Please select 'Pause' or 'Resume' for ${meal}.`);
     }
 
     try {
@@ -247,11 +271,16 @@ export default function PauseResumeMeals() {
         reason: reason,
       }));
 
-      const response = await api.post("/pause-resume", {
+      await api.post("/pause-resume", {
         order_no: orderNo,
+        name: name,
+        email: email,
+        phone: phone,
+        plan: plan,
         meals: mealData,
       });
 
+      // Merge new entries with table data
       const newEntries = mealData.map(md => ({
         orderNo,
         name,
@@ -264,12 +293,11 @@ export default function PauseResumeMeals() {
         pauseDate: md.start_date || "-",
         resumeDate: md.end_date || "-",
         reason: md.reason || "-",
-        isCurrent: false, // mark submitted as not current
+        isCurrent: true,
       }));
 
-      setPreviousData(prev => [...prev, ...newEntries]);
+      setTableData(prev => ({ ...prev, data: [...newEntries, ...prev.data], total: prev.total + newEntries.length }));
       setStep(4);
-
     } catch (error) {
       console.error("❌ Failed to submit:", error.response?.data || error.message);
     }
@@ -297,27 +325,7 @@ export default function PauseResumeMeals() {
     }));
   };
 
-  // ================= COMBINED TABLE DATA =================
-  const tableData = useMemo(() => {
-    const currentData = Object.entries(meals)
-      .filter(([_, data]) => data.checked)
-      .map(([meal, data]) => ({
-        orderNo: orderNo || "-",
-        name: name || "-",
-        email: email || "-",
-        phone: phone || "-",
-        plan: plan || "-",
-        meal,
-        pause: data.pause ? "Yes" : "No",
-        resume: data.resume ? "Yes" : "No",
-        pauseDate: data.dates.pause || "-",
-        resumeDate: data.dates.resume || "-",
-        reason: reason || "-",
-        isCurrent: true, // mark current form data
-      }));
-
-    return [...previousData, ...currentData];
-  }, [meals, orderNo, name, email, phone, plan, reason, previousData]);
+  if (loading && tableData.data.length === 0) return <div className="loading">Loading previous submissions...</div>;
 
   return (
     <div className="container-fluid row">
@@ -367,6 +375,7 @@ export default function PauseResumeMeals() {
         <SummaryDataTable
           data={tableData}
           title={<span style={{ color: "#104b45" }}>Pause / Resume Summary</span>}
+          onSearch={fetchTableData}
         />
       </div>
     </div>
