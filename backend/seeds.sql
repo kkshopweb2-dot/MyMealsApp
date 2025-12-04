@@ -1,0 +1,1 @@
+INSERT INTO users (id, name, email, phone, password) VALUES (1, 'Test User', 'test@example.com', '1234567890', 'password') ON DUPLICATE KEY UPDATE name = 'Test User', email = 'test@example.com', phone = '1234567890', password = 'password';

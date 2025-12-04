@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../api/axios";
 import "../css/Profile.css";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-
   const [user, setUser] = useState({
-    name: "User",
-    email: "user@example.com",
-    phone: "+91 9876543210",
-    image: "https://i.pravatar.cc/150"
+    name: "",
+    email: "",
+    phone: "",
+    image: "",
   });
+  const [newImage, setNewImage] = useState(null);
+
+  useEffect(() => {
+    // Hardcoded user ID for now
+    const userId = 1;
+    axios
+      .get(`/users/${userId}`)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -18,8 +32,34 @@ const Profile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setNewImage(file);
       setUser({ ...user, image: URL.createObjectURL(file) });
     }
+  };
+
+  const handleSave = () => {
+    // Hardcoded user ID
+    const userId = 1;
+    const formData = new FormData();
+    formData.append("name", user.name);
+    formData.append("email", user.email);
+    formData.append("phone", user.phone);
+    if (newImage) {
+      formData.append("image", newImage);
+    }
+
+    axios
+      .put(`/users/${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        console.error("Error updating user data:", error);
+      });
   };
 
   return (
@@ -28,10 +68,12 @@ const Profile = () => {
 
       <div className="profile-card">
         <div className="profile-image-wrapper">
-          <img src={user.image} alt="User" className="profile-image" />
-          {isEditing && (
-            <input type="file" onChange={handleImageChange} />
-          )}
+          <img
+            src={user.image ? `http://localhost:5000/${user.image}` : "https://i.pravatar.cc/150"}
+            alt="User"
+            className="profile-image"
+          />
+          {isEditing && <input type="file" onChange={handleImageChange} />}
         </div>
 
         <div className="profile-info">
@@ -58,16 +100,22 @@ const Profile = () => {
             </>
           ) : (
             <>
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Phone:</strong> {user.phone}</p>
+              <p>
+                <strong>Name:</strong> {user.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {user.email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {user.phone}
+              </p>
             </>
           )}
         </div>
 
         <div className="profile-actions">
           {isEditing ? (
-            <button className="save-btn" onClick={() => setIsEditing(false)}>
+            <button className="save-btn" onClick={handleSave}>
               Save Profile
             </button>
           ) : (
