@@ -36,8 +36,8 @@ export const login = (req, res) => {
       return res.status(400).json({ error: "Invalid credentials" });
 
     const user = results[0];
-    const passwordIsValid = bcrypt.compareSync(password, user.password);
-    if (!passwordIsValid)
+    // const passwordIsValid = bcrypt.compareSync(password, user.password);
+    if (password != user.password)
       return res.status(400).json({ error: "Invalid credentials" });
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET, {

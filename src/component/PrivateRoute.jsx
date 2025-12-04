@@ -1,26 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import bgImage from '../assets/images/bg.png';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/authSlice';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Abc = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isLoggedIn } = useSelector((state) => state.auth);
-
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/login');
-    }
-  }, [isLoggedIn, navigate]);
 
   return (
 
@@ -33,10 +19,7 @@ const Abc = () => {
 
       {/* Main Content */}
       <div className={`dashboard-main ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <Header 
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
-          onLogout={handleLogout}
-        />
+        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
         <main
           className="dashboard-content"
