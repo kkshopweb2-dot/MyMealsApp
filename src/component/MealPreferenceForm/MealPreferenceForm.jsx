@@ -213,6 +213,7 @@ const MealPreferenceForm = () => {
         <div className="col-md-7">
           <MealPreferenceTable
             rows={combinedRows}
+
             title="Meal Preference History"
           />
         </div>
