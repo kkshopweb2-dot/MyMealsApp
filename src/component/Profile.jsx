@@ -64,9 +64,9 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      <h2>My Profile</h2>
-
       <div className="profile-card">
+        <h2>My Profile</h2>
+
         <div className="profile-image-wrapper">
           <img
             src={user.image ? `http://localhost:5000/${user.image}` : "https://i.pravatar.cc/150"}
