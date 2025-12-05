@@ -49,13 +49,10 @@ const MealPreferenceForm = () => {
         orderNo: item.order_no,
         mealType: item.meal_type,
         preference_details: item.preference_details, // This is already a string
-        // These fields are not directly available in meal_preferences table
-        // and are set to empty strings for historical data
-        name: "", 
-        email: "", 
-        phone: "", 
-        plan: "", 
-        effectiveFrom: "", 
+        name: item.name,
+        email: item.email,
+        plan: item.plan,
+        effectiveFrom: item.effectiveFrom ? new Date(item.effectiveFrom).toLocaleDateString() : "",
         isCurrent: false, // Historical data is not current
       }));
       setSubmittedData(dataArray);

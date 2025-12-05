@@ -18,9 +18,28 @@ export const getMealPreferences = (req, res) => {
     "SELECT COUNT(*) AS total FROM meal_preferences WHERE user_id = ?";
 
   let dataSql = `
-    SELECT * FROM meal_preferences
-    WHERE user_id = ?
-    ORDER BY id DESC
+    SELECT
+      mp.id,
+      mp.user_id,
+      mp.order_no,
+      mp.meal_type,
+      mp.preference_details,
+      mp.is_active,
+      mp.created_at,
+      u.name,
+      u.email,
+      o.plan,
+      o.created_at AS effectiveFrom
+    FROM
+      meal_preferences AS mp
+    LEFT JOIN
+      users AS u ON mp.user_id = u.id
+    LEFT JOIN
+      orders AS o ON mp.order_no = o.order_no
+    WHERE
+      mp.user_id = ?
+    ORDER BY
+      mp.id DESC
   `;
 
   const queryParams = [req.userId];
