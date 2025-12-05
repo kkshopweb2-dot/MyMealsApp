@@ -38,42 +38,30 @@ const MealPreferenceForm = () => {
     dishChoice: "",
   });
 
-  // === FETCH DATA FROM SERVER & PREFILL LATEST ===
+  // === FETCH DATA FROM SERVER ===
   const fetchData = async () => {
     try {
-      const response = await axios.get("/meal-preferences");
+      // Request all records from the backend
+      const response = await axios.get("/meal-preferences?limit=-1"); 
 
-      const dataArray = Array.isArray(response.data) ? response.data : [];
+      // The backend now returns an object with a 'data' property
+      const dataArray = (response.data.data || []).map(item => ({
+        orderNo: item.order_no,
+        mealType: item.meal_type,
+        preference_details: item.preference_details, // This is already a string
+        // These fields are not directly available in meal_preferences table
+        // and are set to empty strings for historical data
+        name: "", 
+        email: "", 
+        phone: "", 
+        plan: "", 
+        effectiveFrom: "", 
+        isCurrent: false, // Historical data is not current
+      }));
       setSubmittedData(dataArray);
 
-      console.log("Fetched:", dataArray);
+      console.log("Fetched all meal preferences:", dataArray);
 
-      // PREFILL FORM FROM MOST RECENT RECORD
-      if (dataArray.length > 0) {
-        const last = dataArray[dataArray.length - 1];
-
-        let parsedPrefs = {};
-        try {
-          parsedPrefs = last.preference_details
-            ? JSON.parse(last.preference_details)
-            : {};
-        } catch (e) {
-          console.log("Error parsing preference details:", e);
-        }
-
-        setFormData({
-          orderNo: last.order_no || "",
-          name: last.name || "",
-          email: last.email || "",
-          phone: last.phone || "",
-          plan: last.plan || "",
-          effectiveFrom: last.effectiveFrom || "",
-          mealType: last.meal_type || "",
-          avoidNonVeg: parsedPrefs.avoidNonVeg || "",
-          avoidVeg: parsedPrefs.avoidVeg || "",
-          dishChoice: parsedPrefs.dishChoice || "",
-        });
-      }
     } catch (error) {
       console.error("❌ Failed to fetch meal preferences:", error);
       setSubmittedData([]);

@@ -5,33 +5,47 @@ import db from "../db.js";
 // ===========================================
 export const getMealPreferences = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 10; // <--- Show 10 records per page
-  const offset = (page - 1) * limit;
+  const limit = parseInt(req.query.limit) || 10; // Allow limit to be passed as query parameter, default to 10
+
+  let offset;
+  if (limit === -1) { // If limit is -1, fetch all records
+    offset = 0;
+  } else {
+    offset = (page - 1) * limit;
+  }
 
   const countSql =
     "SELECT COUNT(*) AS total FROM meal_preferences WHERE user_id = ?";
 
-  const dataSql = `
+  let dataSql = `
     SELECT * FROM meal_preferences
     WHERE user_id = ?
     ORDER BY id DESC
-    LIMIT ? OFFSET ?
   `;
+
+  const queryParams = [req.userId];
+
+  if (limit !== -1) {
+    dataSql += `
+      LIMIT ? OFFSET ?
+    `;
+    queryParams.push(limit, offset);
+  }
 
   // Step 1: Count total rows
   db.query(countSql, [req.userId], (err, countResult) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const total = countResult[0].total;
-    const totalPages = Math.ceil(total / limit);
+    const totalPages = limit === -1 ? 1 : Math.ceil(total / limit); // If all records, only one page
 
     // Step 2: Fetch paginated items
-    db.query(dataSql, [req.userId, limit, offset], (err, results) => {
+    db.query(dataSql, queryParams, (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
 
       res.json({
-        page,
-        limit,
+        page: limit === -1 ? 1 : page,
+        limit: limit === -1 ? total : limit,
         total,
         totalPages,
         data: results,
