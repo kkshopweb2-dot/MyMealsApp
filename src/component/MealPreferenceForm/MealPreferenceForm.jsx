@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "../../api/axios";
 import styles from "../../css/MealPreference.module.css";
-
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import "../../css/dashboard.css";
 
 import Step1UserInfo from "./Step1UserInfo";
 import Step2MealDetails from "./Step2MealDetails";
@@ -13,10 +9,8 @@ import ThankYou from "./ThankYou";
 import MealPreferenceTable from "../MealPreferenceTable";
 
 const MealPreferenceForm = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [submittedData, setSubmittedData] = useState([]);
 
   const [toggles, setToggles] = useState({
     vegNonveg: false,
@@ -37,37 +31,6 @@ const MealPreferenceForm = () => {
     avoidVeg: "",
     dishChoice: "",
   });
-
-  // === FETCH DATA FROM SERVER ===
-  const fetchData = async () => {
-    try {
-      // Request all records from the backend
-      const response = await axios.get("/meal-preferences?limit=-1"); 
-
-      // The backend now returns an object with a 'data' property
-      const dataArray = (response.data.data || []).map(item => ({
-        orderNo: item.order_no,
-        mealType: item.meal_type,
-        preference_details: item.preference_details, // This is already a string
-        name: item.name,
-        email: item.email,
-        plan: item.plan,
-        effectiveFrom: item.effectiveFrom ? new Date(item.effectiveFrom).toLocaleDateString() : "",
-        isCurrent: false, // Historical data is not current
-      }));
-      setSubmittedData(dataArray);
-
-      console.log("Fetched all meal preferences:", dataArray);
-
-    } catch (error) {
-      console.error("❌ Failed to fetch meal preferences:", error);
-      setSubmittedData([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   // === HANDLERS ===
   const handleChange = (e) => {
@@ -106,12 +69,6 @@ const MealPreferenceForm = () => {
       console.log("Submitted:", response.data);
       window.alert("Meal preference submitted successfully!");
 
-      // Add new submission to table, previous data stays
-      const newSubmission = {
-        ...formData,
-        preference_details: requestData.preference_details,
-      };
-      setSubmittedData((prev) => [...prev, newSubmission]);
       setSubmitted(true);
     } catch (error) {
       console.error("❌ Failed to submit meal preference:", error);
@@ -135,20 +92,6 @@ const MealPreferenceForm = () => {
     });
     setStep(1);
   };
-
-  // === COMBINE PREVIOUS + CURRENT RECORD (ALWAYS DISPLAY) ===
-  const combinedRows = [
-    ...submittedData,
-    {
-      ...formData,
-      preference_details: JSON.stringify({
-        dishChoice: formData.dishChoice,
-        avoidNonVeg: formData.avoidNonVeg,
-        avoidVeg: formData.avoidVeg,
-      }),
-      isCurrent: !submitted, // mark as current if not submitted
-    },
-  ];
 
   return (
     <div className="container-fluid">
@@ -196,10 +139,7 @@ const MealPreferenceForm = () => {
 
         {/* TABLE CARD */}
         <div className="col-md-7">
-          <MealPreferenceTable
-            rows={combinedRows}
-            title="Meal Preference History"
-          />
+          <MealPreferenceTable title="Meal Preference History" />
         </div>
       </div>
     </div>

@@ -6,14 +6,13 @@ import {
   updateMealPreference,
   deleteMealPreference,
 } from "../controllers/mealPreferenceController.js";
-import verifyToken from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getMealPreferences);
-router.post("/", verifyToken, createMealPreference);
-router.get("/:id", verifyToken, getMealPreference);
-router.put("/:id", verifyToken, updateMealPreference);
-router.delete("/:id", verifyToken, deleteMealPreference);
+router.get("/", getMealPreferences);
+router.post("/", createMealPreference);
+router.get("/:id", getMealPreference);
+router.put("/:id", updateMealPreference);
+router.delete("/:id", deleteMealPreference);
 
 export default router;

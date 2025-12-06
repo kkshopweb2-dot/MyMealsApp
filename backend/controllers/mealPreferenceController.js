@@ -14,8 +14,7 @@ export const getMealPreferences = (req, res) => {
     offset = (page - 1) * limit;
   }
 
-  const countSql =
-    "SELECT COUNT(*) AS total FROM meal_preferences WHERE user_id = ?";
+  const countSql = "SELECT COUNT(*) AS total FROM meal_preferences";
 
   let dataSql = `
     SELECT
@@ -36,13 +35,11 @@ export const getMealPreferences = (req, res) => {
       users AS u ON mp.user_id = u.id
     LEFT JOIN
       orders AS o ON mp.order_no = o.order_no
-    WHERE
-      mp.user_id = ?
     ORDER BY
       mp.id DESC
   `;
 
-  const queryParams = [req.userId];
+  const queryParams = [];
 
   if (limit !== -1) {
     dataSql += `
@@ -52,7 +49,7 @@ export const getMealPreferences = (req, res) => {
   }
 
   // Step 1: Count total rows
-  db.query(countSql, [req.userId], (err, countResult) => {
+  db.query(countSql, (err, countResult) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const total = countResult[0].total;
@@ -77,7 +74,8 @@ export const getMealPreferences = (req, res) => {
 // CREATE
 // ===========================================
 export const createMealPreference = (req, res) => {
-  const { order_no, meal_type, preference_details, is_active } = req.body;
+  const { user_id, order_no, meal_type, preference_details, is_active } =
+    req.body;
 
   const sql = `
     INSERT INTO meal_preferences 
@@ -87,7 +85,7 @@ export const createMealPreference = (req, res) => {
 
   db.query(
     sql,
-    [req.userId, order_no, meal_type, preference_details, is_active],
+    [user_id, order_no, meal_type, preference_details, is_active],
     (err, results) => {
       if (err) {
         console.error("Database error:", err);
@@ -106,9 +104,9 @@ export const createMealPreference = (req, res) => {
 // GET SINGLE RECORD
 // ===========================================
 export const getMealPreference = (req, res) => {
-  const sql = "SELECT * FROM meal_preferences WHERE id = ? AND user_id = ?";
+  const sql = "SELECT * FROM meal_preferences WHERE id = ?";
 
-  db.query(sql, [req.params.id, req.userId], (err, results) => {
+  db.query(sql, [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
 
     if (results.length === 0)
@@ -127,12 +125,12 @@ export const updateMealPreference = (req, res) => {
   const sql = `
     UPDATE meal_preferences
     SET meal_type = ?, preference_details = ?, is_active = ?
-    WHERE id = ? AND user_id = ?
+    WHERE id = ?
   `;
 
   db.query(
     sql,
-    [meal_type, preference_details, is_active, req.params.id, req.userId],
+    [meal_type, preference_details, is_active, req.params.id],
     (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
 
@@ -151,10 +149,9 @@ export const updateMealPreference = (req, res) => {
 // DELETE
 // ===========================================
 export const deleteMealPreference = (req, res) => {
-  const sql =
-    "DELETE FROM meal_preferences WHERE id = ? AND user_id = ?";
+  const sql = "DELETE FROM meal_preferences WHERE id = ?";
 
-  db.query(sql, [req.params.id, req.userId], (err, results) => {
+  db.query(sql, [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
 
     if (results.affectedRows === 0)
