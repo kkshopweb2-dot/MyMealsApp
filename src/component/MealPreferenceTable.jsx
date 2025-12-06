@@ -142,6 +142,8 @@ const MealPreferenceTable = ({ title }) => {
       </div>
     </div>
   );
+
+
 };
 
 export default MealPreferenceTable;

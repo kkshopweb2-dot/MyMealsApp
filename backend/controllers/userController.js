@@ -73,7 +73,18 @@ export const updateUser = [
 
     db.query(query, params, (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: "User updated successfully" });
+
+      // Fetch the updated user data
+      db.query(
+        "SELECT id, name, email, phone, image FROM users WHERE id = ?",
+        [id],
+        (err, results) => {
+          if (err) return res.status(500).json({ error: err.message });
+          if (results.length === 0)
+            return res.status(404).json({ message: "User not found" });
+          res.json(results[0]);
+        }
+      );
     });
   },
 ];

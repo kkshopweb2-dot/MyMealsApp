@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 const Abc = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { user } = useSelector((state) => state.auth);
 
   return (
 
@@ -19,7 +20,11 @@ const Abc = () => {
 
       {/* Main Content */}
       <div className={`dashboard-main ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <Header
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          username={user?.name}
+          userImage={user?.image}
+        />
 
         <main
           className="dashboard-content"

@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import multer from "multer";
-import path from "path";
 
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
@@ -26,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the "uploads" directory
-app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
+app.use('/uploads', express.static('uploads'));
 
 // Middleware to sanitize the request URL
 app.use((req, res, next) => {

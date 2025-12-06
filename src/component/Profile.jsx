@@ -1,29 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import "../css/Profile.css";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../redux/authSlice";
+import { imageBaseURL } from '../api/baseURL';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    image: "",
-  });
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const [user, setUser] = useState(currentUser);
   const [newImage, setNewImage] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // Hardcoded user ID for now
-    const userId = 1;
-    axios
-      .get(`/users/${userId}`)
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, []);
+    setUser(currentUser);
+  }, [currentUser]);
+
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -38,8 +30,8 @@ const Profile = () => {
   };
 
   const handleSave = () => {
-    // Hardcoded user ID
-    const userId = 1;
+    if (!user) return;
+    const userId = user.id;
     const formData = new FormData();
     formData.append("name", user.name);
     formData.append("email", user.email);
@@ -55,6 +47,7 @@ const Profile = () => {
         },
       })
       .then((response) => {
+        dispatch(updateUser(response.data));
         setIsEditing(false);
       })
       .catch((error) => {
@@ -69,7 +62,7 @@ const Profile = () => {
 
         <div className="profile-image-wrapper">
           <img
-            src={user.image ? `http://localhost:5000/${user.image}` : "https://i.pravatar.cc/150"}
+            src={user.image ? (user.image.startsWith('blob:') ? user.image : `${imageBaseURL}${user.image}`) : "https://i.pravatar.cc/150"}
             alt="User"
             className="profile-image"
           />

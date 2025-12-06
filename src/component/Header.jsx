@@ -2,8 +2,9 @@ import React from 'react';
 import { NavLink } from "react-router-dom";
 import { FaBars, FaBell, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import '../css/header.css';
+import { imageBaseURL } from '../api/baseURL';
 
-const Header = ({ toggleSidebar, onLogout, username = "User" }) => {
+const Header = ({ toggleSidebar, onLogout, username = "User", userImage }) => {
   return (
     <header className="dashboard-header">
       <div className="left-section">
@@ -42,7 +43,7 @@ const Header = ({ toggleSidebar, onLogout, username = "User" }) => {
 
         {/* Profile */}
         <NavLink to="/Profile" className="profile-avatar">
-          <img src="https://i.pravatar.cc/40" alt="User Avatar" />
+          <img src={userImage ? `${imageBaseURL}${userImage}` : "https://i.pravatar.cc/40"} alt="User Avatar" />
         </NavLink>
 
 

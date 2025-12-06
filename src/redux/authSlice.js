@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../api/axios';
 
-const user = JSON.parse(localStorage.getItem('user'));
+const storedUser = JSON.parse(localStorage.getItem('user'));
 
 export const register = createAsyncThunk(
   'auth/register',
@@ -54,14 +54,21 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   await localStorage.removeItem('user');
 });
 
-const initialState = user
-  ? { isLoggedIn: true, user, token: user.token }
+const initialState = storedUser
+  ? { isLoggedIn: true, user: storedUser.user, token: storedUser.token }
   : { isLoggedIn: false, user: null, token: null };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    updateUser: (state, action) => {
+      state.user = action.payload;
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      storedUser.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(storedUser));
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(register.fulfilled, (state, action) => {
@@ -87,5 +94,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const { updateUser } = authSlice.actions;
 
 export default authSlice.reducer;
