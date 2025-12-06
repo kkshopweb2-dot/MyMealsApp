@@ -44,35 +44,32 @@ export const updateUser = [
     const { name, email, phone } = req.body;
     let image = req.file ? `uploads/profile/${req.file.filename}` : null;
 
-    let query = "UPDATE users SET";
+    const fields = [];
     const params = [];
 
     if (name) {
-      query += " name = ?,";
+      fields.push("name = ?");
       params.push(name);
     }
     if (email) {
-      query += " email = ?,";
+      fields.push("email = ?");
       params.push(email);
     }
     if (phone) {
-      query += " phone = ?,";
+      fields.push("phone = ?");
       params.push(phone);
     }
     if (image) {
-      query += " image = ?,";
+      fields.push("image = ?");
       params.push(image);
     }
 
-    // Remove trailing comma
-    query = query.slice(0, -1);
-
-    query += " WHERE id = ?";
-    params.push(id);
-
-    if (params.length === 1) {
+    if (fields.length === 0) {
       return res.status(400).json({ message: "No fields to update" });
     }
+
+    const query = `UPDATE users SET ${fields.join(", ")} WHERE id = ?`;
+    params.push(id);
 
     db.query(query, params, (err, results) => {
       if (err) return res.status(500).json({ error: err.message });

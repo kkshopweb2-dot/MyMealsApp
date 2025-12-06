@@ -18,17 +18,22 @@ db.connect((err) => {
   }
   console.log("✅ Connected to MySQL database!");
 
-  const schema = fs.readFileSync("backend/schema.sql", "utf8");
-  const addColumns = fs.readFileSync("backend/add_columns_to_renewal_payments.sql", "utf8");
-  const addImageToUsers = fs.readFileSync("backend/add_image_to_users.sql", "utf8");
+  const sqlFile = process.argv[2];
+  if (!sqlFile) {
+    console.error("❌ Please provide a SQL file to run.");
+    db.end();
+    process.exit(1);
+  }
 
-  db.query(schema + addColumns + addImageToUsers, (err, results) => {
+  const sql = fs.readFileSync(sqlFile, "utf8");
+
+  db.query(sql, (err, results) => {
     if (err) {
-      console.error("❌ Error executing schema:", err.message);
+      console.error(`❌ Error executing ${sqlFile}:`, err.message);
       db.end();
       process.exit(1);
     }
-    console.log("✅ Database schema updated successfully!");
+    console.log(`✅ ${sqlFile} executed successfully!`);
     db.end();
   });
 });
