@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { store } from '../redux/store';
 import { logout } from '../redux/authSlice';
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaBars, FaBell, FaSearch, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaBell, FaSignOutAlt } from 'react-icons/fa';
 import '../css/header.css';
 import { imageBaseURL } from '../api/baseURL';
 
 const Header = ({ toggleSidebar, username = "User", userImage }) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  const handleSearch = () => {
-    if (searchTerm.trim()) {
-      navigate(`/search?query=${searchTerm}`);
-    }
+  const onLogout = () => {
+    store.dispatch(logout());
+    window.location.reload();
   };
-  const onLogout = ()=>{
-     store.dispatch(logout());
-     window.location.reload();
-  };
+
   return (
     <header className="dashboard-header">
       <div className="left-section">
@@ -31,26 +26,6 @@ const Header = ({ toggleSidebar, username = "User", userImage }) => {
         >
           <FaBars />
         </button>
-
-        {/* Search Bar */}
-        <div className="header-search">
-          <FaSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button
-            type="button"
-            className="search-button"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-        </div>
       </div>
 
       <div className="header-right">
@@ -59,13 +34,13 @@ const Header = ({ toggleSidebar, username = "User", userImage }) => {
           Hello, <strong>{username}</strong>
         </div>
 
-        
-
         {/* Profile */}
         <NavLink to="/Profile" className="profile-avatar">
-          <img src={userImage ? `${imageBaseURL}${userImage}` : "https://i.pravatar.cc/40"} alt="User Avatar" />
+          <img
+            src={userImage ? `${imageBaseURL}${userImage}` : "https://i.pravatar.cc/40"}
+            alt="User Avatar"
+          />
         </NavLink>
-
 
         {/* Logout */}
         <button className="logout-btn" onClick={onLogout}>
@@ -77,4 +52,3 @@ const Header = ({ toggleSidebar, username = "User", userImage }) => {
 };
 
 export default Header;
-
