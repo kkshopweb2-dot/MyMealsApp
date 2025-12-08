@@ -34,7 +34,7 @@ export const initialMealState = () => ({
 });
 
 // ================= SUMMARY TABLE =================
-const SummaryDataTable = ({ data, title, onSearch }) => {
+const SummaryDataTable = ({ data, title, onSearch, loading }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activePage, setActivePage] = useState(1);
   const entriesPerPage = 10;
@@ -92,46 +92,50 @@ const SummaryDataTable = ({ data, title, onSearch }) => {
       </div>
 
       <div className="table-responsive">
-        <table className="tableWrapper">
-          <thead>
-            <tr>
-              <th>Order No</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Plan</th>
-              <th>Meal</th>
-              <th>Pause</th>
-              <th>Resume</th>
-              <th>Pause Date</th>
-              <th>Resume Date</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row, index) => (
-                <tr key={index} className={row.isCurrent ? "current-row" : "submitted-row"}>
-                  <td>{row.orderNo}</td>
-                  <td>{row.name}</td>
-                  <td>{row.email}</td>
-                  <td>{row.phone}</td>
-                  <td>{row.plan}</td>
-                  <td>{row.meal}</td>
-                  <td>{row.pause}</td>
-                  <td>{row.resume}</td>
-                  <td>{row.pauseDate}</td>
-                  <td>{row.resumeDate}</td>
-                  <td>{row.reason}</td>
-                </tr>
-              ))
-            ) : (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>Loading previous submissions...</div>
+        ) : (
+          <table className="tableWrapper">
+            <thead>
               <tr>
-                <td colSpan="11" className="noData">No data available to display.</td>
+                <th>Order No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Plan</th>
+                <th>Meal</th>
+                <th>Pause</th>
+                <th>Resume</th>
+                <th>Pause Date</th>
+                <th>Resume Date</th>
+                <th>Reason</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paginatedData.length > 0 ? (
+                paginatedData.map((row, index) => (
+                  <tr key={index} className={row.isCurrent ? "current-row" : "submitted-row"}>
+                    <td>{row.orderNo}</td>
+                    <td>{row.name}</td>
+                    <td>{row.email}</td>
+                    <td>{row.phone}</td>
+                    <td>{row.plan}</td>
+                    <td>{row.meal}</td>
+                    <td>{row.pause}</td>
+                    <td>{row.resume}</td>
+                    <td>{row.pauseDate}</td>
+                    <td>{row.resumeDate}</td>
+                    <td>{row.reason}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="11" className="noData">No data available to display.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <div className="pagination">
@@ -325,7 +329,7 @@ export default function PauseResumeMeals() {
     }));
   };
 
-  if (loading && tableData.data.length === 0) return <div className="loading">Loading previous submissions...</div>;
+  
 
   return (
     <div className="container-fluid row">
@@ -376,6 +380,7 @@ export default function PauseResumeMeals() {
           data={tableData}
           title={<span style={{ color: "#104b45" }}>Pause / Resume Summary</span>}
           onSearch={fetchTableData}
+          loading={loading}
         />
       </div>
     </div>

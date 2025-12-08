@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS order_meals (
 CREATE TABLE IF NOT EXISTS complaints (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
+    order_no VARCHAR(255),
     subject VARCHAR(255),
     description TEXT,
     status VARCHAR(50),
@@ -109,6 +110,10 @@ CREATE TABLE IF NOT EXISTS pause_resume_meals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     order_no VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(255),
+    plan VARCHAR(255),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     reason TEXT,
