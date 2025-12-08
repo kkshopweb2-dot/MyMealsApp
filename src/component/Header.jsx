@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { store } from '../redux/store';
+import { logout } from '../redux/authSlice';
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaBell, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import '../css/header.css';
 import { imageBaseURL } from '../api/baseURL';
 
-const Header = ({ toggleSidebar, onLogout, username = "User", userImage }) => {
+const Header = ({ toggleSidebar, username = "User", userImage }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
@@ -13,7 +15,9 @@ const Header = ({ toggleSidebar, onLogout, username = "User", userImage }) => {
       navigate(`/search?query=${searchTerm}`);
     }
   };
-
+  const onLogout = ()=>{
+     store.dispatch(logout());
+  };
   return (
     <header className="dashboard-header">
       <div className="left-section">
