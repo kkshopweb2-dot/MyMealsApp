@@ -1,6 +1,10 @@
-
 import mysql from "mysql";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -25,7 +29,9 @@ db.connect((err) => {
     process.exit(1);
   }
 
-  const sql = fs.readFileSync(sqlFile, "utf8");
+  const sqlFilePath = path.join(__dirname, sqlFile);
+
+  const sql = fs.readFileSync(sqlFilePath, "utf8");
 
   db.query(sql, (err, results) => {
     if (err) {

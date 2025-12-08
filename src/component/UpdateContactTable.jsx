@@ -1,72 +1,170 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+  useCallback,
+} from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
+import axios from "../../src/api/axios";
 
-const UpdateContactTable = ({ rows, title }) => {
+const UpdateContactTable = forwardRef(({ title }, ref) => {
+  const [contactUpdates, setContactUpdates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [activePage, setActivePage] = useState(1);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
-  const entriesPerPage = 10;
-
-  const filteredData = rows.filter(
-    (item) =>
-      (item.field_name &&
-        item.field_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.old_value &&
-        item.old_value.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.new_value &&
-        item.new_value.toLowerCase().includes(searchQuery.toLowerCase()))
+  const fetchContactUpdates = useCallback(
+    async (page = 1, limit = entriesPerPage, search = debouncedSearchQuery) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(
+          `/user-contact-updates?page=${page}&limit=${limit}&search=${search}`
+        );
+        setContactUpdates(response.data.data || []);
+        setCurrentPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
+        setTotalEntries(response.data.total);
+      } catch (err) {
+        console.error("Failed to fetch contact updates:", err);
+        setError(
+          err.response?.data?.error ||
+            "Failed to fetch contact updates. Please try again later."
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [entriesPerPage, debouncedSearchQuery]
   );
 
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
 
-  const paginatedData = filteredData.slice(
-    (activePage - 1) * entriesPerPage,
-    activePage * entriesPerPage
-  );
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      setCurrentPage(1);
+    }
+    fetchContactUpdates(currentPage, entriesPerPage, debouncedSearchQuery);
+  }, [
+    currentPage,
+    entriesPerPage,
+    debouncedSearchQuery,
+    fetchContactUpdates,
+  ]);
+
+  useImperativeHandle(ref, () => ({
+    fetchContactUpdates: () =>
+      fetchContactUpdates(1, entriesPerPage, debouncedSearchQuery),
+  }));
+
+  const handleEntriesPerPageChange = (e) => {
+    setEntriesPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleSearch = () => {
+    setDebouncedSearchQuery(searchQuery);
+    setCurrentPage(1);
+  };
+
+  const startIndex = (currentPage - 1) * entriesPerPage;
+  const endIndex = Math.min(startIndex + entriesPerPage, totalEntries);
 
   return (
     <div className="tableCard">
-        <div className="tableCardHeader">
-            <h2>{title}</h2>
+      <div className="tableCardHeader">
+        <h2>{title}</h2>
+      </div>
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          Show
+          <select
+            value={entriesPerPage}
+            onChange={handleEntriesPerPageChange}
+            className="entriesSelect"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+          entries
         </div>
-      {/* Search Bar */}
-      <div className="tableSearch">
-        <input
-          type="text"
-          placeholder="Search here..."
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setActivePage(1);
-          }}
-        />
-        <FaSearch />
+        <div className="tableSearch">
+          <input
+            type="text"
+            placeholder="Search here..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <FaSearch onClick={handleSearch} style={{ cursor: "pointer" }} />
+        </div>
       </div>
 
-      {/* Table */}
       <table className="tableWrapper">
         <thead>
           <tr>
-            <th>Field</th>
-            <th>Old Value</th>
-            <th>New Value</th>
+            <th>Order No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Plan</th>
+            <th>Old Phone</th>
+            <th>New Phone</th>
             <th>Status</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row, index) => (
+          {loading ? (
+            <tr>
+              <td colSpan="8" className="noData">
+                Loading...
+              </td>
+            </tr>
+          ) : error ? (
+            <tr>
+              <td colSpan="8" className="noData" style={{ color: "red" }}>
+                {error}
+              </td>
+            </tr>
+          ) : contactUpdates.length > 0 ? (
+            contactUpdates.map((row, index) => (
               <tr key={index}>
-                <td>{row.field_name}</td>
+                <td>{row.order_no}</td>
+                <td>{row.name}</td>
+                <td>{row.email}</td>
+                <td>{row.plan}</td>
                 <td>{row.old_value}</td>
                 <td>{row.new_value}</td>
                 <td>{row.status}</td>
+                <td>{new Date(row.created_at).toLocaleDateString()}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="noData">
+              <td colSpan="8" className="noData">
                 No data found
               </td>
             </tr>
@@ -74,41 +172,36 @@ const UpdateContactTable = ({ rows, title }) => {
         </tbody>
       </table>
 
-      {/* Pagination */}
       <div className="pagination">
         <button
-          onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
-          disabled={activePage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
         >
           &lt;
         </button>
-
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={activePage === i + 1 ? "active" : ""}
-            onClick={() => setActivePage(i + 1)}
+            className={currentPage === i + 1 ? "active" : ""}
+            onClick={() => handlePageChange(i + 1)}
           >
             {i + 1}
           </button>
         ))}
-
         <button
-          onClick={() =>
-            setActivePage((p) => Math.min(p + 1, totalPages))
-          }
-          disabled={activePage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
         >
           &gt;
         </button>
       </div>
 
-      {/* Entries Info */}
       <div className="entriesInfo">
-        Showing {paginatedData.length} of {filteredData.length} entries
+        Showing {totalEntries === 0 ? 0 : startIndex + 1} to {endIndex} of{" "}
+        {totalEntries} entries
       </div>
     </div>
   );
-};
+});
 
 export default UpdateContactTable;

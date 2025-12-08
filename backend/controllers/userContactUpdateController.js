@@ -1,17 +1,35 @@
 import db from "../db.js";
 
 // ==========================
-// GET ALL with Pagination
+// GET ALL with Pagination and Search
 // ==========================
 export const getUserContactUpdates = (req, res) => {
-  const page = parseInt(req.query.page) || 1;     // current page
-  const limit = parseInt(req.query.limit) || 10;  // show 10 records per page
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
   const offset = (page - 1) * limit;
 
-  // Count total records for pagination
-  const countSql = "SELECT COUNT(*) AS total FROM user_contact_updates WHERE user_id = ?";
+  let queryParams = [];
+  let whereClause = "";
 
-  db.query(countSql, [req.userId], (err, countResult) => {
+  if (search) {
+    whereClause = `
+      WHERE 
+        order_no LIKE ? OR
+        name LIKE ? OR
+        email LIKE ? OR
+        plan LIKE ? OR
+        field_name LIKE ? OR 
+        old_value LIKE ? OR 
+        new_value LIKE ?
+    `;
+    const searchTerm = `%${search}%`;
+    queryParams.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+
+  const countSql = `SELECT COUNT(*) AS total FROM user_contact_updates ${whereClause}`;
+
+  db.query(countSql, queryParams, (err, countResult) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const total = countResult[0].total;
@@ -19,12 +37,12 @@ export const getUserContactUpdates = (req, res) => {
 
     const sql = `
       SELECT * FROM user_contact_updates 
-      WHERE user_id = ? 
+      ${whereClause} 
       ORDER BY created_at DESC 
       LIMIT ? OFFSET ?
     `;
 
-    db.query(sql, [req.userId, limit, offset], (err, results) => {
+    db.query(sql, [...queryParams, limit, offset], (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
 
       res.json({
@@ -42,19 +60,19 @@ export const getUserContactUpdates = (req, res) => {
 // CREATE
 // ==========================
 export const createUserContactUpdate = (req, res) => {
-  const { field_name, old_value, new_value, status } = req.body;
+  const { orderNo, name, email, plan, oldPhone, newPhone } = req.body;
 
-  if (!field_name || !new_value) {
-    return res.status(400).json({ error: "Field name and new value are required" });
+  if (!orderNo || !name || !email || !plan || !oldPhone || !newPhone) {
+    return res.status(400).json({ error: "All fields are required" });
   }
 
   const sql = `
     INSERT INTO user_contact_updates 
-    (user_id, field_name, old_value, new_value, status)
-    VALUES (?, ?, ?, ?, ?)
+    (user_id, order_no, name, email, plan, field_name, old_value, new_value, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  db.query(sql, [req.userId, field_name, old_value, new_value, status || "pending"], (err, results) => {
+  db.query(sql, [req.userId, orderNo, name, email, plan, "phone", oldPhone, newPhone, "pending"], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
 
     res.status(201).json({

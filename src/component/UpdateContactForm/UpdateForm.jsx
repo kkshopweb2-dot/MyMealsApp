@@ -9,13 +9,7 @@ const UpdateForm = ({ formData, setFormData, setStep, handleSubmit }) => {
       alert("Please fill all required fields");
       return;
     }
-    const transformedData = {
-      field_name: "phone",
-      old_value: oldPhone,
-      new_value: newPhone,
-    };
-    console.log("Submitting transformed data:", transformedData);
-    handleSubmit(transformedData);
+    handleSubmit(formData);
     setStep("thankyou");
   };
 
