@@ -17,6 +17,7 @@ const Header = ({ toggleSidebar, username = "User", userImage }) => {
   };
   const onLogout = ()=>{
      store.dispatch(logout());
+     window.location.reload();
   };
   return (
     <header className="dashboard-header">
@@ -58,11 +59,7 @@ const Header = ({ toggleSidebar, username = "User", userImage }) => {
           Hello, <strong>{username}</strong>
         </div>
 
-        {/* Notification */}
-        <div className="notification-bell">
-          <FaBell />
-          <span className="badge">0</span>
-        </div>
+        
 
         {/* Profile */}
         <NavLink to="/Profile" className="profile-avatar">
