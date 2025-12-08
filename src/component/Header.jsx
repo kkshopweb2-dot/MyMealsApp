@@ -1,10 +1,19 @@
-import React from 'react';
-import { NavLink } from "react-router-dom";
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaBell, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import '../css/header.css';
 import { imageBaseURL } from '../api/baseURL';
 
 const Header = ({ toggleSidebar, onLogout, username = "User", userImage }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/search?query=${searchTerm}`);
+    }
+  };
+
   return (
     <header className="dashboard-header">
       <div className="left-section">
@@ -25,7 +34,17 @@ const Header = ({ toggleSidebar, onLogout, username = "User", userImage }) => {
             type="text"
             placeholder="Search..."
             className="search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           />
+          <button
+            type="button"
+            className="search-button"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
         </div>
       </div>
 
@@ -57,3 +76,4 @@ const Header = ({ toggleSidebar, onLogout, username = "User", userImage }) => {
 };
 
 export default Header;
+

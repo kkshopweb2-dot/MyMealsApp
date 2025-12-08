@@ -124,3 +124,15 @@ ease;
     width: 160px;
   }
 }
+.search-button {
+  background: #104b45;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: -50px;
+}
+.search-button:hover {
+  background: #104b45e0;
+}

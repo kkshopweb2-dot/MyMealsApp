@@ -31,6 +31,7 @@ const UpdateContactFormPage = lazy(() => import("./pages/UpdateContactFormPage")
 const MealPreferenceFormPage = lazy(() => import("./pages/MealPreferenceFormPage"));
 const ChangeDeliveryLocationPage = lazy(() => import("./pages/ChangeDeliveryLocationPage"));
 const ComplaintPage = lazy(() => import("./pages/ComplaintPage"));
+const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
 
 
 const App = () => {
@@ -62,6 +63,7 @@ const App = () => {
             <Route path="/FeedbackTable" element={<FeedbackTable />} />
             <Route path="/menu" element={<MenuModal />} />
             <Route path="/complaint" element={<ComplaintPage />} />
+            <Route path="/search" element={<SearchResultsPage />} />
           </Route>
         </Routes>
       {/* <Suspense fallback={<div className="loading">Loading...</div>}>

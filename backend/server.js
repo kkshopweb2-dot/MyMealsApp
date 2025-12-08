@@ -16,6 +16,7 @@ import pauseResumeMealRoutes from "./routes/pauseResumeMeals.js";
 import paymentRoutes from "./routes/payments.js";
 import renewalPaymentRoutes from "./routes/renewalPayments.js";
 import userContactUpdateRoutes from "./routes/userContactUpdates.js";
+import searchRoutes from "./routes/search.js";
 
 const app = express();
 const upload = multer();
@@ -47,6 +48,7 @@ app.use("/api/pause-resume", pauseResumeMealRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/renewal-payment", upload.any(), renewalPaymentRoutes);
 app.use("/api/user-contact-updates", userContactUpdateRoutes);
+app.use("/api/search", searchRoutes);
 
 app.listen(5000, () =>
   console.log("✅ Server running on http://localhost:5000")
