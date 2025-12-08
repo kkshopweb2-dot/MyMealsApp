@@ -6,7 +6,7 @@ const SearchResults = ({ results }) => {
       {results.length > 0 ? (
         results.map((result) => (
           <div key={result.id} className="search-result-item">
-            <h3>{result.name}</h3>
+            <h3>{result.title}</h3>
             <p>{result.description}</p>
           </div>
         ))
