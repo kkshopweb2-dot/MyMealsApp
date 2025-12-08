@@ -13,8 +13,10 @@ const ComplaintTable = ({ data = [] }) => {
   const filteredData = safeData.filter(
     (item) =>
       item?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item?.orderNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item?.issue?.toLowerCase().includes(searchQuery.toLowerCase())
+      item?.phone?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item?.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item?.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item?.order_no?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -49,13 +51,13 @@ const ComplaintTable = ({ data = [] }) => {
       <table className="tableWrapper">
         <thead>
           <tr>
-            <th>Order No</th>
             <th>Name</th>
             <th>Phone</th>
-            <th>Meal</th>
-            <th>Issue</th>
+            <th>Order No.</th>
+            <th>Subject</th>
+            <th>Description</th>
             <th>Date</th>
-            <th>Image</th>
+            <th>Status</th>
           </tr>
         </thead>
 
@@ -63,23 +65,13 @@ const ComplaintTable = ({ data = [] }) => {
           {paginatedData.length > 0 ? (
             paginatedData.map((row, index) => (
               <tr key={index}>
-                <td>{row.orderNo}</td>
                 <td>{row.name}</td>
                 <td>{row.phone}</td>
-                <td>{row.meal}</td>
-                <td>{row.issue}</td>
-                <td>{row.date}</td>
-                <td>
-                  {row.image ? (
-                    <img
-                      src={row.image}
-                      alt="complaint"
-                      style={{ width: "50px", borderRadius: "6px" }}
-                    />
-                  ) : (
-                    "No Image"
-                  )}
-                </td>
+                <td>{row.order_no}</td>
+                <td>{row.subject}</td>
+                <td>{row.description}</td>
+                <td>{new Date(row.created_at).toLocaleDateString()}</td>
+                <td>{row.status}</td>
               </tr>
             ))
           ) : (

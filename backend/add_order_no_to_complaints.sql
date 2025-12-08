@@ -1,0 +1,1 @@
+ALTER TABLE complaints ADD COLUMN order_no VARCHAR(255);

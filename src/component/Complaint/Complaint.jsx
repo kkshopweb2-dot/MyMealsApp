@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../../api/axios";
 import "../../css/Complaint.css";
 import Header from "../Header";
@@ -36,6 +36,19 @@ const Complaint = () => {
 
   const [submittedComplaints, setSubmittedComplaints] = useState([]);
 
+  const fetchComplaints = async () => {
+    try {
+      const response = await axios.get("/complaints/all");
+      setSubmittedComplaints(response.data.data);
+    } catch (error) {
+      console.error("Error fetching complaints:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
+
   // ✅ Submit & send data to backend
   const handleSubmit = async (newComplaint) => {
     const fullComplaint = {
@@ -53,7 +66,7 @@ const Complaint = () => {
 
       console.log("Backend response:", response.data);
 
-      setSubmittedComplaints((prev) => [...prev, fullComplaint]);
+      fetchComplaints();
       setStep("thankyou");
     } catch (error) {
       console.error("Error sending complaint:", error);
