@@ -3,6 +3,7 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useCallback,
 } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/DataTable.css";
@@ -10,6 +11,7 @@ import axios from "../../src/api/axios";
 
 const MealPreferenceTable = forwardRef(({ title }, ref) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [mealPreferences, setMealPreferences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,60 +19,73 @@ const MealPreferenceTable = forwardRef(({ title }, ref) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
-  const [entriesPerPage, setEntriesPerPage] = useState(10); // Added entriesPerPage state
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
 
-  const fetchMealPreferences = async (page = 1, limit = entriesPerPage) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get(
-        `/meal-preferences?page=${page}&limit=${limit}`
-      );
-      setMealPreferences(response.data.data || []);
-      setCurrentPage(response.data.page);
-      setTotalPages(response.data.totalPages);
-      setTotalEntries(response.data.total);
-    } catch (error) {
-      console.error("Failed to fetch meal preferences:", error);
-      setError(
-        error.response?.data?.error ||
-          "Failed to fetch meal preferences. Please try again later."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchMealPreferences = useCallback(
+    async (page = 1, limit = entriesPerPage, search = debouncedSearchQuery) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(
+          `/meal-preferences?page=${page}&limit=${limit}&search=${search}`
+        );
+        setMealPreferences(response.data.data || []);
+        setCurrentPage(response.data.page);
+        setTotalPages(response.data.totalPages);
+        setTotalEntries(response.data.total);
+      } catch (error) {
+        console.error("Failed to fetch meal preferences:", error);
+        setError(
+          error.response?.data?.error ||
+            "Failed to fetch meal preferences. Please try again later."
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [entriesPerPage, debouncedSearchQuery]
+  );
 
   useEffect(() => {
-    fetchMealPreferences(currentPage, entriesPerPage);
-  }, [currentPage, entriesPerPage]); // Added entriesPerPage to dependencies
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      setCurrentPage(1);
+    }
+    fetchMealPreferences(currentPage, entriesPerPage, debouncedSearchQuery);
+  }, [
+    currentPage,
+    entriesPerPage,
+    debouncedSearchQuery,
+    fetchMealPreferences,
+  ]);
 
   useImperativeHandle(ref, () => ({
-    fetchMealPreferences: () => fetchMealPreferences(1, entriesPerPage), // Fetch first page with current limit
+    fetchMealPreferences: () =>
+      fetchMealPreferences(1, entriesPerPage, debouncedSearchQuery),
   }));
 
   const handleEntriesPerPageChange = (e) => {
     setEntriesPerPage(Number(e.target.value));
-    setCurrentPage(1); // Reset to first page when entries per page changes
+    setCurrentPage(1);
   };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const filteredData = mealPreferences.filter(
-    (item) =>
-      (item.order_no &&
-        item.order_no.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.name &&
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.email &&
-        item.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.plan &&
-        item.plan.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.meal_type &&
-        item.meal_type.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const handleSearch = () => {
+    setDebouncedSearchQuery(searchQuery);
+    setCurrentPage(1);
+  };
 
   const renderPreferenceDetails = (details) => {
     if (!details) return "N/A";
@@ -114,8 +129,9 @@ const MealPreferenceTable = forwardRef(({ title }, ref) => {
             placeholder="Search meal preferences..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
-          <FaSearch />
+          <FaSearch onClick={handleSearch} style={{ cursor: "pointer" }} />
         </div>
       </div>
 
@@ -145,8 +161,8 @@ const MealPreferenceTable = forwardRef(({ title }, ref) => {
                 {error}
               </td>
             </tr>
-          ) : filteredData.length > 0 ? (
-            filteredData.map((row) => (
+          ) : mealPreferences.length > 0 ? (
+            mealPreferences.map((row) => (
               <tr
                 key={row.id}
                 className={row.isCurrent ? "currentPreferenceRow" : ""}
@@ -207,4 +223,3 @@ const MealPreferenceTable = forwardRef(({ title }, ref) => {
 });
 
 export default MealPreferenceTable;
-

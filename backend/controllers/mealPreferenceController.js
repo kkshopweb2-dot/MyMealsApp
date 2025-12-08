@@ -5,70 +5,61 @@ import db from "../db.js";
 // ===========================================
 export const getMealPreferences = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10; // Allow limit to be passed as query parameter, default to 10
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || ""; // Added search query
 
   let offset;
-  if (limit === -1) { // If limit is -1, fetch all records
+  if (limit === -1) {
     offset = 0;
   } else {
     offset = (page - 1) * limit;
   }
 
-  const countSql = "SELECT COUNT(*) AS total FROM meal_preferences";
+  const queryParams = [];
+  let whereClause = "";
 
-  // Simplified query for debugging
+  if (search) {
+    whereClause = `
+      WHERE 
+        mp.order_no LIKE ? OR 
+        mp.name LIKE ? OR 
+        mp.email LIKE ? OR 
+        mp.plan LIKE ? OR 
+        mp.meal_type LIKE ?
+    `;
+    const searchTerm = `%${search}%`;
+    queryParams.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+
+  const countSql = `SELECT COUNT(*) AS total FROM meal_preferences AS mp ${whereClause}`;
+
   let dataSql = `
     SELECT
       mp.*
     FROM
       meal_preferences AS mp
+    ${whereClause}
     ORDER BY
       mp.id DESC
   `;
 
-  /*
-    let dataSql = `
-    SELECT
-      mp.id,
-      mp.user_id,
-      mp.order_no,
-      mp.meal_type,
-      mp.preference_details,
-      mp.is_active,
-      mp.created_at,
-      u.name,
-      u.email,
-      o.plan,
-      o.created_at AS effectiveFrom
-    FROM
-      meal_preferences AS mp
-    LEFT JOIN
-      users AS u ON mp.user_id = u.id
-    LEFT JOIN
-      orders AS o ON mp.order_no = o.order_no
-    ORDER BY
-      mp.id DESC
-  `;
-  */
-
-  const queryParams = [];
-
+  const limitParams = [];
   if (limit !== -1) {
     dataSql += `
       LIMIT ? OFFSET ?
     `;
-    queryParams.push(limit, offset);
+    limitParams.push(limit, offset);
   }
 
   // Step 1: Count total rows
-  db.query(countSql, (err, countResult) => {
+  db.query(countSql, queryParams, (err, countResult) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const total = countResult[0].total;
-    const totalPages = limit === -1 ? 1 : Math.ceil(total / limit); // If all records, only one page
+    const totalPages = limit === -1 ? 1 : Math.ceil(total / limit);
 
     // Step 2: Fetch paginated items
-    db.query(dataSql, queryParams, (err, results) => {
+    db.query(dataSql, [...queryParams, ...limitParams], (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
 
       res.json({
@@ -152,7 +143,11 @@ export const getMealPreference = (req, res) => {
 // UPDATE
 // ===========================================
 export const updateMealPreference = (req, res) => {
-  const { meal_type, preference_details, is_active } = req.body;
+  const {
+    meal_type,
+    preference_details,
+    is_active
+  } = req.body;
 
   const sql = `
     UPDATE meal_preferences
