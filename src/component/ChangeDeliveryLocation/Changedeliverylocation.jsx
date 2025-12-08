@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "../../api/axios";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
@@ -19,7 +19,8 @@ const Changedeliverylocation = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [step, setStep] = useState(1);
   const [confirmed, setConfirmed] = useState(false);
-  const [submittedData, setSubmittedData] = useState([]);
+  // const [submittedData, setSubmittedData] = useState([]); // Removed submittedData state
+  const tableRef = useRef(null); // Create a ref for DeliveryLocationTable
 
   const initialFormState = {
     orderNo: "",
@@ -68,28 +69,33 @@ const Changedeliverylocation = () => {
     if (e) e.preventDefault();
 
     const deliveryData = {
+      order_no: formData.orderNo,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      plan: formData.plan,
       address_line_1: formData.primaryAddress,
       address_line_2: formData.secondaryAddress,
       city: formData.primaryCity,
       state: formData.primaryState,
       zip_code: formData.primaryZip,
-      is_default: formData.addressType === 'primary',
+      is_default: formData.addressType === "primary",
     };
 
     console.log("Data being sent:", deliveryData);
 
     try {
-      const response = await axios.post(
-        "/delivery-locations",
-        deliveryData
-      );
+      const response = await axios.post("/delivery-locations", deliveryData);
 
       console.log("Server Response:", response.data);
+      if (tableRef.current) {
+        tableRef.current.fetchDeliveryLocations(); // Refresh table data after submission
+      }
     } catch (error) {
       console.error("Axios Error:", error);
     }
 
-    setSubmittedData((prev) => [...prev, formData]);
+    // setSubmittedData((prev) => [...prev, formData]); // Removed
     setStep(7);
   };
 
@@ -104,16 +110,22 @@ const Changedeliverylocation = () => {
       <div className="col-md-5">
         <div className={styles.deliveryFormCard}>
           {step === 1 && (
-            <Step1BasicInfo {...{ formData, handleChange, confirmed, setConfirmed, nextStep }} />
+            <Step1BasicInfo
+              {...{ formData, handleChange, confirmed, setConfirmed, nextStep }}
+            />
           )}
           {step === 2 && (
-            <Step2EffectiveDate {...{ formData, handleChange, nextStep, prevStep }} />
+            <Step2EffectiveDate
+              {...{ formData, handleChange, nextStep, prevStep }}
+            />
           )}
           {step === 3 && (
             <Step3Meals {...{ formData, handleChange, nextStep, prevStep }} />
           )}
           {step === 4 && (
-            <Step4ChangeFor {...{ formData, handleChange, nextStep, prevStep }} />
+            <Step4ChangeFor
+              {...{ formData, handleChange, nextStep, prevStep }}
+            />
           )}
           {step === 5 && (
             <Step5Address {...{ formData, handleChange, nextStep, prevStep }} />
@@ -121,15 +133,22 @@ const Changedeliverylocation = () => {
           {step === 6 && (
             <Step6Preview {...{ formData, handleSubmit, prevStep }} />
           )}
-          {step === 7 && <Step7ThankYou handleNewSubmission={handleNewSubmission} />}
+          {step === 7 && (
+            <Step7ThankYou handleNewSubmission={handleNewSubmission} />
+          )}
         </div>
       </div>
 
       {/* Table Section */}
       <div className="col-md-7">
         <DeliveryLocationTable
-          rows={submittedData}
-          title={<span style={{ color: "#104b45" }}>Delivery Location Change Summary</span>}
+          ref={tableRef} // Pass the ref to DeliveryLocationTable
+          // rows={submittedData} // Removed
+          title={
+            <span style={{ color: "#104b45" }}>
+              Delivery Location Change Summary
+            </span>
+          }
         />
       </div>
     </div>
