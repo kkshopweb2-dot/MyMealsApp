@@ -7,7 +7,7 @@ const Step2MealDetails = ({
   handleChange,
   toggleSwitch,
   handleFinalSubmit,
-  setStep
+  setStep,
 }) => {
   return (
     <form onSubmit={handleFinalSubmit} className={styles.formStep}>
@@ -44,13 +44,18 @@ const Step2MealDetails = ({
           <div className={styles.inputGroup}>
             <label className={styles.blackLabel}>Meal Type</label>
 
-            <div className={styles.radioGroup}>
+            <div
+              className={styles.radioGroup}
+              role="radiogroup"
+              aria-label="Meal Type"
+            >
               {["Veg", "Non Veg", "Both"].map((option) => (
                 <label key={option} className={styles.blackRadioLabel}>
                   <input
                     type="radio"
                     name="mealType"
                     value={option}
+                    checked={formData.mealType === option}
                     onChange={handleChange}
                   />
                   {option}

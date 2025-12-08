@@ -1,26 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { FaSearch } from "react-icons/fa";
-import "../css/DataTable.css"; // reuse same CSS used by your DataTable
+import "../css/DataTable.css";
 import axios from "../../src/api/axios";
 
-const MealPreferenceTable = ({ title }) => {
+const MealPreferenceTable = forwardRef(({ title }, ref) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activePage, setActivePage] = useState(1);
   const [mealPreferences, setMealPreferences] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [entriesPerPage, setEntriesPerPage] = useState(10); // Added entriesPerPage state
+
+  const fetchMealPreferences = async (page = 1, limit = entriesPerPage) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(
+        `/meal-preferences?page=${page}&limit=${limit}`
+      );
+      setMealPreferences(response.data.data || []);
+      setCurrentPage(response.data.page);
+      setTotalPages(response.data.totalPages);
+      setTotalEntries(response.data.total);
+    } catch (error) {
+      console.error("Failed to fetch meal preferences:", error);
+      setError(
+        error.response?.data?.error ||
+          "Failed to fetch meal preferences. Please try again later."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchMealPreferences = async () => {
-      try {
-        const response = await axios.get("/meal-preferences");
-        setMealPreferences(response.data.data);
-      } catch (error) {
-        console.error("Failed to fetch meal preferences:", error);
-      }
-    };
-    fetchMealPreferences();
-  }, []);
+    fetchMealPreferences(currentPage, entriesPerPage);
+  }, [currentPage, entriesPerPage]); // Added entriesPerPage to dependencies
 
-  const entriesPerPage = 10;
+  useImperativeHandle(ref, () => ({
+    fetchMealPreferences: () => fetchMealPreferences(1, entriesPerPage), // Fetch first page with current limit
+  }));
+
+  const handleEntriesPerPageChange = (e) => {
+    setEntriesPerPage(Number(e.target.value));
+    setCurrentPage(1); // Reset to first page when entries per page changes
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const filteredData = mealPreferences.filter(
     (item) =>
@@ -36,32 +72,53 @@ const MealPreferenceTable = ({ title }) => {
         item.meal_type.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+  const renderPreferenceDetails = (details) => {
+    if (!details) return "N/A";
+    try {
+      const parsedDetails =
+        typeof details === "string" ? JSON.parse(details) : details;
+      return Object.entries(parsedDetails)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
+    } catch (e) {
+      console.error("Failed to parse preference details:", e);
+      return "Invalid preference format";
+    }
+  };
 
-  const paginatedData = filteredData.slice(
-    (activePage - 1) * entriesPerPage,
-    activePage * entriesPerPage
-  );
+  const startIndex = (currentPage - 1) * entriesPerPage;
+  const endIndex = Math.min(startIndex + entriesPerPage, totalEntries);
 
   return (
     <div className="tableCard">
-      {title && <h3 className="tableTitle">{title}</h3>}
+      <h3 className="tableTitle">{title || "Meal Preference History"}</h3>
 
-      {/* Search Bar */}
-      <div className="tableSearch">
-        <input
-          type="text"
-          placeholder="Search meal preferences..."
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setActivePage(1);
-          }}
-        />
-        <FaSearch />
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          Show
+          <select
+            value={entriesPerPage}
+            onChange={handleEntriesPerPageChange}
+            className="entriesSelect"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+          entries
+        </div>
+        <div className="tableSearch">
+          <input
+            type="text"
+            placeholder="Search meal preferences..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <FaSearch />
+        </div>
       </div>
 
-      {/* Table */}
       <table className="tableWrapper">
         <thead>
           <tr>
@@ -76,8 +133,20 @@ const MealPreferenceTable = ({ title }) => {
           </tr>
         </thead>
         <tbody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row) => (
+          {loading ? (
+            <tr>
+              <td colSpan="8" className="noData">
+                Loading...
+              </td>
+            </tr>
+          ) : error ? (
+            <tr>
+              <td colSpan="8" className="noData" style={{ color: "red" }}>
+                {error}
+              </td>
+            </tr>
+          ) : filteredData.length > 0 ? (
+            filteredData.map((row) => (
               <tr
                 key={row.id}
                 className={row.isCurrent ? "currentPreferenceRow" : ""}
@@ -86,14 +155,9 @@ const MealPreferenceTable = ({ title }) => {
                 <td>{row.name}</td>
                 <td>{row.email}</td>
                 <td>{row.plan}</td>
-                <td>{row.effectiveFrom}</td>
+                <td>{row.effective_from}</td>
                 <td>{row.meal_type}</td>
-                <td>
-                  {row.preference_details &&
-                    Object.entries(JSON.parse(row.preference_details))
-                      .map(([key, value]) => `${key}: ${value}`)
-                      .join(", ")}
-                </td>
+                <td>{renderPreferenceDetails(row.preference_details)}</td>
                 <td className={row.isCurrent ? "currentPreferenceCell" : ""}>
                   {row.isCurrent ? "Current" : "Previous"}
                 </td>
@@ -109,41 +173,38 @@ const MealPreferenceTable = ({ title }) => {
         </tbody>
       </table>
 
-      {/* Pagination */}
+      {/* Pagination Controls */}
       <div className="pagination">
         <button
-          onClick={() => setActivePage((p) => Math.max(p - 1, 1))}
-          disabled={activePage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
         >
           &lt;
         </button>
-
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={activePage === i + 1 ? "active" : ""}
-            onClick={() => setActivePage(i + 1)}
+            className={currentPage === i + 1 ? "active" : ""}
+            onClick={() => handlePageChange(i + 1)}
           >
             {i + 1}
           </button>
         ))}
-
         <button
-          onClick={() => setActivePage((p) => Math.min(p + 1, totalPages))}
-          disabled={activePage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
         >
           &gt;
         </button>
       </div>
 
-      {/* Entries Info */}
       <div className="entriesInfo">
-        Showing {paginatedData.length} of {filteredData.length} entries
+        Showing {totalEntries === 0 ? 0 : startIndex + 1} to {endIndex} of{" "}
+        {totalEntries} entries
       </div>
     </div>
   );
-
-
-};
+});
 
 export default MealPreferenceTable;
+

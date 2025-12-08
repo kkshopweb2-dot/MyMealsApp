@@ -40,6 +40,17 @@ const Step1UserInfo = ({ formData, handleChange, handleNext }) => {
         </select>
       </div>
 
+      <div className={styles.inputGroup}>
+        <label>Effective From *</label>
+        <input
+          type="date"
+          name="effectiveFrom"
+          value={formData.effectiveFrom}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
       <button type="submit" className={styles.primaryBtn}>
         Next →
       </button>

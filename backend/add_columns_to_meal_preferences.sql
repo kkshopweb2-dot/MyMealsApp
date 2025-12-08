@@ -1,0 +1,5 @@
+ALTER TABLE meal_preferences
+ADD COLUMN name VARCHAR(255),
+ADD COLUMN email VARCHAR(255),
+ADD COLUMN plan VARCHAR(255),
+ADD COLUMN effective_from DATE;

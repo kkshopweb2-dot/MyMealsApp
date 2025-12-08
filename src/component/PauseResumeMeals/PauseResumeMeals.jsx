@@ -198,10 +198,10 @@ export default function PauseResumeMeals() {
       }
 
       const response = await api.get("/pause-resume", {
-        params: { search, page }
+        params: { search, page },
       });
 
-      const mappedData = response.data.data.map(item => ({
+      const mappedData = response.data.data.map((item) => ({
         orderNo: item.order_no || "-",
         name: item.name || "-",
         email: item.email || "-",

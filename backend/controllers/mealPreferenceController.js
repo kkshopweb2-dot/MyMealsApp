@@ -16,7 +16,18 @@ export const getMealPreferences = (req, res) => {
 
   const countSql = "SELECT COUNT(*) AS total FROM meal_preferences";
 
+  // Simplified query for debugging
   let dataSql = `
+    SELECT
+      mp.*
+    FROM
+      meal_preferences AS mp
+    ORDER BY
+      mp.id DESC
+  `;
+
+  /*
+    let dataSql = `
     SELECT
       mp.id,
       mp.user_id,
@@ -38,6 +49,7 @@ export const getMealPreferences = (req, res) => {
     ORDER BY
       mp.id DESC
   `;
+  */
 
   const queryParams = [];
 
@@ -74,18 +86,37 @@ export const getMealPreferences = (req, res) => {
 // CREATE
 // ===========================================
 export const createMealPreference = (req, res) => {
-  const { user_id, order_no, meal_type, preference_details, is_active } =
-    req.body;
+  const {
+    user_id,
+    order_no,
+    name,
+    email,
+    plan,
+    effective_from,
+    meal_type,
+    preference_details,
+    is_active,
+  } = req.body;
 
   const sql = `
     INSERT INTO meal_preferences 
-    (user_id, order_no, meal_type, preference_details, is_active)
-    VALUES (?, ?, ?, ?, ?)
+    (user_id, order_no, name, email, plan, effective_from, meal_type, preference_details, is_active)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [user_id, order_no, meal_type, preference_details, is_active],
+    [
+      user_id,
+      order_no,
+      name,
+      email,
+      plan,
+      effective_from,
+      meal_type,
+      preference_details,
+      is_active,
+    ],
     (err, results) => {
       if (err) {
         console.error("Database error:", err);
@@ -99,6 +130,7 @@ export const createMealPreference = (req, res) => {
     }
   );
 };
+// ... rest of the file is unchanged
 
 // ===========================================
 // GET SINGLE RECORD

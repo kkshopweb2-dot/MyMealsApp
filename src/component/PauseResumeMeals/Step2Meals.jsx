@@ -7,9 +7,8 @@ export default function Step2Meals({
   setMealField,
   setMealDate,
   handleSubmit,
-  handleBack
+  handleBack,
 }) {
-
   const handlePauseToggle = (meal, isChecked) => {
     setMealField(meal, "pause", isChecked);
 
@@ -64,7 +63,9 @@ export default function Step2Meals({
                   <input
                     type="checkbox"
                     checked={m.resume}
-                    onChange={(e) => setMealField(meal, "resume", e.target.checked)}
+                    onChange={(e) =>
+                      setMealField(meal, "resume", e.target.checked)
+                    }
                   />
                   Resume
                 </label>
@@ -73,7 +74,9 @@ export default function Step2Meals({
                   <input
                     type="date"
                     value={m.dates.resume || ""}
-                    onChange={(e) => setMealDate(meal, "resume", e.target.value)}
+                    onChange={(e) =>
+                      setMealDate(meal, "resume", e.target.value)
+                    }
                   />
                 )}
               </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "../../api/axios";
 import styles from "../../css/MealPreference.module.css";
 
@@ -11,6 +11,7 @@ import MealPreferenceTable from "../MealPreferenceTable";
 const MealPreferenceForm = () => {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const tableRef = useRef(null);
 
   const [toggles, setToggles] = useState({
     vegNonveg: false,
@@ -55,6 +56,10 @@ const MealPreferenceForm = () => {
     try {
       const requestData = {
         order_no: formData.orderNo,
+        name: formData.name,
+        email: formData.email,
+        plan: formData.plan,
+        effective_from: formData.effectiveFrom,
         meal_type: formData.mealType,
         preference_details: JSON.stringify({
           dishChoice: formData.dishChoice,
@@ -64,12 +69,14 @@ const MealPreferenceForm = () => {
         is_active: true,
       };
 
-      const response = await axios.post("/meal-preferences", requestData);
+      await axios.post("/meal-preferences", requestData);
 
-      console.log("Submitted:", response.data);
       window.alert("Meal preference submitted successfully!");
-
       setSubmitted(true);
+
+      if (tableRef.current) {
+        tableRef.current.fetchMealPreferences();
+      }
     } catch (error) {
       console.error("❌ Failed to submit meal preference:", error);
       window.alert("Failed to submit meal preference. Please try again.");
@@ -139,7 +146,10 @@ const MealPreferenceForm = () => {
 
         {/* TABLE CARD */}
         <div className="col-md-7">
-          <MealPreferenceTable title="Meal Preference History" />
+          <MealPreferenceTable
+            ref={tableRef}
+            title="Meal Preference History"
+          />
         </div>
       </div>
     </div>
