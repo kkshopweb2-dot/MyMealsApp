@@ -8,7 +8,7 @@ export const getMeals = (req, res) => {
 };
 
 export const getPlansList = (req, res) => {
-  db.query("SELECT * FROM plansList", (err, results) => {
+  db.query("SELECT id as p_id, name as p_name, price as p_price FROM plans", (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });

@@ -35,7 +35,12 @@ export default function QRPaymentForm({
 
       <div className="mymeals-input-group">
         <label>Amount To Pay</label>
-        <input type="number" value={formDataRef.current.get("amount")}  readOnly />
+        <input
+          type="number"
+          name="amount"
+          defaultValue={formDataRef.current.get("amount")}
+          onChange={handleChange}
+        />
       </div>
 
       <div>

@@ -97,28 +97,40 @@ export default function OrderForm({ bg, plan, setPlan, onSuccess }) {
       payByCash,
       payByQR); // Logs to console
       const paymentMethod = (payByCash)?'Cash':'QR';
-    try {
-      // Build plain object from FormData
-      const payload = {
-        ...formData,
-        primaryAddress,
-        secondaryAddress,
-        plan,
-        paymentMethod,
-      };
 
-      // Append any file fields if they exist
-      const screenshot = formDataRef.current.get("screenshot");
-      if (screenshot && screenshot instanceof File && screenshot.size > 0) {
-        const response = await axios.post("/orders", payload, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        console.log("Server response:", response.data);
+      const isHardcodedPlan = isNaN(parseInt(plan));
+      let planName, planId;
+  
+      if (isHardcodedPlan) {
+          planName = plan;
+          planId = null;
       } else {
-        const response = await axios.post("/orders", payload);
-        console.log("Server response:", response.data);
+          const selectedPlanObject = plans.find(p => p.p_id === parseInt(plan));
+          planName = selectedPlanObject ? selectedPlanObject.p_name : '';
+          planId = selectedPlanObject ? selectedPlanObject.p_id : null;
       }
 
+    try {
+      const orderData = new FormData();
+
+      // Append all form fields to FormData
+      for (const [key, value] of formDataRef.current.entries()) {
+        orderData.append(key, value);
+      }
+      orderData.append("primaryAddress", primaryAddress);
+      orderData.append("secondaryAddress", secondaryAddress);
+      orderData.append("plan", planName);
+      orderData.append("plan_id", planId);
+      orderData.append("paymentMethod", paymentMethod);
+
+
+      const response = await axios.post("/orders", orderData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Server response:", response.data);
       onSuccess(); // Move to Success page
     } catch (err) {
       console.error("Error submitting order:", err);

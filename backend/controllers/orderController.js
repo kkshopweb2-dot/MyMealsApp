@@ -1,22 +1,39 @@
-
 import multer from "multer";
 import path from "path";
+import { fileURLToPath } from 'url';
 import db from "../db.js";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.join(__dirname, '..', 'uploads', 'transactions');
+
+// Create uploads folder if missing
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb){
-    cb(null, "uploads/transactions");
+    cb(null, uploadDir);
   },
   filename: function(req, file, cb){
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname)); // keep file extension
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
+
 const upload = multer({storage});
 export { upload };
 
+
+// =========================
+//   CREATE ORDER
+// =========================
+
 export const createOrder = (req, res) => {
-  console.log(req.body);
+  console.log("Incoming Order Body:", req.body);
+
   const {
     name,
     phone,
@@ -34,6 +51,7 @@ export const createOrder = (req, res) => {
     primaryAddress,
     secondaryAddress,
     plan,
+    plan_id,
     paymentMethod,
   } = req.body;
 
@@ -43,8 +61,10 @@ export const createOrder = (req, res) => {
   }
 
   const orderSql = `
-    INSERT INTO users (name, phone, email, primary_address, secondary_address, delivery_time, plan, payment_method, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+    INSERT INTO orders 
+      (name, phone, email, primary_address, secondary_address, 
+       delivery_time, plan, plan_id, payment_method, status, total_amount)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)
   `;
 
   const orderValues = [
@@ -55,10 +75,14 @@ export const createOrder = (req, res) => {
     secondaryAddress,
     deliveryTime,
     plan,
+    plan_id === "null" ? null : plan_id,
+
     paymentMethod,
+    amount,
   ];
 
   db.query(orderSql, orderValues, (err, results) => {
+
     if (err) {
       console.error("Error inserting order:", err);
       return res.status(500).json({ error: "Failed to create order", db_error: err });
@@ -66,13 +90,18 @@ export const createOrder = (req, res) => {
 
     const orderId = results.insertId;
 
+    // ------------------------
+    //   QR PAYMENT
+    // ------------------------
     if (paymentMethod === 'QR') {
       const screenshotPath = req.file ? req.file.path : null;
 
       const qrSql = `
-        INSERT INTO qr_payments (order_id, amount, transaction_id, note, screenshot)
+        INSERT INTO qr_payments 
+          (order_id, amount, transaction_id, note, screenshot)
         VALUES (?, ?, ?, ?, ?)
       `;
+
       const qrValues = [
         orderId,
         amount,
@@ -86,23 +115,54 @@ export const createOrder = (req, res) => {
           console.error("Error inserting QR payment:", err2);
           return res.status(500).json({ error: "Failed to create QR payment", db_error: err2 });
         }
-        res.json({ message: "Order placed successfully!", orderId });
+
+        return res.json({ message: "Order placed successfully!", orderId });
       });
-    } else if (paymentMethod === 'Cash') {
-      const cashSql = `INSERT INTO cash_payments(id, amount, paid_by, dname, dnum, pdate, note) VALUES (?, ?, ?, ?, ?, ?, ?)
+    }
+
+    // ------------------------
+    //   CASH PAYMENT
+    // ------------------------
+    else if (paymentMethod === 'Cash') {
+
+      const cashSql = `
+        INSERT INTO cash_payments
+          (order_id, amount, paid_by, dname, dnum, pdate, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
-      db.query(cashSql, [orderId, amount, cashPaidOption, deliveryBoyName, deliveryBoyMobile, cashDate+' '+cashTime, cashNote], (err3) => {
-        if (err3) {
-          console.error("Error inserting cash payment:", err3);
-          return res.status(500).json({ error: "Failed to create cash payment", db_error: err3 });
+
+      db.query(
+        cashSql,
+        [
+          orderId,
+          amount,
+          cashPaidOption,
+          deliveryBoyName,
+          deliveryBoyMobile,
+          `${cashDate} ${cashTime}`,
+          cashNote
+        ],
+        (err3) => {
+          if (err3) {
+            console.error("Error inserting cash payment:", err3);
+            return res.status(500).json({ error: "Failed to create cash payment", db_error: err3 });
+          }
+
+          return res.json({ message: "Order placed successfully!", orderId });
         }
-        res.json({ message: "Order placed successfully!", orderId });
-      });
-    } else {
-      res.json({ message: "Order placed successfully!", orderId });
+      );
+    }
+
+    else {
+      return res.status(400).json({ error: "Invalid payment method" });
     }
   });
 };
+
+
+// =========================
+//   GET ORDERS
+// =========================
 
 export const getOrders = (req, res) => {
   const sql = `
@@ -133,6 +193,7 @@ export const getOrders = (req, res) => {
         });
         orders.push(map.get(row.order_id));
       }
+
       if (row.meal_id) {
         map.get(row.order_id).meals.push({
           meal_id: row.meal_id,

@@ -20,7 +20,12 @@ export default function PayCashForm({ formDataRef, handleChange, onSubmit, }) {
 
       <div className="form-group">
         <label>Amount Paid *</label>
-        <input type="number" value={formDataRef.current.get("amount")} readOnly />
+        <input
+          type="number"
+          name="amount"
+          defaultValue={formDataRef.current.get("amount")}
+          onChange={handleChange}
+        />
       </div>
 
       <div className="form-group">
