@@ -25,7 +25,7 @@ const FeedbackTable = ({ data = [], onSearch }) => {
     <div className="tableCard">
       <h2
         className="tableTitle"
-        style={{ color: "#000", fontWeight: "600", marginBottom: "10px" }}
+        style={{ color: "#104b45", fontWeight: "600", marginBottom: "10px" }}
       >
         Feedback Data Table
       </h2>
