@@ -168,6 +168,12 @@ export default function OrderForm({ bg, plan, setPlan, onSuccess }) {
           <label>Select Plan *</label>
           <select value={plan} onChange={setplanid}>
             <option value="">Select Plan</option>
+            <option value="Combo lunch and breakfast">Combo lunch and breakfast</option>
+            <option value="Combo lunch,dinner and breakfast">Combo lunch,dinner and breakfast</option>
+            <option value="Monthly lunch">Monthly lunch</option>
+            <option value="Monthly breakfast">Monthly breakfast</option>
+            <option value="Monthly dinner">Monthly dinner</option>
+            <option value="Combo lunch and dinner">Combo lunch and dinner</option>
             {plans.map((p) => (
               <option key={p.p_id} data-id={p.p_price} value={p.p_id}>{p.p_name}</option>
             ))}
