@@ -17,13 +17,12 @@ const UpdateContactTable = forwardRef(({ title }, ref) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
-  const [entriesPerPage, setEntriesPerPage] = useState(10);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
   const fetchContactUpdates = useCallback(
-    async (page = 1, limit = entriesPerPage, search = debouncedSearchQuery) => {
+    async (page = 1, limit = 10, search = debouncedSearchQuery) => { // Changed limit to fixed 10
       setLoading(true);
       setError(null);
       try {
@@ -44,7 +43,7 @@ const UpdateContactTable = forwardRef(({ title }, ref) => {
         setLoading(false);
       }
     },
-    [entriesPerPage, debouncedSearchQuery]
+    [debouncedSearchQuery] // Removed entriesPerPage from dependencies
   );
 
   useEffect(() => {
@@ -61,23 +60,19 @@ const UpdateContactTable = forwardRef(({ title }, ref) => {
     if (debouncedSearchQuery) {
       setCurrentPage(1);
     }
-    fetchContactUpdates(currentPage, entriesPerPage, debouncedSearchQuery);
+    fetchContactUpdates(currentPage, 10, debouncedSearchQuery);
   }, [
     currentPage,
-    entriesPerPage,
     debouncedSearchQuery,
     fetchContactUpdates,
   ]);
 
   useImperativeHandle(ref, () => ({
     fetchContactUpdates: () =>
-      fetchContactUpdates(1, entriesPerPage, debouncedSearchQuery),
+      fetchContactUpdates(1, 10, debouncedSearchQuery), // Changed entriesPerPage to fixed 10
   }));
 
-  const handleEntriesPerPageChange = (e) => {
-    setEntriesPerPage(Number(e.target.value));
-    setCurrentPage(1);
-  };
+
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -88,8 +83,8 @@ const UpdateContactTable = forwardRef(({ title }, ref) => {
     setCurrentPage(1);
   };
 
-  const startIndex = (currentPage - 1) * entriesPerPage;
-  const endIndex = Math.min(startIndex + entriesPerPage, totalEntries);
+  const startIndex = (currentPage - 1) * 10;
+  const endIndex = Math.min(startIndex + 10, totalEntries);
 
   return (
     <div className="tableCard">
@@ -97,20 +92,6 @@ const UpdateContactTable = forwardRef(({ title }, ref) => {
         <h2 className="tableTitle">{title}</h2>
       </div>
       <div className="d-flex justify-content-between align-items-center mb-2">
-        <div>
-          Show
-          <select
-            value={entriesPerPage}
-            onChange={handleEntriesPerPageChange}
-            className="entriesSelect"
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-          entries
-        </div>
         <div className="tableSearch">
           <input
             type="text"

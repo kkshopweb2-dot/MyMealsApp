@@ -109,20 +109,6 @@ const MealPreferenceTable = forwardRef(({ title }, ref) => {
       <h3 className="tableTitle">{title || "Meal Preference History"}</h3>
 
       <div className="d-flex justify-content-between align-items-center mb-2">
-        <div>
-          Show
-          <select
-            value={entriesPerPage}
-            onChange={handleEntriesPerPageChange}
-            className="entriesSelect"
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-          entries
-        </div>
         <div className="tableSearch">
           <input
             type="text"
@@ -216,7 +202,7 @@ const MealPreferenceTable = forwardRef(({ title }, ref) => {
 
       <div className="entriesInfo">
         Showing {totalEntries === 0 ? 0 : startIndex + 1} to {endIndex} of{" "}
-        {totalEntries} entries
+        {totalEntries}
       </div>
     </div>
   );
