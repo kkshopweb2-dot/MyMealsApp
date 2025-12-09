@@ -18,7 +18,7 @@ const RenewalPaymentTable = ({
 
   return (
     <div className="tableCard">
-      {title && <h3 className="mb-4">{title}</h3>}
+      {title && <h3 className="mb-4 tableTitle">{title}</h3>}
 
       {/* Search Bar */}
       <div className="tableSearch">

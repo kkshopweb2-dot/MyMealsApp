@@ -94,7 +94,7 @@ const UpdateContactTable = forwardRef(({ title }, ref) => {
   return (
     <div className="tableCard">
       <div className="tableCardHeader">
-        <h2>{title}</h2>
+        <h2 className="tableTitle">{title}</h2>
       </div>
       <div className="d-flex justify-content-between align-items-center mb-2">
         <div>

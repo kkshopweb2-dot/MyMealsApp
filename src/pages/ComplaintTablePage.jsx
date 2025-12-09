@@ -32,7 +32,7 @@ const ComplaintTable = ({ data = [] }) => {
 
   return (
     <div className="tableCard">
-      <h3 className="complaint-title" style={{ color: "black" }}>
+      <h3 className="tableTitle">
         Complaint Summary
       </h3>
 
